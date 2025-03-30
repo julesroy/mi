@@ -2,15 +2,16 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite"
+        "build:css": "npx @tailwindcss/cli -i ./resources/css/app.css -o ./public/css/app.css",
+        "build:cssprod": "npx @tailwindcss/cli -i ./resources/css/app.css -o ./public/css/app.css --minify",
+        "start": "npm run build:css && php -S localhost:8000  -t public",
+        "dev": "nodemon"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.0.0",
+        "@tailwindcss/cli": "^4.0.17",
         "axios": "^1.7.4",
         "concurrently": "^9.0.1",
-        "laravel-vite-plugin": "^1.2.0",
-        "tailwindcss": "^4.0.0",
-        "vite": "^6.0.11"
+        "nodemon": "^3.1.9",
+        "tailwindcss": "^4.0.17"
     }
 }
