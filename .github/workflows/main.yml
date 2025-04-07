@@ -13,11 +13,10 @@ jobs:
     - name: 📂 Synchronisation fichiers
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
-        timeout: 30000
         server: ${{ secrets.SFTP_SERVER }}
         username: ${{ secrets.SFTP_USERNAME }}
         password: ${{ secrets.SFTP_PASSWORD }}
-        port: ${{ secrets.SFTP_PORT }}
+        port: 22
         protocol: ftps
         local-dir: ./ # dossier local
         server-dir: /www/ # dossier sur le serveur
