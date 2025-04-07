@@ -18,7 +18,7 @@ jobs:
         run: |
           lftp -e "
           set ftp:ssl-allow yes;
-          open -u $FTP_USER,$FTP_PASS ftp://$FTP_SERVER;
+          open -u $SFTP_USER,$SFTP_PASSWORD ftp://$SFTP_SERVER;
           mirror --reverse --delete \
                  --exclude vendor/ \
                  --exclude .git/ \
