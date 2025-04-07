@@ -1,31 +1,21 @@
-name: Déploiement FTP
-
 on:
   push:
     branches:
       - deployment
-
+name: Publish
 jobs:
-  deploy:
+  FTP-Deploy-Action:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Installer LFTP
-        run: sudo apt-get update && sudo apt-get install -y lftp
-
-      - name: Envoyer les fichiers via FTP
-        run: |
-          lftp -e "
-          set ftp:ssl-allow no;
-          open -u $SFTP_USER,$SFTP_PASSWORD ftp://$SFTP_SERVER;
-          mirror --reverse --delete \
-                 --exclude vendor/ \
-                 --exclude .git/ \
-                 ./ /www/
-          bye
-          "
-        env:
-          FTP_SERVER: ${{ secrets.SFTP_SERVER }}
-          FTP_USER: ${{ secrets.SFTP_USER }}
-          FTP_PASS: ${{ secrets.SFTP_PASSWORD }}
+      - name: Checkout
+        uses: actions/checkout@v2.1.0
+        with:
+          fetch-depth: 2
+      - name: FTP-Deploy-Action
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        with:
+          server: ftp.cluster021.hosting.ovh.net
+          username: nlntmyr
+          password: MaisonISENIT2025
+          local-dir: ./
+          server-dir: www/
