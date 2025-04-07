@@ -1,3 +1,5 @@
+name: Déploiement FTP
+
 on:
   push:
     branches:
@@ -7,12 +9,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SFTP_SERVER }}
-          username: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          port: 22
-          source: "./"
-          target: "/www/"
-          exclude: "vendor/, .git/"
+      - uses: actions/checkout@v4
+
+      - name: Installer LFTP
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
+      - name: Envoyer les fichiers via FTP
+        run: |
+          lftp -e "
+          set ftp:ssl-allow yes;
+          open -u $FTP_USER,$FTP_PASS ftp://$FTP_SERVER;
+          mirror --reverse --delete \
+                 --exclude vendor/ \
+                 --exclude .git/ \
+                 ./ /www/
+          bye
+          "
+        env:
+          FTP_SERVER: ${{ secrets.SFTP_SERVER }}
+          FTP_USER: ${{ secrets.SFTP_USER }}
+          FTP_PASS: ${{ secrets.SFTP_PASSWORD }}
