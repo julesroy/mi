@@ -8,10 +8,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v2
     
     - name: 📂 Synchronisation fichiers
-      uses: SamKirkland/FTP-Deploy-Action@4.3.5
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: ${{ secrets.SFTP_SERVER }}
         username: ${{ secrets.SFTP_USERNAME }}
