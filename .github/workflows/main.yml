@@ -1,23 +1,18 @@
-name: Deploiement SFTP
-
 on:
   push:
-    branches: [ deployment ]
+    branches:
+      - deployment
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: 📂 Synchronisation fichiers
-      uses: SamKirkland/FTP-Deploy-Action@4.3.0
-      with:
-        server: ${{ secrets.SFTP_SERVER }}
-        username: ${{ secrets.SFTP_USERNAME }}
-        password: ${{ secrets.SFTP_PASSWORD }}
-        port: 22
-        protocol: ftps
-        local-dir: ./ # dossier local
-        server-dir: /www/ # dossier sur le serveur
-        exclude: vendor/**
+      - uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SFTP_SERVER }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: 22
+          source: "./"
+          target: "/www/"
+          exclude: "vendor/, .git/"
