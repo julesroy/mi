@@ -14,8 +14,11 @@ jobs:
       - name: FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
-          server: ftp.cluster021.hosting.ovh.net
-          username: nlntmyr
-          password: MaisonISENIT2025
+          server: ${{ secrets.SFTP_SERVER }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          exclude: |
+            **/vendor/**
+            .env
           local-dir: ./
           server-dir: www/
