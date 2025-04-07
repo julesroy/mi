@@ -13,6 +13,7 @@ jobs:
     - name: 📂 Synchronisation fichiers
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
+        timeout: 30000
         server: ${{ secrets.SFTP_SERVER }}
         username: ${{ secrets.SFTP_USERNAME }}
         password: ${{ secrets.SFTP_PASSWORD }}
