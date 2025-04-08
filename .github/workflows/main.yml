@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.1.0
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
       - name: ⚡ FTP-Deploy-Action
-        uses: SamKirkland/FTP-Deploy-Action@4.3.3
+        uses: SamKirkland/FTP-Deploy-Action@4.3.5
         with:
           server: ${{ secrets.SFTP_SERVER }}
           username: ${{ secrets.SFTP_USERNAME }}
@@ -20,5 +20,15 @@ jobs:
           exclude: |
             **/vendor/**
             .env
+            .env.example
+            artisan
+            .gitignore
+            .gitattributes
+            .editorconfig
+            nodemon.json
+            package.json
+            package-lock.json
+            README.md
+            tailwind.config.js
           local-dir: ./
           server-dir: www/
