@@ -30,5 +30,6 @@ jobs:
             package-lock.json
             README.md
             tailwind.config.js
+            .git/**
           local-dir: ./
           server-dir: www/
