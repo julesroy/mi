@@ -4,7 +4,7 @@
     "scripts": {
         "build:css": "npx @tailwindcss/cli -i ./resources/css/app.css -o ./public/css/app.css",
         "build:cssprod": "npx @tailwindcss/cli -i ./resources/css/app.css -o ./public/css/app.css --minify",
-        "start": "npm run build:css && php -S localhost:8000  -t public",
+        "start": "npm run build:css && php artisan serve",
         "dev": "nodemon"
     },
     "devDependencies": {

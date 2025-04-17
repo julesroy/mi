@@ -3,5 +3,5 @@
         "resources/views/**/*.blade.php"
     ],
     "ext": "php",
-    "exec": "npm run build:css && php -S localhost:8000  -t public"
+    "exec": "npm run build:css && php artisan serve"
 }
