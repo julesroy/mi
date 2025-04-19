@@ -6,22 +6,28 @@ use Illuminate\Support\Facades\DB;
 
 // accueil
 Route::get('/', function () {
-    return view('welcome');
+    return view('accueil');
 });
 
 // connexion
-Route::get('/connexion', [AuthController::class, 'afficherFormulaireConnexion'])->name('connexion');
-Route::post('/connexion', [AuthController::class, 'connecter']);
+Route::get('/connexion', [AuthController::class, 'afficherFormulaireConnexion'])->middleware('guest')->name('connexion');
+Route::post('/connexion', [AuthController::class, 'connecter'])->middleware('throttle:2,1'); // on limite le nombre de tentatives de connexion à 2 par minute (à assouplir plus tard mais là c'est pour les tests)
+
+// déconnexion
+Route::get('/deconnexion', [AuthController::class, 'deconnecter'])->middleware('auth');
 
 // page compte
 Route::get('/compte', function () {
-    return 'Bienvenue dans ton espace personnel !';
+    return view('compte');
 })->middleware('auth');
 
+
+// affiche le php.ini NE PAS METTRE EN PRODUCTION
 Route::get('/info', function () {
     return view('info');
 });
 
+// test de la connexion à la base de données NE PAS METTRE EN PRODUCTION
 Route::get('/test-bdd', function () {
     try {
         DB::connection()->getPdo();
