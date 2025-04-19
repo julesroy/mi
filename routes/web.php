@@ -11,7 +11,7 @@ Route::get('/', function () {
 
 // connexion
 Route::get('/connexion', [AuthController::class, 'afficherFormulaireConnexion'])->middleware('guest')->name('connexion');
-Route::post('/connexion', [AuthController::class, 'connecter'])->middleware('throttle:2,1'); // on limite le nombre de tentatives de connexion à 2 par minute (à assouplir plus tard mais là c'est pour les tests)
+Route::post('/connexion', [AuthController::class, 'connecter'])->middleware('messagethrottle:2,1'); // on limite le nombre de tentatives de connexion à 2 par minute (à assouplir plus tard mais là c'est pour les tests)
 
 // déconnexion
 Route::get('/deconnexion', [AuthController::class, 'deconnecter'])->middleware('auth');
