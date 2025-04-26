@@ -19,6 +19,7 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           exclude: |
             **/vendor/**
+            **/dev/**
             .env
             .env.example
             artisan
