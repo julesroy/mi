@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Titre Page</title>
-
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        @include('head')
+        <title>Le nom de votre page</title>
     </head>
-    <body>
 
+    <body>
+        @include('header')
+
+        Le contenu de votre page ici
+
+        @include('footer')
     </body>
 </html>

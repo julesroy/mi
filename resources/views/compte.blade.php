@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
+        @include('head')
         <title>Compte</title>
-
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
+
     <body class="bg-[#0a0a0a] text-white">
+        @include('header')
+
         Compte
-        <br>
+        <br />
         <a href="/deconnexion">Déconnexion</a>
+
+        @include('footer')
     </body>
 </html>

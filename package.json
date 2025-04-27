@@ -5,7 +5,8 @@
         "build:css": "npx @tailwindcss/cli -i ./resources/css/app.css -o ./public/css/app.css",
         "build:cssprod": "npx @tailwindcss/cli -i ./resources/css/app.css -o ./public/css/app.css --minify",
         "start": "npm run build:css && php artisan serve",
-        "dev": "nodemon"
+        "dev": "nodemon",
+        "format": "prettier --write ./resources/views/**/*.blade.php"
     },
     "devDependencies": {
         "@tailwindcss/cli": "^4.0.17",
@@ -13,6 +14,8 @@
         "chalk": "^5.4.1",
         "concurrently": "^9.0.1",
         "nodemon": "^3.1.9",
+        "prettier": "^3.5.3",
+        "prettier-plugin-blade": "^2.1.21",
         "tailwindcss": "^4.0.17"
     }
 }

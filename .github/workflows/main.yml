@@ -26,6 +26,7 @@ jobs:
             .gitignore
             .gitattributes
             .editorconfig
+            .prettierrc
             nodemon.json
             package.json
             package-lock.json

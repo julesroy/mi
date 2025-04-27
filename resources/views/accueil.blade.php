@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>Laravel</title>
-
-        <!-- Styles / Scripts -->
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        @include('head')
+        <title>Accueil</title>
     </head>
+
     <body class="bg-[#0a0a0a] text-white">
+        @include('header')
+
         <a href="/connexion">Connexion</a>
-        <br>
+        <br />
         <a href="/inscription">Inscription</a>
+
+        @include('footer')
     </body>
 </html>
