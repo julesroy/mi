@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - deployment
+      - deploiement
 name: 🖥️ Déploiement
 jobs:
   FTP-Deploy-Action:
