@@ -50,3 +50,17 @@ Lancement projet (active le hot reloading, compile TailwindCSS) :
 ```powershell
 npm run dev
 ```
+
+### 📄 Générer la documentation :
+
+Pour PHP, on utilise PHPDocumentor :
+
+```powershell
+php phpDocumentor.phar run
+```
+
+Pour Javascript, on utilise JSDoc :
+
+```powershell
+npx jsdoc -c jsdoc.json
+```

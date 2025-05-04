@@ -1,0 +1,12 @@
+{
+    "source": {
+        "include": [
+            "./resources/js"
+        ],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules/|docs)"
+    },
+    "opts": {
+        "destination": "./documentation/js"
+    }
+}
