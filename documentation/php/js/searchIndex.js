@@ -3,22 +3,32 @@ Search.appendIndex(
                 {
             "fqsen": "\\App\\Http\\Controllers\\AuthController",
             "name": "AuthController",
-            "summary": "",
+            "summary": "classe\u0020pour\u0020l\u0027authentification",
             "url": "classes/App-Http-Controllers-AuthController.html"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\AuthController\u003A\u003AafficherFormulaireConnexion\u0028\u0029",
             "name": "afficherFormulaireConnexion",
-            "summary": "",
+            "summary": "affiche\u0020le\u0020formulaire\u0020de\u0020connexion",
             "url": "classes/App-Http-Controllers-AuthController.html#method_afficherFormulaireConnexion"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\AuthController\u003A\u003Aconnecter\u0028\u0029",
             "name": "connecter",
-            "summary": "",
+            "summary": "permet\u0020de\u0020lancer\u0020une\u0020tentative\u0020de\u0020connexion",
             "url": "classes/App-Http-Controllers-AuthController.html#method_connecter"
+        },                {
+            "fqsen": "\\App\\Http\\Controllers\\AuthController\u003A\u003AafficherFormulaireInscription\u0028\u0029",
+            "name": "afficherFormulaireInscription",
+            "summary": "affiche\u0020le\u0020formulaire\u0020d\u0027inscription",
+            "url": "classes/App-Http-Controllers-AuthController.html#method_afficherFormulaireInscription"
+        },                {
+            "fqsen": "\\App\\Http\\Controllers\\AuthController\u003A\u003Ainscrire\u0028\u0029",
+            "name": "inscrire",
+            "summary": "permet\u0020d\u0027inscrire\u0020un\u0020nouvel\u0020utilisateur",
+            "url": "classes/App-Http-Controllers-AuthController.html#method_inscrire"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\AuthController\u003A\u003Adeconnecter\u0028\u0029",
             "name": "deconnecter",
-            "summary": "",
+            "summary": "permet\u0020de\u0020se\u0020d\u00E9connecter",
             "url": "classes/App-Http-Controllers-AuthController.html#method_deconnecter"
         },                {
             "fqsen": "\\App\\Http\\Controllers\\Controller",
