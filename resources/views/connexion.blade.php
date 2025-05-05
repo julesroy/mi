@@ -5,7 +5,7 @@
         <title>Connexion</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white">
+    <body class="bg-[#0a0a0a] text-white pt-18 md:pt-28">
         @include('header')
 
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">

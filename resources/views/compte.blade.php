@@ -5,7 +5,7 @@
         <title>Compte</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white">
+    <body class="bg-[#0a0a0a] text-white pt-18 md:pt-28">
         @include('header')
 
         Compte
