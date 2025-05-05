@@ -43,6 +43,9 @@ class AuthController extends Controller
             return back()->withErrors(['mdp' => 'Mot de passe incorrect.']);
         }
 
+        // ajouts de données à la session
+        $requete->session()->put('emailUtilisateur', $utilisateur->email);
+
         // mise en place des cookies
         $dureeVieCookie = 7 * 24 * 60; // durée de vie du cookie d'une semaine
         Cookie::queue('idUtilisateur', Crypt::encryptString($utilisateur->idUtilisateur), $dureeVieCookie, null, null, false, true, false, 'Lax');
@@ -89,6 +92,9 @@ class AuthController extends Controller
         Cookie::queue('emailUtilisateur', Crypt::encryptString($validatedData['email']), $dureeVieCookie, null, null, false, true, false, 'Lax');
 
         Auth::loginUsingId($idUtilisateur);
+
+        // ajouts de données à la session
+        $requete->session()->put('emailUtilisateur', $validatedData['email']);
 
         // Regenerate session
         $requete->session()->regenerate();

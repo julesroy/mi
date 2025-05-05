@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 // accueil
 Route::get('/', function () {
@@ -26,17 +28,26 @@ Route::get('/compte', function () {
 })->middleware('auth');
 
 
+/**-----------------------------------------------
+ * DEBUG
+ -----------------------------------------------*/
+
 // affiche le php.ini NE PAS METTRE EN PRODUCTION
-Route::get('/info', function () {
+Route::get('/debug/info', function () {
     return view('info');
-});
+})->middleware('can:verifier-acces-administrateur');
 
 // test de la connexion à la base de données NE PAS METTRE EN PRODUCTION
-Route::get('/test-bdd', function () {
+Route::get('/debug/test-bdd', function () {
     try {
         DB::connection()->getPdo();
         return '✅ Connexion à la base de données réussie !';
     } catch (\Exception $e) {
         return '❌ Erreur : ' . $e->getMessage();
     }
-});
+})->middleware('can:verifier-acces-administrateur');
+
+// affichage des données de la session
+Route::get('/debug/session', function (Request $request) {
+    return view('session', ['session' => $request->session()->all(), 'id' => Auth::id()]);
+})->middleware('can:verifier-acces-administrateur');
