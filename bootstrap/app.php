@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\MessageThrottleMiddleware;
+use App\Http\Middleware\ConnexionDepuisCookies;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,6 +26,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'messagethrottle' => MessageThrottleMiddleware::class,
         ]);
+
+        /**
+         * création de la session (connexion de l'utilisateur) depuis les cookies, avec append, on s'assure que le middleware est appelé pour chaque route du site
+         */
+        $middleware->append(ConnexionDepuisCookies::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

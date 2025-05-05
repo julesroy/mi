@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * classe pour l'authentification
@@ -40,7 +42,12 @@ class AuthController extends Controller
         if (!Hash::check($motDePasse, $utilisateur->mdp)) {
             return back()->withErrors(['mdp' => 'Mot de passe incorrect.']);
         }
-    
+
+        // mise en place des cookies
+        $dureeVieCookie = 7 * 24 * 60; // durée de vie du cookie d'une semaine
+        Cookie::queue('idUtilisateur', Crypt::encryptString($utilisateur->idUtilisateur), $dureeVieCookie, null, null, false, true, false, 'Lax');
+        Cookie::queue('emailUtilisateur', Crypt::encryptString($utilisateur->email), $dureeVieCookie, null, null, false, true, false, 'Lax');
+
         // connexion de l'utilisateur
         Auth::loginUsingId($utilisateur->idUtilisateur);
     
@@ -76,6 +83,11 @@ class AuthController extends Controller
             'mdp' => Hash::make($validatedData['mdp'])
         ]);
 
+        // mise en place des cookies
+        $dureeVieCookie = 7 * 24 * 60; // durée de vie du cookie d'une semaine
+        Cookie::queue('idUtilisateur', Crypt::encryptString($idUtilisateur), $dureeVieCookie, null, null, false, true, false, 'Lax');
+        Cookie::queue('emailUtilisateur', Crypt::encryptString($validatedData['email']), $dureeVieCookie, null, null, false, true, false, 'Lax');
+
         Auth::loginUsingId($idUtilisateur);
 
         // Regenerate session
@@ -92,6 +104,10 @@ class AuthController extends Controller
         Auth::logout();
         $requete->session()->invalidate();
         $requete->session()->regenerateToken();
+
+        // supprimer les cookies
+        Cookie::queue(Cookie::forget('idUtilisateur'));
+        Cookie::queue(Cookie::forget('emailUtilisateur'));
 
         return redirect('/connexion');
     }

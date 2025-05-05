@@ -41,7 +41,7 @@
                         <label for="prenom" class="block text-sm/6 font-medium">Prénom</label>
                         <div class="mt-2">
                             <input type="text" name="prenom" id="prenom" value="{{ old('prenom') }}" autocomplete="given-name" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 @error('prenom') border-red-500 @enderror" />
-                             @error('prenom')
+                            @error('prenom')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
@@ -51,7 +51,7 @@
                         <label for="email" class="block text-sm/6 font-medium">Email</label>
                         <div class="mt-2">
                             <input type="email" name="email" id="email" value="{{ old('email') }}" autocomplete="email" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 @error('email') border-red-500 @enderror" />
-                             @error('email')
+                            @error('email')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
@@ -61,7 +61,7 @@
                         <label for="mdp" class="block text-sm/6 font-medium">Mot de passe</label>
                         <div class="mt-2">
                             <input type="password" name="mdp" id="mdp" autocomplete="new-password" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 @error('mdp') border-red-500 @enderror" />
-                             @error('mdp')
+                            @error('mdp')
                                 <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
