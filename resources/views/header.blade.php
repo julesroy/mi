@@ -14,7 +14,7 @@
     <!-- menu déroulant que l'on fait apparaître pour les petits écrans (genre téléphone) -->
     <nav id="menu" class="overflow-hidden h-0 transition-all duration-500 ease-in-out flex flex-col items-center bg-white absolute w-full left-0 top-full md:static md:flex-row md:items-stretch md:justify-start md:h-auto md:overflow-visible">
         <a href="#" class="w-full text-center px-4 py-4 hover:bg-gray-100 text-black">Carte</a>
-        <a href="#" class="w-full text-center px-4 py-4 hover:bg-gray-100 text-black">Commander</a>
+        <a href="/commander" class="w-full text-center px-4 py-4 hover:bg-gray-100 text-black">Commander</a>
         <a href="#" class="w-full text-center px-4 py-4 hover:bg-gray-100 text-black">Contact</a>
         <!-- dropdown (sous-menu) pour le compte -->
         <div class="relative w-full">
