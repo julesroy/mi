@@ -37,6 +37,10 @@ Route::get('/debug/info', function () {
     return view('info');
 })->middleware('can:verifier-acces-administrateur');
 
+Route::get('/commander', function () {
+    return view('commander');
+});
+
 // test de la connexion à la base de données NE PAS METTRE EN PRODUCTION
 Route::get('/debug/test-bdd', function () {
     try {
