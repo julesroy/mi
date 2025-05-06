@@ -36,6 +36,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Http-Controllers-Controller.html"
         },                {
+            "fqsen": "\\App\\Http\\Middleware\\ConnexionDepuisCookies",
+            "name": "ConnexionDepuisCookies",
+            "summary": "",
+            "url": "classes/App-Http-Middleware-ConnexionDepuisCookies.html"
+        },                {
+            "fqsen": "\\App\\Http\\Middleware\\ConnexionDepuisCookies\u003A\u003Ahandle\u0028\u0029",
+            "name": "handle",
+            "summary": "Permet\u0020de\u0020connecter\u0020l\u0027utilisateur\u0020depuis\u0020les\u0020cookies\u0020cr\u00E9\u00E9s\u0020lors\u0020de\u0020l\u0027inscription\u0020ou\u0020de\u0020la\u0020connexion.",
+            "url": "classes/App-Http-Middleware-ConnexionDepuisCookies.html#method_handle"
+        },                {
             "fqsen": "\\App\\Http\\Middleware\\MessageThrottleMiddleware",
             "name": "MessageThrottleMiddleware",
             "summary": "",

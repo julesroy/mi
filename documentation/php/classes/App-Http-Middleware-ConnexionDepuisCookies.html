@@ -100,16 +100,14 @@
                                 <section>
                                         <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/app.html">App</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-providers.html">Providers</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-http.html">Http</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-http-middleware.html">Middleware</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    AppServiceProvider
+    ConnexionDepuisCookies
 
-        <span class="phpdocumentor-element__extends">
-        extends <abbr title="\Illuminate\Support\ServiceProvider">ServiceProvider</abbr>
-    </span>
     
             <div class="phpdocumentor-element__package">
             in package
@@ -127,9 +125,9 @@
 </div>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Providers/AppServiceProvider.php"><a href="files/app-providers-appserviceprovider.html"><abbr title="app/Providers/AppServiceProvider.php">AppServiceProvider.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="app/Http/Middleware/ConnexionDepuisCookies.php"><a href="files/app-http-middleware-connexiondepuiscookies.html"><abbr title="app/Http/Middleware/ConnexionDepuisCookies.php">ConnexionDepuisCookies.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">10</span>
+    <span class="phpdocumentor-element-found-in__line">14</span>
 
     </aside>
 
@@ -144,7 +142,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="classes/App-Providers-AppServiceProvider.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Http-Middleware-ConnexionDepuisCookies.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -159,23 +157,16 @@
 
 <h4 id="toc-methods">
     Methods
-    <a href="classes/App-Providers-AppServiceProvider.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Http-Middleware-ConnexionDepuisCookies.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a class="" href="classes/App-Providers-AppServiceProvider.html#method_boot">boot()</a>
+    <a class="" href="classes/App-Http-Middleware-ConnexionDepuisCookies.html#method_handle">handle()</a>
     <span>
-                                &nbsp;: void    </span>
+                                &nbsp;: <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>    </span>
 </dt>
-<dd>Bootstrap any application services.</dd>
-
-            <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a class="" href="classes/App-Providers-AppServiceProvider.html#method_register">register()</a>
-    <span>
-                                &nbsp;: void    </span>
-</dt>
-<dd>Register any application services.</dd>
+<dd>Permet de connecter l&#039;utilisateur depuis les cookies créés lors de l&#039;inscription ou de la connexion.</dd>
 
     </dl>
 
@@ -188,7 +179,7 @@
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/App-Providers-AppServiceProvider.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Http-Middleware-ConnexionDepuisCookies.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -197,69 +188,57 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_boot">
-        boot()
-        <a href="classes/App-Providers-AppServiceProvider.html#method_boot" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_handle">
+        handle()
+        <a href="classes/App-Http-Middleware-ConnexionDepuisCookies.html#method_handle" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Providers/AppServiceProvider.php"><a href="files/app-providers-appserviceprovider.html"><abbr title="app/Providers/AppServiceProvider.php">AppServiceProvider.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="app/Http/Middleware/ConnexionDepuisCookies.php"><a href="files/app-http-middleware-connexiondepuiscookies.html"><abbr title="app/Http/Middleware/ConnexionDepuisCookies.php">ConnexionDepuisCookies.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">23</span>
+    <span class="phpdocumentor-element-found-in__line">22</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Bootstrap any application services.</p>
+        <p class="phpdocumentor-summary">Permet de connecter l&#039;utilisateur depuis les cookies créés lors de l&#039;inscription ou de la connexion.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">boot</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
+                    <span class="phpdocumentor-signature__name">handle</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Illuminate\Http\Request">Request</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$request</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__return-type">callable(<abbr title="\Illuminate\Http\Request">Request</abbr>): <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$next</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
     
-    
-    
-    
+        <section class="phpdocumentor-description"><p>Rappel : les cookies ont une durée de validite d'une semaine.</p>
+</section>
+
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$request</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Illuminate\Http\Request">Request</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$next</span>
+                : <span class="phpdocumentor-signature__argument__return-type">callable(<abbr title="\Illuminate\Http\Request">Request</abbr>): <abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
 
     
 
     
-</article>
-                    <article
-        class="phpdocumentor-element
-            -method
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="method_register">
-        register()
-        <a href="classes/App-Providers-AppServiceProvider.html#method_register" class="headerlink"><i class="fas fa-link"></i></a>
 
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Providers/AppServiceProvider.php"><a href="files/app-providers-appserviceprovider.html"><abbr title="app/Providers/AppServiceProvider.php">AppServiceProvider.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">15</span>
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Symfony\Component\HttpFoundation\Response">Response</abbr></span>
+            </section>
 
-    </aside>
-
-        <p class="phpdocumentor-summary">Register any application services.</p>
-
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">register</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">void</span></code>
-
-    <div class="phpdocumentor-label-line">
-        </div>
-    
-    
-    
-    
-
-    
-
-    
 </article>
             </section>
 
@@ -267,7 +246,7 @@
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/app/Providers/AppServiceProvider.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/app/Http/Middleware/ConnexionDepuisCookies.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -366,7 +345,7 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                                                <li><a href="classes/App-Providers-AppServiceProvider.html#toc-methods">Methods</a></li>
+                                                                                <li><a href="classes/App-Http-Middleware-ConnexionDepuisCookies.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
@@ -374,8 +353,7 @@
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li class=""><a href="classes/App-Providers-AppServiceProvider.html#method_boot">boot()</a></li>
-                                            <li class=""><a href="classes/App-Providers-AppServiceProvider.html#method_register">register()</a></li>
+                                            <li class=""><a href="classes/App-Http-Middleware-ConnexionDepuisCookies.html#method_handle">handle()</a></li>
                                     </ul>
             </li>
                     </ul>
@@ -395,7 +373,7 @@
     </section>
 </section>
         </div>
-        <a href="classes/App-Providers-AppServiceProvider.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/App-Http-Middleware-ConnexionDepuisCookies.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 

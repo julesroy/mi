@@ -5,12 +5,10 @@
         <title>Compte</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-18 md:pt-28">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
         @include('header')
 
-        Compte
-        <br />
-        <a href="/deconnexion">Déconnexion</a>
+        <p>Compte</p>
 
         @include('footer')
     </body>
