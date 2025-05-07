@@ -412,6 +412,9 @@
   .px-6 {
     padding-inline: calc(var(--spacing) * 6);
   }
+  .px-8 {
+    padding-inline: calc(var(--spacing) * 8);
+  }
   .py-1\.5 {
     padding-block: calc(var(--spacing) * 1.5);
   }
@@ -776,6 +779,11 @@
       overflow: visible;
     }
   }
+  .md\:px-8 {
+    @media (width >= 48rem) {
+      padding-inline: calc(var(--spacing) * 8);
+    }
+  }
   .md\:py-6 {
     @media (width >= 48rem) {
       padding-block: calc(var(--spacing) * 6);
@@ -786,9 +794,9 @@
       padding-top: calc(var(--spacing) * 36);
     }
   }
-  .md\:pr-0 {
+  .md\:text-left {
     @media (width >= 48rem) {
-      padding-right: calc(var(--spacing) * 0);
+      text-align: left;
     }
   }
   .lg\:px-8 {

@@ -5,6 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\MessageThrottleMiddleware;
 use App\Http\Middleware\ConnexionDepuisCookies;
+use App\Http\Middleware\RecupererSoldeCompte;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -30,7 +31,12 @@ return Application::configure(basePath: dirname(__DIR__))
         /**
          * création de la session (connexion de l'utilisateur) depuis les cookies, avec append, on s'assure que le middleware est appelé pour chaque route du site
          */
-        $middleware->append(ConnexionDepuisCookies::class);
+        $middleware->appendToGroup('web', ConnexionDepuisCookies::class);
+
+        /**
+         * récupération du solde de l'utilisateur depuis la base de données (notamment pour le header)
+         */
+        $middleware->appendToGroup('web', RecupererSoldeCompte::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
