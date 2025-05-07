@@ -31,6 +31,11 @@ Route::get('/commander', function () {
     return view('commander');
 });
 
+// page panneau admin
+Route::get('/panneau-admin', function () {
+    return view('panneau-admin');
+});
+
 /**-----------------------------------------------
  * DEBUG
  -----------------------------------------------*/
