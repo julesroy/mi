@@ -234,6 +234,9 @@
   .z-50 {
     z-index: 50;
   }
+  .m-2 {
+    margin: calc(var(--spacing) * 2);
+  }
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
   }
@@ -297,6 +300,9 @@
   .max-h-40 {
     max-height: calc(var(--spacing) * 40);
   }
+  .min-h-20 {
+    min-height: calc(var(--spacing) * 20);
+  }
   .min-h-full {
     min-height: 100%;
   }
@@ -314,6 +320,12 @@
   }
   .w-full {
     width: 100%;
+  }
+  .min-w-80 {
+    min-width: calc(var(--spacing) * 80);
+  }
+  .min-w-full {
+    min-width: 100%;
   }
   .flex-1 {
     flex: 1;
@@ -391,6 +403,9 @@
   .bg-black {
     background-color: var(--color-black);
   }
+  .bg-gray-700 {
+    background-color: var(--color-gray-700);
+  }
   .bg-indigo-600 {
     background-color: var(--color-indigo-600);
   }
@@ -408,6 +423,9 @@
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
+  }
+  .px-5 {
+    padding-inline: calc(var(--spacing) * 5);
   }
   .px-6 {
     padding-inline: calc(var(--spacing) * 6);
@@ -591,10 +609,24 @@
       color: var(--color-gray-400);
     }
   }
+  .hover\:cursor-pointer {
+    &:hover {
+      @media (hover: hover) {
+        cursor: pointer;
+      }
+    }
+  }
   .hover\:bg-gray-100 {
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-gray-100);
+      }
+    }
+  }
+  .hover\:bg-gray-400 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-400);
       }
     }
   }
