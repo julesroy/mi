@@ -31,23 +31,19 @@
 
                 <div class="flex flex-col bg-gray-800 p-2"> <!-- Données -->  
                     <div class="flex flex-row"> <!-- Nom -->
-                        <p class="font-bold pr-3"> Nom : </p>
-                        <p> ... </p>  
+                        <p class="font-bold pr-3"> Nom : {{ $donneesUtilisateur->nom }}</p>
                     </div>
 
                     <div class="flex flex-row"> <!-- Prenom -->
-                        <p class="font-bold pr-3"> Prenom : </p>
-                        <p> ... </p>  
+                        <p class="font-bold pr-3"> Prenom : {{ $donneesUtilisateur->prenom }}</p>
                     </div>
 
                     <div class="flex flex-row"> <!-- Adresse mail -->
-                        <p class="font-bold pr-3"> Adresse mail : </p>
-                        <p> ... </p>  
+                        <p class="font-bold pr-3"> Adresse mail : {{ $donneesUtilisateur->email }}</p>
                     </div>
 
                     <div class="flex flex-row"> <!-- Numéro compte (identifiant) -->
-                        <p class="font-bold pr-3"> Identifiant : </p>
-                        <p> ... </p>  
+                        <p class="font-bold pr-3"> Numéro de compte : {{ $donneesUtilisateur->numeroCompte }}</p>
                     </div>
 
                 </div>
