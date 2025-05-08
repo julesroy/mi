@@ -27,6 +27,7 @@ Route::get('/compte', function () {
     return view('compte');
 })->middleware('auth');
 
+//page commander
 Route::get('/commander', function () {
     return view('commander');
 });
@@ -34,6 +35,36 @@ Route::get('/commander', function () {
 // page panneau admin
 Route::get('/panneau-admin', function () {
     return view('panneau-admin');
+});
+
+// page contact
+Route::get('/contact', function() {
+    return view('contact');
+});
+
+// page politiques de donnees
+Route::get('/politiques-donnees', function() {
+    return view('politiques-donnees');
+});
+
+//page mentions légales
+Route::get('/mentions-legales', function() {
+    return view('mentions-legales');
+});
+
+// page réglement
+Route::get('/reglement', function() {
+    return view('reglement');
+});
+
+// page carte
+Route::get('/carte', function() {
+    return view('carte');
+});
+
+// page actus
+Route::get('/actus', function() {
+    return view('actus');
 });
 
 /**-----------------------------------------------
