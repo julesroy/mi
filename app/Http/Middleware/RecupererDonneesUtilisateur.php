@@ -21,7 +21,7 @@ class RecupererDonneesUtilisateur
         // on définit la variable qui contiendra les données de l'utilisateur
         $donneesUtilisateur = null;
 
-        // si l'utilisateur est connecté, on récupère son solde
+        // si l'utilisateur est connecté, on récupère ses données
         if (Auth::check()) {
             // on récupère les données de l'utilisateur
             $donneesUtilisateur = DB::table('utilisateurs')

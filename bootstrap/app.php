@@ -34,7 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToGroup('web', ConnexionDepuisCookies::class);
 
         /**
-         * récupération du solde de l'utilisateur depuis la base de données (notamment pour le header)
+         * récupération des données de l'utilisateur depuis la base de données
          */
         $middleware->appendToGroup('web', RecupererDonneesUtilisateur::class);
     })
