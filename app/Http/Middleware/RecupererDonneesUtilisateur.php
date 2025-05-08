@@ -9,17 +9,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
-class RecupererSoldeCompte
+class RecupererDonneesUtilisateur
 {
     /**
-     * Permet de récupérer le solde de l'utilisateur depuis la base de données.
+     * Permet de récupérer les données de l'utilisateur depuis la base de données.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // on définit la variable qui contiendra le solde de l'utilisateur
-        $soldeUtilisateur = 0.0;
+        // on définit la variable qui contiendra les données de l'utilisateur
+        $donneesUtilisateur = null;
 
         // si l'utilisateur est connecté, on récupère son solde
         if (Auth::check()) {
@@ -27,13 +27,10 @@ class RecupererSoldeCompte
             $donneesUtilisateur = DB::table('utilisateurs')
                                 ->where('idUtilisateur', Auth::id())
                                 ->first();
-
-            // on récupère le solde de l'utilisateur
-            $soldeUtilisateur = $donneesUtilisateur->solde;
         }
 
         // on partage la donnée récupérée avec toutes les vues
-        View::share('soldeUtilisateur', $soldeUtilisateur);
+        View::share('donneesUtilisateur', $donneesUtilisateur);
 
         return $next($request);
     }

@@ -5,7 +5,7 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\MessageThrottleMiddleware;
 use App\Http\Middleware\ConnexionDepuisCookies;
-use App\Http\Middleware\RecupererSoldeCompte;
+use App\Http\Middleware\RecupererDonneesUtilisateur;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -36,7 +36,7 @@ return Application::configure(basePath: dirname(__DIR__))
         /**
          * récupération du solde de l'utilisateur depuis la base de données (notamment pour le header)
          */
-        $middleware->appendToGroup('web', RecupererSoldeCompte::class);
+        $middleware->appendToGroup('web', RecupererDonneesUtilisateur::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

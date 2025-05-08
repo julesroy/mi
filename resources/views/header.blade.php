@@ -3,7 +3,7 @@
         <span class="text-2xl font-bold text-black"><a href="/">Par'MI'Giano</a></span>
         <span id="cote-droit" class="flex items-center justify-between">
             @auth
-                <span class="pr-9 text-lg text-black md:px-8">{{ $soldeUtilisateur }}€</span>
+                <span class="pr-9 text-lg text-black md:px-8">{{ $donneesUtilisateur->solde }}€</span>
             @endauth
 
             <!-- menu déroulant que l'on fait apparaître pour les petits écrans (genre téléphone) -->
