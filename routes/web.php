@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PlanningController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -27,18 +28,65 @@ Route::get('/compte', function () {
     return view('compte');
 })->middleware('auth');
 
+
 Route::get('/commander', function () {
     return view('commander');
 });
+
+/**-----------------------------------------------
+ * ADMIN
+ -----------------------------------------------*/
 
 // page panneau admin
 Route::get('/panneau-admin', function () {
     return view('panneau-admin');
 });
 
-// page admin inventaire
+// page inventaire
 Route::get('/admin/inventaire', function () {
     return view('inventaire');
+});
+
+// Page de planning
+Route::get('/admin/planning', [PlanningController::class, 'afficher'])
+    ->middleware('auth')
+    ->middleware('can:verifier-acces-serveur')
+    ->middleware('adminAccess');
+
+Route::post('/admin/planning/supprimer-inscription', [PlanningController::class, 'supprimer'])
+    ->middleware('auth')
+    ->middleware('can:verifier-acces-serveur')
+    ->middleware('adminAccess');
+
+
+// page contact
+Route::get('/contact', function() {
+    return view('contact');
+});
+
+// page politiques de donnees
+Route::get('/politiques-donnees', function() {
+    return view('politiques-donnees');
+});
+
+//page mentions légales
+Route::get('/mentions-legales', function() {
+    return view('mentions-legales');
+});
+
+// page réglement
+Route::get('/reglement', function() {
+    return view('reglement');
+});
+
+// page carte
+Route::get('/carte', function() {
+    return view('carte');
+});
+
+// page actus
+Route::get('/actus', function() {
+    return view('actus');
 });
 
 /**-----------------------------------------------

@@ -11,6 +11,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
+
+      - name: 📢 Début du déploiement
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": "🚀 Déploiement lancé sur la branche `deploiement`."}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
+
       - name: ⚡ FTP-Deploy-Action
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -39,3 +47,19 @@ jobs:
             .git/**
           local-dir: ./
           server-dir: www/
+
+      - name: ✅ Fin du déploiement
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": "✅ Déploiement terminé avec succès ! 🎉"}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      - name: ❌ Échec du déploiement
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{"content": "❌ Échec du déploiement sur la branche `deploiement`."}' \
+               ${{ secrets.DISCORD_WEBHOOK_URL }}
