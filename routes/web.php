@@ -28,10 +28,10 @@ Route::get('/compte', function () {
     return view('compte');
 })->middleware('auth');
 
-
+// page de commande 
 Route::get('/commander', function () {
     return view('commander');
-});
+})->middleware('auth');
 
 /**-----------------------------------------------
  * ADMIN
@@ -51,6 +51,32 @@ Route::post('/admin/planning/supprimer-inscription', [PlanningController::class,
     ->middleware('auth')
     ->middleware('can:verifier-acces-serveur')
     ->middleware('adminAccess');
+
+// Page de validation/modifier... des commande 
+Route::prefix('admin/commandes')->group(function() {
+    Route::get('/', [CommandeCuisineController::class, 'index'])
+         ->name('admin.commandes.index');
+         
+    Route::get('/data', [CommandeCuisineController::class, 'getCommandes'])
+         ->name('admin.commandes.data');
+         
+    Route::post('/commande-prete/{id}', [CommandeCuisineController::class, 'marquerCommandePrete'])
+         ->name('admin.commandes.marquer-prete');
+         
+    Route::post('/commande-donnee/{id}', [CommandeCuisineController::class, 'marquerCommandeServie'])
+         ->name('admin.commandes.marquer-servie');
+         
+    Route::post('/modifier-commande/{id}', [CommandeCuisineController::class, 'modifierCommande'])
+         ->name('admin.commandes.modifier');
+         
+    Route::post('/annuler-commande/{id}', [CommandeCuisineController::class, 'annulerCommande'])
+         ->name('admin.commandes.annuler');
+});
+Route::get('/admin/commandes', function () {
+    return view('admin/commandes');
+})->middleware('auth')
+  ->middleware('can:verifier-acces-serveur')
+  ->middleware('adminAccess');
 
 
 // page contact
