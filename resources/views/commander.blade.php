@@ -13,7 +13,7 @@
             <!-- Conteneur principal -->
             <div class="w-full max-w-6xl">
                 <!-- Conteneur des blocs + dialog -->
-                <div class="flex flex-col items-stretch justify-center md:gap-4 pb-6 transition-all duration-300 bg-white text-black rounded-2xl" id="ecran-1">
+                <div class="hidden flex-col items-stretch justify-center md:gap-4 pb-6 transition-all duration-300 bg-white text-black rounded-2xl" id="ecran-1">
                     <div class="pt-2 text-xl text-center">Fais ton choix</div>
 
                     <div class="h-148 md:h-132 flex flex-col md:flex-row justify-around items-center" id="elements-commande">
@@ -76,6 +76,31 @@
 
                     <div class="text-center border-2 w-10/12 md:w-1/3 rounded-lg bg-black text-white flex justify-center mx-auto py-2">Ton panier : 0.0€</div>
                 </div>
+
+                <div class="flex flex-col items-stretch justify-center md:gap-4 pb-6 transition-all duration-300 bg-white text-black rounded-2xl" id="ecran-snacks">
+                    <div class="pt-2 text-xl text-center">Choisis tes snacks/boissons</div>
+
+                    <div class="flex justify-around">
+                        <span id="onglet-snacks" class="border-b-2 border-black font-semibold">Snacks</span>
+                        <span id="onglet-boissons">Boissons</span>
+                    </div>
+
+                    <div class="h-148 md:h-128 grid grid-cols-5 md:grid-cols-10 justify-items-center" id="elements-snacks">
+                        <div class="border w-10/12 h-24 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out" data-selected="false" onclick="toggleSelection(this)">
+                            <span>img snack</span>
+                            <p>Snack</p>
+                        </div>
+                    </div>
+
+                    <div class="h-148 md:h-128 hidden grid-cols-5 md:grid-cols-10 justify-items-center" id="elements-boissons">
+                        <div class="border w-10/12 h-24 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out" data-selected="false" onclick="toggleSelection(this)">
+                            <span>img boisson</span>
+                            <p>Boisson</p>
+                        </div>
+                    </div>
+
+                    <div class="text-center border-2 w-10/12 md:w-1/3 rounded-lg bg-black text-white flex justify-center mx-auto py-2">Ton panier : 0.0€</div>
+                </div>
             </div>
         </div>
 
@@ -123,6 +148,35 @@
                         }, 500);
                     });
                 }
+            });
+
+            /**
+             * Pour changer d'onglet snacks/boissons et la sélection des éléments
+             */
+            function toggleSelection(el) {
+                const selected = el.getAttribute('data-selected') === 'true';
+                el.setAttribute('data-selected', !selected);
+                el.classList.toggle('bg-black', !selected);
+                el.classList.toggle('text-white', !selected);
+            }
+
+            const ongletSnacks = document.getElementById('onglet-snacks');
+            const ongletBoissons = document.getElementById('onglet-boissons');
+            const sectionSnacks = document.getElementById('elements-snacks');
+            const sectionBoissons = document.getElementById('elements-boissons');
+
+            ongletSnacks.addEventListener('click', () => {
+                sectionSnacks.classList.remove('hidden');
+                sectionBoissons.classList.add('hidden');
+                ongletSnacks.classList.add('border-b-2', 'border-black', 'font-semibold');
+                ongletBoissons.classList.remove('border-b-2', 'border-black', 'font-semibold');
+            });
+
+            ongletBoissons.addEventListener('click', () => {
+                sectionBoissons.classList.remove('hidden');
+                sectionSnacks.classList.add('hidden');
+                ongletBoissons.classList.add('border-b-2', 'border-black', 'font-semibold');
+                ongletSnacks.classList.remove('border-b-2', 'border-black', 'font-semibold');
             });
         </script>
     </body>
