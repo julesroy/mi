@@ -248,6 +248,12 @@
   .m-2 {
     margin: calc(var(--spacing) * 2);
   }
+  .m-2\.5 {
+    margin: calc(var(--spacing) * 2.5);
+  }
+  .m-auto {
+    margin: auto;
+  }
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
   }
@@ -362,6 +368,9 @@
   .cursor-default {
     cursor: default;
   }
+  .cursor-pointer {
+    cursor: pointer;
+  }
   .list-inside {
     list-style-position: inside;
   }
@@ -370,6 +379,9 @@
   }
   .flex-col {
     flex-direction: column;
+  }
+  .flex-row {
+    flex-direction: row;
   }
   .items-center {
     align-items: center;
@@ -385,6 +397,9 @@
   }
   .justify-items-center {
     justify-items: center;
+  }
+  .gap-2\.5 {
+    gap: calc(var(--spacing) * 2.5);
   }
   .gap-4 {
     gap: calc(var(--spacing) * 4);
@@ -429,6 +444,10 @@
   .border-b-2 {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 2px;
+  }
+  .border-none {
+    --tw-border-style: none;
+    border-style: none;
   }
   .border-gray-300 {
     border-color: var(--color-gray-300);
@@ -603,6 +622,9 @@
   .text-white {
     color: var(--color-white);
   }
+  .underline {
+    text-decoration-line: underline;
+  }
   .shadow {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -682,6 +704,11 @@
   .placeholder\:text-gray-400 {
     &::placeholder {
       color: var(--color-gray-400);
+    }
+  }
+  .even\:bg-gray-800 {
+    &:nth-child(even) {
+      background-color: var(--color-gray-800);
     }
   }
   .hover\:cursor-pointer {
@@ -1013,6 +1040,27 @@
       &:active {
         color: var(--color-gray-300);
       }
+    }
+  }
+  .\[\&_td\,\&_th\]\:border-collapse {
+    & td,& th {
+      border-collapse: collapse;
+    }
+  }
+  .\[\&_td\,\&_th\]\:p-1 {
+    & td,& th {
+      padding: calc(var(--spacing) * 1);
+    }
+  }
+  .\[\&_th\,\&_td\]\:border-2 {
+    & th,& td {
+      border-style: var(--tw-border-style);
+      border-width: 2px;
+    }
+  }
+  .\[\&_th\,\&_td\]\:border-white {
+    & th,& td {
+      border-color: var(--color-white);
     }
   }
 }
