@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GestionComptesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanningController;
@@ -52,6 +53,12 @@ Route::post('/admin/planning/supprimer-inscription', [PlanningController::class,
     ->middleware('can:verifier-acces-serveur')
     ->middleware('adminAccess');
 
+//page gestion des comptes
+Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
+    ->middleware('auth')
+    ->middleware('can:verifier-acces-serveur')
+    ->middleware('adminAccess')
+    ->name('gestion-comptes');
 
 // page contact
 Route::get('/contact', function() {
