@@ -53,6 +53,36 @@ Route::post('/admin/planning/supprimer-inscription', [PlanningController::class,
     ->middleware('adminAccess');
 
 
+// page contact
+Route::get('/contact', function() {
+    return view('contact');
+});
+
+// page politiques de donnees
+Route::get('/politiques-donnees', function() {
+    return view('politiques-donnees');
+});
+
+//page mentions légales
+Route::get('/mentions-legales', function() {
+    return view('mentions-legales');
+});
+
+// page réglement
+Route::get('/reglement', function() {
+    return view('reglement');
+});
+
+// page carte
+Route::get('/carte', function() {
+    return view('carte');
+});
+
+// page actus
+Route::get('/actus', function() {
+    return view('actus');
+});
+
 /**-----------------------------------------------
  * DEBUG
  -----------------------------------------------*/

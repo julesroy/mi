@@ -12,9 +12,9 @@
                     <a href="/panneau-admin" class="w-full text-center px-8 py-4 hover:bg-gray-100 text-black">Admin</a>
                 @endcan
 
-                <a href="#" class="w-full text-center px-8 py-4 hover:bg-gray-100 text-black">Carte</a>
+                <a href="/carte" class="w-full text-center px-8 py-4 hover:bg-gray-100 text-black">Carte</a>
                 <a href="/commander" class="w-full text-center px-8 py-4 hover:bg-gray-100 text-black">Commander</a>
-                <a href="#" class="w-full text-center px-8 py-4 hover:bg-gray-100 text-black">Contact</a>
+                <a href="/contact" class="w-full text-center px-8 py-4 hover:bg-gray-100 text-black">Contact</a>
                 <!-- dropdown (sous-menu) pour le compte -->
                 <div class="relative w-full">
                     <button id="compte-btn" class="w-full text-center px-8 py-4 hover:bg-gray-100 text-black flex items-center justify-center">

@@ -59,7 +59,7 @@
                 </div>
 
                 <!-- Sandwich -->
-                 <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center">
                     <div class="text-lg font-medium">
                         <h2 class="text-xl">Sandwich</h2>
                         <p class="text-sm text-white">Garnitures (2 au choix dont 1 viande max) + salade, tomates, beurre</p>
@@ -68,7 +68,7 @@
                 </div>
 
                 <!-- Panini -->
-                 <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center">
                     <div class="text-lg font-medium">
                         <h2 class="text-xl">Panini</h2>
                         <p class="text-sm text-white">Garnitures (2 au choix) (/!\1 viande max) + salade, tomates, beurre</p>
@@ -79,11 +79,12 @@
                 <!-- Périphériques -->
                 <h2 class="text-xl">Périphériques</h2>
                 <!-- Snacks -->
-                 <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center">
                     <div class="text-lg font-medium">
                         <h2 class="text-xl">Snacks</h2>
                         <p class="text-sm text-white">
-                            Salé : chips barbecue, chips ancienne, chips nature, chips poulet<br>
+                            Salé : chips barbecue, chips ancienne, chips nature, chips poulet
+                            <br />
                             Sucré : Kinder Bueno, Kinder Bueno White, Kinder Délice, KitKat, M&Ms, Lion, Granola
                         </p>
                     </div>
@@ -91,23 +92,26 @@
                 </div>
 
                 <!-- Boissons -->
-                 <div class="flex justify-between items-center">
+                <div class="flex justify-between items-center">
                     <div class="text-lg font-medium">
                         <h2 class="text-xl">Snacks</h2>
                         <p class="text-sm text-white">
-                            Eau : plate, gazeuse<br>
-                            Soft : Coca-cola, Coca-cola Zéro, Coca-Cola Cherry, Oasis Tropical, Oasis Pomme Cassis Framboise, Fanta Orange, Fante Citron, Sprite, ...<br>
-                            Redbull : 
+                            Eau : plate, gazeuse
+                            <br />
+                            Soft : Coca-cola, Coca-cola Zéro, Coca-Cola Cherry, Oasis Tropical, Oasis Pomme Cassis Framboise, Fanta Orange, Fante Citron, Sprite, ...
+                            <br />
+                            Redbull :
                         </p>
                     </div>
                     <div class="ml-auto text-sm font-bold text-red-600">
-                        0,50€<br>
-                        0,80€<br>
-                        1,30€<br>
+                        0,50€
+                        <br />
+                        0,80€
+                        <br />
+                        1,30€
+                        <br />
                     </div>
                 </div>
-
-
             </div>
         </div>
         @include('footer')
