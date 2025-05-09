@@ -47,39 +47,43 @@ Route::get('/admin/planning', [PlanningController::class, 'afficher'])
     ->middleware('auth')
     ->middleware('can:verifier-acces-serveur')
     ->middleware('adminAccess');
-Route::post('/admin/planning/supprimer-inscription', [PlanningController::class, 'supprimer'])
+Route::delete('/admin/planning/supprimer-inscription/{idInscription}', [PlanningController::class, 'supprimer'])
+    ->middleware('auth')
+    ->middleware('can:verifier-acces-serveur')
+    ->middleware('adminAccess');
+Route::post('/admin/planning/ajouter-inscription', [PlanningController::class, 'ajouter'])
     ->middleware('auth')
     ->middleware('can:verifier-acces-serveur')
     ->middleware('adminAccess');
 
 
 // page contact
-Route::get('/contact', function() {
+Route::get('/contact', function () {
     return view('contact');
 });
 
 // page politiques de donnees
-Route::get('/politiques-donnees', function() {
+Route::get('/politiques-donnees', function () {
     return view('politiques-donnees');
 });
 
 //page mentions légales
-Route::get('/mentions-legales', function() {
+Route::get('/mentions-legales', function () {
     return view('mentions-legales');
 });
 
 // page réglement
-Route::get('/reglement', function() {
+Route::get('/reglement', function () {
     return view('reglement');
 });
 
 // page carte
-Route::get('/carte', function() {
+Route::get('/carte', function () {
     return view('carte');
 });
 
 // page actus
-Route::get('/actus', function() {
+Route::get('/actus', function () {
     return view('actus');
 });
 
