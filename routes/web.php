@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanningController;
+use App\Http\Controllers\InventaireController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -43,9 +44,7 @@ Route::get('/panneau-admin', function () {
 });
 
 // page inventaire
-Route::get('/admin/inventaire', function () {
-    return view('inventaire');
-});
+Route::get('/admin/inventaire', [InventaireController::class, 'index'])->middleware('auth');
 
 // Page de planning
 Route::get('/admin/planning', [PlanningController::class, 'afficher'])
