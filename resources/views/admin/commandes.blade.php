@@ -173,7 +173,7 @@
         }
         
         window.marquerPrete = function(id) {
-            if (id === 999) {
+            if (id === 999999) {
                 alert('Cette commande est un exemple test - Action impossible');
                 return;
             }
@@ -199,7 +199,7 @@
         };
         
         window.marquerServie = function(id) {
-            if (id === 999) {
+            if (id === 999999) {
                 alert('Cette commande est un exemple test - Action impossible');
                 return;
             }
@@ -225,7 +225,7 @@
         };
         
         window.modifierCommande = function(id) {
-            if (id === 999) {
+            if (id === 999999) {
                 alert('Cette commande est un exemple test - Action impossible');
                 return;
             }
@@ -235,7 +235,7 @@
         };
         
         window.annulerCommande = function(id) {
-            if (id === 999) {
+            if (id === 999999) {
                 alert('Cette commande est un exemple test - Action impossible');
                 return;
             }
