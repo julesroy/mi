@@ -36,6 +36,11 @@ Route::get('/panneau-admin', function () {
     return view('panneau-admin');
 });
 
+// page admin inventaire
+Route::get('/admin/inventaire', function () {
+    return view('inventaire');
+});
+
 /**-----------------------------------------------
  * DEBUG
  -----------------------------------------------*/
