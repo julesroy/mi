@@ -40,7 +40,7 @@
                             <a href="/admin/inventaire" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Inventaire</p>
                             </a>
-                            <a href="/gestion-stocks" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/gestion-stocks" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Gestion des stocks</p>
                             </a>
                             <a href="/gestion-carte" class="text-center text-base md:text-lg font-bold hover:underline">

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Stock; // Remplace par le nom réel de ton modèle
+use App\Models\Stock;
 
-class InventaireController extends Controller
+class GestionStocksController extends Controller
 {
     public function index(Request $request)
     {
@@ -43,7 +43,7 @@ class InventaireController extends Controller
 
         $stocks = $query->get();
 
-        return view('admin/inventaire', compact('stocks', 'sort', 'direction'));
+        return view('admin/gestion-stocks', compact('stocks', 'sort', 'direction'));
     }
 
 }

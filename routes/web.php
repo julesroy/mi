@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanningController;
-use App\Http\Controllers\InventaireController;
+use App\Http\Controllers\GestionStocksController;
+use App\Http\Controllers\IngredientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -43,8 +44,15 @@ Route::get('/panneau-admin', function () {
     return view('panneau-admin');
 });
 
-// page inventaire
-Route::get('/admin/inventaire', [InventaireController::class, 'index'])->middleware('auth');
+// page Gestion stocks
+Route::get('/admin/gestion-stocks', [GestionStocksController::class, 'index'])->middleware('auth');
+
+// Routes pour la gestion des ingrédients
+Route::get('/admin/inventaire', [IngredientController::class, 'index'])->middleware('auth');
+Route::post('/admin/ingredients/store', [IngredientController::class, 'store'])->name('ingredients.store')->middleware('auth');
+Route::post('/admin/ingredients/update', [IngredientController::class, 'update'])->name('ingredients.update')->middleware('auth');
+Route::post('/admin/ingredients/delete', [IngredientController::class, 'delete'])->name('ingredients.delete')->middleware('auth');
+
 
 // Page de planning
 Route::get('/admin/planning', [PlanningController::class, 'afficher'])
