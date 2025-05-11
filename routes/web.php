@@ -4,6 +4,9 @@ use App\Http\Controllers\GestionComptesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanningController;
+use App\Http\Controllers\CommandeCuisineController;
+use App\Http\Controllers\GestionStocksController;
+use App\Http\Controllers\IngredientController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +33,16 @@ Route::get('/compte', function () {
 })->middleware('auth');
 
 
+// page Gestion stocks
+Route::get('/admin/gestion-stocks', [GestionStocksController::class, 'index'])->middleware('auth');
+
+// Routes pour la gestion des ingrédients
+Route::get('/admin/inventaire', [IngredientController::class, 'index'])->middleware('auth');
+Route::post('/admin/ingredients/store', [IngredientController::class, 'store'])->name('ingredients.store')->middleware('auth');
+Route::post('/admin/ingredients/update', [IngredientController::class, 'update'])->name('ingredients.update')->middleware('auth');
+Route::post('/admin/ingredients/delete', [IngredientController::class, 'delete'])->name('ingredients.delete')->middleware('auth');
+
+// page commander
 Route::get('/commander', function () {
     return view('commander');
 });
@@ -63,6 +76,32 @@ Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherCompte
     ->middleware('can:verifier-acces-serveur')
     ->middleware('adminAccess')
     ->name('gestion-comptes');
+
+// Page de validation/modifier... des commande 
+Route::prefix('admin/commandes')->group(function() {
+    Route::get('/', [CommandeCuisineController::class, 'index'])
+         ->name('admin.commandes.index');
+         
+    Route::get('/data', [CommandeCuisineController::class, 'getCommandes'])
+         ->name('admin.commandes.data');
+         
+    Route::post('/commande-prete/{id}', [CommandeCuisineController::class, 'marquerCommandePrete'])
+         ->name('admin.commandes.marquer-prete');
+         
+    Route::post('/commande-donnee/{id}', [CommandeCuisineController::class, 'marquerCommandeServie'])
+         ->name('admin.commandes.marquer-servie');
+         
+    Route::post('/modifier-commande/{id}', [CommandeCuisineController::class, 'modifierCommande'])
+         ->name('admin.commandes.modifier');
+         
+    Route::post('/annuler-commande/{id}', [CommandeCuisineController::class, 'annulerCommande'])
+         ->name('admin.commandes.annuler');
+});
+Route::get('/admin/commandes', function () {
+    return view('admin/commandes');
+})->middleware('auth')
+  ->middleware('can:verifier-acces-serveur')
+  ->middleware('adminAccess');
 
 // page contact
 Route::get('/contact', function () {
