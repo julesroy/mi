@@ -35,11 +35,11 @@
         <form method="POST" action="planning/ajouter-inscription"
             class="bg-gray-800 flex flex-col [&_*]:text-white border border-white rounded-2xl p-2.5 pr-3.5 pl-3.5 [&_label]:text-2xl [&>input,&>select]:mb-1.5 [&>input,&>select]:bg-gray-900">
 
-            @csrf <!-- {{ csrf_field() }} -->
+            @csrf
 
             <h3 class="text-center text-3xl font-bold mt-2.5 mb-2.5">Inscription planning</h3>
 
-            @if ($acces == 3)
+            @can('verifier-acces-super-administrateur')
                 <label for="serveur">Serveur</label>
                 <select name="serveur" required>
                     @foreach ($servers as $server)
@@ -50,7 +50,7 @@
                 </select>
             @else
                 <input type="hidden" value="{{ $userId }}" name="serveur" />
-            @endif
+            @endcan
 
             <label for="poste">Poste</label>
             <select name="poste" required>
@@ -140,7 +140,7 @@
                         @endswitch
                     </td>
                     <td>
-                        @if ($acces == 3 || $userId == $inscription->numeroCompte)
+                        @if (Auth::user()->can('verifier-acces-super-administrateur') || $userId == $inscription->numeroCompte)
                             <button class="cursor-pointer border-none m-auto"
                                 onclick="deleteInscription({{ $inscription->idInscription }})">Suppr</button>
                         @endif
