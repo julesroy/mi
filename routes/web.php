@@ -51,24 +51,19 @@ Route::get('/commander', function () {
  * ADMIN
  -----------------------------------------------*/
 
-// page panneau admin
-Route::get('/panneau-admin', function () {
-    return view('panneau-admin');
+// Groupe de middlewares pour les pages admin : utilisateur authentifié, avec au minimum l'accès serveur
+Route::middleware(['auth', 'adminAccess', 'can:verifier-acces-serveur'], function () {
+    // page panneau admin
+    Route::get('/panneau-admin', function () {
+        return view('panneau-admin');
+    });
+
+    // Page de planning
+    Route::get('/admin/planning', [PlanningController::class, 'afficher']);
+    Route::delete('/admin/planning/supprimer-inscription/{idInscription}', [PlanningController::class, 'supprimer']);
+    Route::post('/admin/planning/ajouter-inscription', [PlanningController::class, 'ajouter']);
 });
 
-// Page de planning
-Route::get('/admin/planning', [PlanningController::class, 'afficher'])
-    ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
-    ->middleware('adminAccess');
-Route::delete('/admin/planning/supprimer-inscription/{idInscription}', [PlanningController::class, 'supprimer'])
-    ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
-    ->middleware('adminAccess');
-Route::post('/admin/planning/ajouter-inscription', [PlanningController::class, 'ajouter'])
-    ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
-    ->middleware('adminAccess');
 
 //page gestion des comptes
 Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
