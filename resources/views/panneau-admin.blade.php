@@ -37,10 +37,10 @@
                     <div class="flex flex-col justify-between m-0 md:m-4 p-4 w-full md:w-72 h-full bg-[#151515] rounded-lg shadow">
                         <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-white">Respo</h2>
                         <div class="flex flex-col items-center gap-4">
-                            <a href="/inventaire" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/inventaire" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Inventaire</p>
                             </a>
-                            <a href="/gestion-stocks" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/gestion-stocks" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Gestion des stocks</p>
                             </a>
                             <a href="/gestion-carte" class="text-center text-base md:text-lg font-bold hover:underline">
