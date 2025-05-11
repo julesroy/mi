@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+
+        @include('head')
+        <title>Gestion des ingrédients</title>
+        <style>
+            dialog {
+                background-color: #2a2a2a;
+                color: white;
+                border: 2px solid #4a4a4a;
+                border-radius: 8px;
+                padding: 20px;
+                max-width: 500px;
+            }
+            dialog::backdrop {
+                background-color: rgba(0, 0, 0, 0.7);
+            }
+            .action-icon {
+                cursor: pointer;
+                width: 20px;
+                height: 20px;
+                margin: 0 5px;
+            }
+        </style>
+    </head>
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
+        @include('header')
+
+        @php
+            $categories = [
+                0 => 'Ingrédient',
+                1 => 'Viande',
+                2 => 'Extra',
+                3 => 'Snack/Boisson',
+            ];
+        @endphp
+
+        <div class="container mx-auto p-4">
+            <h1 class="text-2xl font-bold mb-4">Inventaire des ingrédients</h1>
+            
+            <div class="overflow-x-auto min-w-full">
+                <!-- Barre de recherche et bouton d'ajout -->
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center min-w-full mb-4 bg-gray-800 p-4 rounded gap-3 sticky left-0 top-0 z-10">
+                    <form method="GET" action="{{ url()->current() }}" class="flex flex-col sm:flex-row w-full md:w-auto">
+                        <input type="text" name="search" placeholder="Rechercher"
+                            class="px-3 py-2 bg-gray-700 text-white rounded-t sm:rounded-l sm:rounded-t-none border-b sm:border-b-0 sm:border-r-0 border-gray-600 w-full sm:w-auto" value="{{ request('search') }}">
+                        <select name="categorie"
+                            class="px-3 py-2 bg-gray-700 text-white border-t-0 sm:border-t sm:border-l-0 sm:border-r-0 border-gray-600 w-full sm:w-auto">
+                            <option value="">Toutes catégories</option>
+                            @foreach($categories as $key => $label)
+                                <option value="{{ $key }}" {{ request('categorie') !== null && request('categorie') !== '' && request('categorie') == $key ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-b sm:rounded-r sm:rounded-b-none hover:bg-blue-700 w-full sm:w-auto mt-2 sm:mt-0">Rechercher</button>
+                    </form>
+                    <button id="openAddDialog"
+                        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-full md:w-auto">
+                        + Ajouter un ingrédient
+                    </button>
+                </div>
+
+
+                <!-- Indication du tri actuel -->
+                <p class="min-w-full mb-2 text-sm text-gray-400">
+                    @if(request('sort'))
+                    Trié par <span class="font-semibold text-white">
+                        {{ request('sort') == 'nom' ? 'Nom' : 
+                           (request('sort') == 'quantite' ? 'Quantité' : 
+                            (request('sort') == 'marque' ? 'Marque' : 'Prix')) }}
+                    </span>
+                    ({{ request('direction', 'asc') === 'asc' ? 'croissant' : 'décroissant' }})
+                    @else
+                    Tri par défaut
+                    @endif
+                </p>
+
+                <!-- Tableau d'inventaire -->
+                <table class="min-w-full bg-white text-black rounded shadow">
+                    <thead>
+                        <tr class="bg-gray-700 text-white">
+                            <th class="py-2 px-4 border-b">
+                                <a href="{{ request()->fullUrlWithQuery([
+                                    'sort' => 'nom',
+                                    'direction' => request('sort') === 'nom' && request('direction') === 'asc' ? 'desc' : 'asc'
+                                ]) }}" class="flex items-center gap-1 text-white">
+                                    Nom {!! request('sort') === 'nom' ? (request('direction') === 'asc' ? '▲' : '▼') : '' !!}
+                                </a>
+                            </th>
+                            <th class="py-2 px-4 border-b">
+                                <a href="{{ request()->fullUrlWithQuery([
+                                    'sort' => 'quantite',
+                                    'direction' => request('sort') === 'quantite' && request('direction') === 'asc' ? 'desc' : 'asc'
+                                ]) }}" class="flex items-center gap-1 text-white">
+                                    Quantité {!! request('sort') === 'quantite' ? (request('direction') === 'asc' ? '▲' : '▼') : '' !!}
+                                </a>
+                            </th>
+                            <th class="py-2 px-4 border-b">
+                                <a href="{{ request()->fullUrlWithQuery([
+                                    'sort' => 'marque',
+                                    'direction' => request('sort') === 'marque' && request('direction') === 'asc' ? 'desc' : 'asc'
+                                ]) }}" class="flex items-center gap-1 text-white">
+                                    Marque {!! request('sort') === 'marque' ? (request('direction') === 'asc' ? '▲' : '▼') : '' !!}
+                                </a>
+                            </th>
+                            @if(Auth::user() && Auth::user()->acces == 3)
+                            <th class="py-2 px-4 border-b">
+                                <a href="{{ request()->fullUrlWithQuery([
+                                    'sort' => 'estimationPrix',
+                                    'direction' => request('sort') === 'estimationPrix' && request('direction') === 'asc' ? 'desc' : 'asc'
+                                ]) }}" class="flex items-center gap-1 text-white">
+                                    Prix estimé {!! request('sort') === 'estimationPrix' ? (request('direction') === 'asc' ? '▲' : '▼') : '' !!}
+                                </a>
+                            </th>
+                            @endif
+                            <th class="py-2 px-4 border-b">Catégorie</th>
+                            <th class="py-2 px-4 border-b">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($ingredients as $ingredient)
+                        <tr id="row-{{ $ingredient->idIngredient }}" class="hover:bg-gray-100">
+                            <td class="py-2 px-4 border-b" id="nom-{{ $ingredient->idIngredient }}">{{ $ingredient->nom }}</td>
+                            <td class="py-2 px-4 border-b" id="quantite-{{ $ingredient->idIngredient }}">{{ $ingredient->quantite }}</td>
+                            <td class="py-2 px-4 border-b" id="marque-{{ $ingredient->idIngredient }}">{{ $ingredient->marque }}</td>
+                            @if(Auth::user() && Auth::user()->acces == 3)
+                            <td class="py-2 px-4 border-b" id="prix-{{ $ingredient->idIngredient }}">{{ $ingredient->estimationPrix }}</td>
+                            @endif
+                            <td class="py-2 px-4 border-b" id="categorie-{{ $ingredient->idIngredient }}">
+                                {{ $categories[$ingredient->categorieIngredient] ?? 'Inconnu' }}
+                            </td>                            
+                            <td class="py-2 px-4 border-b">
+                                <div class="flex">
+                                    <img src="{{ asset('images/icons/edit.svg') }}" alt="Modifier" class="action-icon edit-btn" 
+                                     data-id="{{ $ingredient->idIngredient }}">
+                                <img src="{{ asset('images/icons/delete.svg') }}" alt="Supprimer" class="action-icon delete-btn"
+                                     data-id="{{ $ingredient->idIngredient }}">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr id="edit-row-{{ $ingredient->idIngredient }}" class="hidden bg-gray-200">
+                            <td class="py-2 px-4 border-b">
+                                <input type="text" class="w-full p-1 border" id="edit-nom-{{ $ingredient->idIngredient }}" 
+                                       value="{{ $ingredient->nom }}">
+                            </td>
+                            <td class="py-2 px-4 border-b">
+                                <input type="number" class="w-full p-1 border" id="edit-quantite-{{ $ingredient->idIngredient }}" 
+                                       value="{{ $ingredient->quantite }}">
+                            </td>
+                            <td class="py-2 px-4 border-b">
+                                <input type="text" class="w-full p-1 border" id="edit-marque-{{ $ingredient->idIngredient }}" 
+                                       value="{{ $ingredient->marque }}">
+                            </td>
+                            @if(Auth::user() && Auth::user()->acces == 3)
+                            <td class="py-2 px-4 border-b">
+                                <input type="number" step="0.01" class="w-full p-1 border" id="edit-prix-{{ $ingredient->idIngredient }}" 
+                                       value="{{ $ingredient->estimationPrix }}">
+                            </td>
+                            @endif
+                            <td class="py-2 px-4 border-b">
+                                <select class="w-full p-1 border" id="edit-categorie-{{ $ingredient->idIngredient }}">
+                                    <option value="0" {{ $ingredient->categorieIngredient == 0 ? 'selected' : '' }}>Ingrédient</option>
+                                    <option value="1" {{ $ingredient->categorieIngredient == 1 ? 'selected' : '' }}>Viande</option>
+                                    <option value="2" {{ $ingredient->categorieIngredient == 2 ? 'selected' : '' }}>Extra</option>
+                                    <option value="3" {{ $ingredient->categorieIngredient == 3 ? 'selected' : '' }}>Snack/Boisson</option>
+                                </select>
+                            </td>
+                            <td class="py-2 px-4 border-b">
+                                <button class="px-4 py-2 bg-green-600 text-white rounded save-btn w-28" data-id="{{ $ingredient->idIngredient }}">Enregistrer</button>
+                                <button class="px-4 py-2 bg-gray-400 text-white rounded cancel-btn w-28 mt-1" data-id="{{ $ingredient->idIngredient }}">Annuler</button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dialog pour l'ajout d'un ingrédient -->
+        <dialog id="addDialog">
+            <h2 class="text-xl font-bold mb-4">Ajouter un article</h2>
+            <form id="addIngredientForm" class="space-y-4">
+                @csrf
+                <div class="grid grid-cols-1 gap-4">
+                    <div>
+                        <label for="nom" class="block mb-1">Nom de l'article</label>
+                        <input type="text" id="nom" name="nom" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                    </div>
+                    
+                    <div>
+                        <label for="categorieIngredient" class="block mb-1">Type</label>
+                        <select id="categorieIngredient" name="categorieIngredient" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                            <option value="0">Ingrédient</option>
+                            <option value="1">Viande</option>
+                            <option value="2">Extra</option>
+                            <option value="3">Snack/Boisson</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="quantite" class="block mb-1">Quantité</label>
+                        <input type="number" id="quantite" name="quantite" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                    </div>
+                    
+                    <div>
+                        <label for="marque" class="block mb-1">Marque</label>
+                        <input type="text" id="marque" name="marque" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                    </div>
+                    
+                    <div>
+                        <label for="commentaire" class="block mb-1">Commentaire (optionnel)</label>
+                        <textarea id="commentaire" name="commentaire" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" rows="3"></textarea>
+                    </div>
+                    
+                    @if(Auth::user() && Auth::user()->acces == 3)
+                    <div>
+                        <label for="estimationPrix" class="block mb-1">Prix estimé</label>
+                        <input type="number" step="0.01" id="estimationPrix" name="estimationPrix" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600">
+                    </div>
+                    @endif
+                </div>
+                
+                <div class="flex justify-end space-x-2 pt-4">
+                    <button type="button" id="closeDialog" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Ajouter</button>
+                </div>
+            </form>
+        </dialog>
+
+        <!-- Dialog de confirmation de suppression -->
+        <dialog id="deleteDialog" class="p-4 rounded">
+            <h2 class="text-xl font-bold mb-4">Confirmer la suppression</h2>
+            <p>Êtes-vous sûr de vouloir supprimer cet ingrédient ?</p>
+            <div class="flex justify-end space-x-2 mt-4">
+                <button id="cancelDelete" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Annuler</button>
+                <button id="confirmDelete" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Supprimer</button>
+            </div>
+            <input type="hidden" id="deleteIngredientId">
+        </dialog>
+
+        <script>
+            const categories = {
+                0: 'Ingrédient',
+                1: 'Viande',
+                2: 'Extra',
+                3: 'Snack/Boisson'
+            };
+
+            // Gestion des dialogues
+            const addDialog = document.getElementById('addDialog');
+            const deleteDialog = document.getElementById('deleteDialog');
+            
+            // Ouvrir le dialogue d'ajout
+            document.getElementById('openAddDialog').addEventListener('click', () => {
+                addDialog.showModal();
+            });
+            
+            // Fermer le dialogue d'ajout
+            document.getElementById('closeDialog').addEventListener('click', () => {
+                addDialog.close();
+            });
+
+            // Gestion de l'édition des lignes
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    document.getElementById(`row-${id}`).classList.add('hidden');
+                    document.getElementById(`edit-row-${id}`).classList.remove('hidden');
+                });
+            });
+
+            // Annuler l'édition
+            document.querySelectorAll('.cancel-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    document.getElementById(`row-${id}`).classList.remove('hidden');
+                    document.getElementById(`edit-row-${id}`).classList.add('hidden');
+                });
+            });
+
+            // Sauvegarder l'édition
+            document.querySelectorAll('.save-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+
+                    // Récupère les valeurs des champs d'édition
+                    const nom = document.getElementById('edit-nom-' + id).value;
+                    const quantite = document.getElementById('edit-quantite-' + id).value;
+                    const marque = document.getElementById('edit-marque-' + id).value;
+                    const categorie = document.getElementById('edit-categorie-' + id).value;
+                    const commentaire = document.getElementById('edit-commentaire-' + id) ? document.getElementById('edit-commentaire-' + id).value : '';
+                    const estimationPrix = document.getElementById('edit-prix-' + id) ? document.getElementById('edit-prix-' + id).value : '';
+
+                    const formData = new FormData();
+                    formData.append('id', id);
+                    formData.append('nom', nom);
+                    formData.append('quantite', quantite);
+                    formData.append('marque', marque);
+                    formData.append('categorieIngredient', categorie);
+                    formData.append('commentaire', commentaire);
+                    formData.append('estimationPrix', estimationPrix);
+
+                    fetch('/admin/ingredients/update', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Met à jour les cellules de la ligne avec les nouvelles valeurs
+                            document.getElementById('nom-' + id).textContent = nom;
+                            document.getElementById('quantite-' + id).textContent = quantite;
+                            document.getElementById('marque-' + id).textContent = marque;
+                            if(document.getElementById('prix-' + id)) {
+                                document.getElementById('prix-' + id).textContent = estimationPrix;
+                            }
+                            document.getElementById('categorie-' + id).textContent = categories[categorie] ?? 'Inconnu';
+
+                            // Masque la ligne d'édition et affiche la ligne normale
+                            document.getElementById('row-' + id).classList.remove('hidden');
+                            document.getElementById('edit-row-' + id).classList.add('hidden');
+                        } else {
+                            alert('Erreur lors de la modification');
+                        }
+                    });
+                });
+            });
+
+
+            // Supprimer un ingrédient (afficher la confirmation)
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    document.getElementById('deleteIngredientId').value = id;
+                    deleteDialog.showModal();
+                });
+            });
+            
+            // Annuler la suppression
+            document.getElementById('cancelDelete').addEventListener('click', () => {
+                deleteDialog.close();
+            });
+            
+            // Confirmer la suppression
+            document.getElementById('confirmDelete').addEventListener('click', function() {
+                const id = document.getElementById('deleteIngredientId').value;
+                
+                // Envoi de la requête de suppression
+                fetch('{{ route("ingredients.delete") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ id: id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Supprimer la ligne du tableau
+                        document.getElementById(`row-${id}`).remove();
+                        document.getElementById(`edit-row-${id}`).remove();
+                        deleteDialog.close();
+                    } else {
+                        alert('Erreur: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite lors de la suppression.');
+                });
+            });
+            
+            // Soumission du formulaire d'ajout
+            document.getElementById('addIngredientForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                
+                // Envoi des données au serveur
+                fetch('{{ route("ingredients.store") }}', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Rafraîchir la page pour afficher le nouvel ingrédient
+                        window.location.reload();
+                    } else {
+                        alert('Erreur: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur s\'est produite lors de l\'ajout.');
+                });
+            });
+        </script>
+        
+        @include('footer')
+    </body>
+</html>
