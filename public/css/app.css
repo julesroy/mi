@@ -42,6 +42,7 @@
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-sm: 24rem;
+    --container-md: 28rem;
     --container-4xl: 56rem;
     --container-6xl: 72rem;
     --text-xs: 0.75rem;
@@ -340,8 +341,14 @@
   .mb-4 {
     margin-bottom: calc(var(--spacing) * 4);
   }
+  .mb-6 {
+    margin-bottom: calc(var(--spacing) * 6);
+  }
   .mb-8 {
     margin-bottom: calc(var(--spacing) * 8);
+  }
+  .mb-16 {
+    margin-bottom: calc(var(--spacing) * 16);
   }
   .mb-35 {
     margin-bottom: calc(var(--spacing) * 35);
@@ -469,6 +476,9 @@
   .max-w-full {
     max-width: 100%;
   }
+  .max-w-md {
+    max-width: var(--container-md);
+  }
   .min-w-80 {
     min-width: calc(var(--spacing) * 80);
   }
@@ -584,6 +594,13 @@
       --tw-space-x-reverse: 0;
       margin-inline-start: calc(calc(var(--spacing) * 2) * var(--tw-space-x-reverse));
       margin-inline-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-x-reverse)));
+    }
+  }
+  .space-x-4 {
+    :where(& > :not(:last-child)) {
+      --tw-space-x-reverse: 0;
+      margin-inline-start: calc(calc(var(--spacing) * 4) * var(--tw-space-x-reverse));
+      margin-inline-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-x-reverse)));
     }
   }
   .place-self-center {
@@ -870,6 +887,9 @@
   .pb-10 {
     padding-bottom: calc(var(--spacing) * 10);
   }
+  .pb-20 {
+    padding-bottom: calc(var(--spacing) * 20);
+  }
   .pl-3\.5 {
     padding-left: calc(var(--spacing) * 3.5);
   }
@@ -878,6 +898,9 @@
   }
   .text-center {
     text-align: center;
+  }
+  .text-left {
+    text-align: left;
   }
   .text-2xl {
     font-size: var(--text-2xl);
@@ -1003,6 +1026,10 @@
   }
   .shadow-sm {
     --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+  .shadow-xl {
+    --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
   .shadow-xs {
@@ -1185,6 +1212,13 @@
     &:hover {
       @media (hover: hover) {
         background-color: var(--color-gray-700);
+      }
+    }
+  }
+  .hover\:bg-gray-800 {
+    &:hover {
+      @media (hover: hover) {
+        background-color: var(--color-gray-800);
       }
     }
   }

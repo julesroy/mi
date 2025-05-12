@@ -98,10 +98,32 @@ Route::prefix('admin/commandes')->group(function() {
          ->name('admin.commandes.annuler');
 });
 Route::get('/admin/commandes', function () {
-    return view('admin/commandes');
+    return view('admin.commandes');
 })->middleware('auth')
   ->middleware('can:verifier-acces-serveur')
   ->middleware('adminAccess');
+
+Route::get('/admin/events', function () {
+    return view('admin.events');
+})->middleware('auth')
+  ->middleware('can:verifier-acces-serveur');
+ 
+
+
+// page Salle et sécurité
+Route::get('/admin/salle-securite', function () {
+    return view('admin.salle-securite');
+});
+Route::prefix('admin/salle-securite')->group(function () {
+    Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
+        ->name('admin.salle-securite');
+        
+    Route::post('salle-securite/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
+        ->name('admin.salle-securite.ajouter-releve-frigo');
+        
+    Route::post('salle-securite/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
+        ->name('admin.salle-securite.ajouter-nettoyage');
+});
 
 // page contact
 Route::get('/contact', function () {
