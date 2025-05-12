@@ -61,6 +61,7 @@ Route::prefix('admin')->group(function () {
 
     // Page de planning
     Route::get('/planning', [PlanningController::class, 'afficher']);
+    Route::get('/planning/data/{month}', [PlanningController::class, 'donnees']);
     Route::delete('/planning/supprimer-inscription/{idInscription}', [PlanningController::class, 'supprimer']);
     Route::post('/planning/ajouter-inscription', [PlanningController::class, 'ajouter']);
 

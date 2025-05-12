@@ -4,27 +4,17 @@
 <head>
     @include('head')
     <title>Planning admin</title>
-    <script>
-        function updateSearchParams(param, value) {
-            let url = new URL(window.location);
-            url.searchParams.set(param, value);
-            window.location = url.href;
+    <style>
+        .calendar-day {
+            @apply rounded-lg w-5 h-5;
         }
+    </style>
 
-        function deleteInscription(idInscription) {
-            console.log('test');
-            fetch('planning/supprimer-inscription/' + idInscription, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-                method: 'DELETE',
-                credentials: 'same-origin',
-            }).then(() => window.location.reload());
-        }
-    </script>
 </head>
+
+<?php
+setlocale(LC_ALL, 'fr_FR');
+?>
 
 <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
     @include('header')
@@ -73,20 +63,16 @@
         </form>
     </dialog>
 
-    <span class="flex-row flex gap-2.5 m-2.5">
+    {{-- <span class="flex-row flex gap-2.5 m-2.5">
         <label>Période :</label>
-        <button class="hover:underline cursor-pointer {{ $scope == 'day' ? 'underline' : '' }}"
-            onclick="updateSearchParams('scope','day')">Jour</button>
-        <button
-            class="hover:underline cursor-pointer {{ $scope == 'week' || ($scope != 'day' && $scope != 'month') ? 'underline' : '' }}"
-            onclick="updateSearchParams('scope','week')">Semaine</button>
-        <button class="hover:underline cursor-pointer {{ $scope == 'month' ? 'underline' : '' }}"
-            onclick="updateSearchParams('scope','month')">Mois</button>
-    </span>
+        <button class="hover:underline cursor-pointer" onclick="updateSearchParams('scope','day')">Jour</button>
+        <button class="hover:underline cursor-pointer" onclick="updateSearchParams('scope','week')">Semaine</button>
+        <button class="hover:underline cursor-pointer " onclick="updateSearchParams('scope','month')">Mois</button>
+    </span> --}}
 
     <span class="flex-row flex gap-2.5 m-2.5">
         <label>Date :</label>
-        <input class="border border-white" type="date" value="{{ $date }}"
+        <input class="border border-white" type="date" value="{{ date('Y-m-d') }}"
             onchange="updateSearchParams('date',this.value)" />
     </span>
 
@@ -99,7 +85,7 @@
     <!--
         Tableau de debug & affichage provisoire à changer plus tard
      -->
-    <table class="[&_th,&_td]:border-2 [&_th,&_td]:border-white [&_td,&_th]:p-1 [&_td,&_th]:border-collapse">
+    {{-- <table class="[&_th,&_td]:border-2 [&_th,&_td]:border-white [&_td,&_th]:p-1 [&_td,&_th]:border-collapse">
         <thead class="bg-gray-700">
             <tr>
                 <th>Jour</th>
@@ -150,7 +136,118 @@
             @endforeach
 
         </tbody>
-    </table>
+    </table> --}}
+
+    <!-- Wrapper global -->
+    <div
+        class="flex flex-column md:flex-row justify-center items-center gap-8
+      [&>*]:bg-gray-800 [&>*]:border-gray-700 [&>*]:border [&>*]:rounded-2xl [&>*]:p-5
+    ">
+        <div id="calendar">
+            <span
+                class="flex flex-row gap-2
+            [&>button]:cursor-pointer [&>button]:hover:bg-gray-700 [&>button]:transition-all [&>button]:px-1.5 [&>button]:rounded-md
+            [&>button]:text-[#5d52f2]">
+                <button id="prev-month">&lt;</button>
+                <h6 id="calendar__title">{{ date('M Y') }}</h6>
+                <button id="next-month">&gt;</button>
+            </span>
+            <div id="calendar__inner">
+
+            </div>
+        </div>
+        <div id="day" class="flex flex-col">
+            <section>
+                <h3 class="flex flex-row gap-2 text-2xl font-bold">
+                    <span class="bg-green-600 w-2 block"></span>
+                    Bar
+                </h3>
+                <div>
+
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        var date = {{ date('Y-m-d') }},
+            scope = "month",
+            currentDate = new Date();
+
+        const calendarBody = document.getElementById('calendar__inner');
+        const calendarTitle = document.getElementById('calendar__title');
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            let month = currentDate.getMonth();
+            if (month == 11) {
+                currentDate.setMonth(0);
+                currentDate.setYear(currentDate.getYear() + 1);
+            } else currentDate.setMonth(month + 1);
+            updateCalendar();
+        });
+
+        document.getElementById('prev-month').addEventListener('click', () => {
+            let month = currentDate.getMonth();
+            if (month == 0) {
+                currentDate.setMonth(11);
+                currentDate.setYear(currentDate.getYear() - 1);
+            } else currentDate.setMonth(month - 1);
+            updateCalendar();
+        });
+
+        function updateSearchParams(param, value) {
+            let url = new URL(window.location);
+            url.searchParams.set(param, value);
+            window.location = url.href;
+        }
+
+        function deleteInscription(idInscription) {
+            console.log('test');
+            fetch('planning/supprimer-inscription/' + idInscription, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                method: 'DELETE',
+                credentials: 'same-origin',
+            }).then(() => window.location.reload());
+        }
+
+        function updateCalendar() {
+            calendarBody.innerHtml = 'Loading..;';
+
+            calendarTitle.innerText = currentDate.toLocaleString('fr-FR', {
+                year: '2-digit',
+                month: 'long'
+            });
+
+            let month = currentDate.getMonth(),
+                // L'année retournée est relative à 1900, donc 125 pour 2025 par exemple
+                year = currentDate.getYear() + 1900,
+                dateString = `${year}-${month}`;
+
+            fetch(window.location + '/data/' + dateString).then(r => r.json()).then(data => {
+                console.log(data);
+
+                let monthData = [],
+                    startPad = new Date(year, month, 1).getDay() - 1,
+                    daysInMonth = new Date(year, month + 1, 0).getDate(),
+                    daysInPreviousMonth = new Date(year, month, 0).getDate();
+
+                for (let i = 0; i < startPad; i++) monthData.push({
+                    day: daysInPreviousMonth - (startPad - i)
+                })
+            })
+
+
+        }
+
+        function afficherInscriptions() {
+            const superAdmin = {{ Auth::user()->can('verifier-acces-super-administrateur') }};
+
+        }
+    </script>
 
     @include('footer')
 </body>
