@@ -7,6 +7,8 @@ use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\CommandeCuisineController;
 use App\Http\Controllers\GestionStocksController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\SalleSecuriteController;
+use App\Http\Controllers\CarteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -32,16 +34,6 @@ Route::get('/compte', function () {
     return view('compte');
 })->middleware('auth');
 
-
-// page Gestion stocks
-Route::get('/admin/gestion-stocks', [GestionStocksController::class, 'index'])->middleware('auth');
-
-// Routes pour la gestion des ingrédients
-Route::get('/admin/inventaire', [IngredientController::class, 'index'])->middleware('auth');
-Route::post('/admin/ingredients/store', [IngredientController::class, 'store'])->name('ingredients.store')->middleware('auth');
-Route::post('/admin/ingredients/update', [IngredientController::class, 'update'])->name('ingredients.update')->middleware('auth');
-Route::post('/admin/ingredients/delete', [IngredientController::class, 'delete'])->name('ingredients.delete')->middleware('auth');
-
 // page commander
 Route::get('/commander', function () {
     return view('commander');
@@ -51,57 +43,80 @@ Route::get('/commander', function () {
  * ADMIN
  -----------------------------------------------*/
 
-// page panneau admin
-Route::get('/panneau-admin', function () {
-    return view('panneau-admin');
-});
+// Groupe de middlewares pour les pages admin : utilisateur authentifié, avec au minimum l'accès serveur
+Route::prefix('admin')->group(function () {
 
-// Page de planning
-Route::get('/admin/planning', [PlanningController::class, 'afficher'])
-    ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
-    ->middleware('adminAccess');
-Route::delete('/admin/planning/supprimer-inscription/{idInscription}', [PlanningController::class, 'supprimer'])
-    ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
-    ->middleware('adminAccess');
-Route::post('/admin/planning/ajouter-inscription', [PlanningController::class, 'ajouter'])
-    ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
-    ->middleware('adminAccess');
+    // page panneau admin
+    Route::get('/panneau-admin', function () {
+        return view('panneau-admin');
+    });
 
-//page gestion des comptes
-Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
-    ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
-    ->middleware('adminAccess')
-    ->name('gestion-comptes');
+    // page Gestion stocks
+    Route::get('/gestion-stocks', [GestionStocksController::class, 'index']);
 
-// Page de validation/modifier... des commande 
-Route::prefix('admin/commandes')->group(function() {
-    Route::get('/', [CommandeCuisineController::class, 'index'])
-         ->name('admin.commandes.index');
-         
-    Route::get('/data', [CommandeCuisineController::class, 'getCommandes'])
-         ->name('admin.commandes.data');
-         
-    Route::post('/commande-prete/{id}', [CommandeCuisineController::class, 'marquerCommandePrete'])
-         ->name('admin.commandes.marquer-prete');
-         
-    Route::post('/commande-donnee/{id}', [CommandeCuisineController::class, 'marquerCommandeServie'])
-         ->name('admin.commandes.marquer-servie');
-         
-    Route::post('/modifier-commande/{id}', [CommandeCuisineController::class, 'modifierCommande'])
-         ->name('admin.commandes.modifier');
-         
-    Route::post('/annuler-commande/{id}', [CommandeCuisineController::class, 'annulerCommande'])
-         ->name('admin.commandes.annuler');
-});
-Route::get('/admin/commandes', function () {
-    return view('admin/commandes');
-})->middleware('auth')
-  ->middleware('can:verifier-acces-serveur')
-  ->middleware('adminAccess');
+    // Routes pour la gestion des ingrédients
+    Route::get('/inventaire', [IngredientController::class, 'index']);
+    Route::post('/ingredients/store', [IngredientController::class, 'store'])->name('ingredients.store');
+    Route::post('/ingredients/update', [IngredientController::class, 'update'])->name('ingredients.update');
+    Route::post('/ingredients/delete', [IngredientController::class, 'delete'])->name('ingredients.delete');
+
+
+    // Page de planning
+    Route::get('/planning', [PlanningController::class, 'afficher']);
+    Route::get('/planning/data/{month}', [PlanningController::class, 'donnees']);
+    Route::delete('/planning/supprimer-inscription/{idInscription}', [PlanningController::class, 'supprimer']);
+    Route::post('/planning/ajouter-inscription', [PlanningController::class, 'ajouter']);
+
+    //page gestion des comptes
+    Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
+        ->name('gestion-comptes');
+
+    // page de gestion de la carte
+    Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
+        ->middleware('auth')
+        ->middleware('can:verifier-acces-serveur');
+    Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
+
+    // page Salle et sécurité
+    Route::get('/salle-securite', function () {
+        return view('admin.salle-securite');
+    });
+    Route::prefix('/salle-securite')->group(function () {
+        Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
+            ->name('admin.salle-securite');
+            
+        Route::post('salle-securite/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
+            ->name('admin.salle-securite.ajouter-releve-frigo');
+            
+        Route::post('salle-securite/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
+            ->name('admin.salle-securite.ajouter-nettoyage');
+    });
+
+    // Page de validation/modifier... des commande 
+    Route::prefix('commandes')->group(function () {
+        Route::get('/', [CommandeCuisineController::class, 'index'])
+            ->name('admin.commandes.index');
+
+        Route::get('/data', [CommandeCuisineController::class, 'getCommandes'])
+            ->name('admin.commandes.data');
+
+        Route::post('/commande-prete/{id}', [CommandeCuisineController::class, 'marquerCommandePrete'])
+            ->name('admin.commandes.marquer-prete');
+
+        Route::post('/commande-donnee/{id}', [CommandeCuisineController::class, 'marquerCommandeServie'])
+            ->name('admin.commandes.marquer-servie');
+
+        Route::post('/modifier-commande/{id}', [CommandeCuisineController::class, 'modifierCommande'])
+            ->name('admin.commandes.modifier');
+
+        Route::post('/annuler-commande/{id}', [CommandeCuisineController::class, 'annulerCommande'])
+            ->name('admin.commandes.annuler');
+    });
+
+    Route::get('/commandes', function () {
+        return view('admin.commandes');
+    });
+})->middleware(['auth', 'can:verifier-acces-serveur']);
 
 // page contact
 Route::get('/contact', function () {

@@ -33,11 +33,11 @@ class AuthController extends Controller
 
         // vérification de l'existence de l'utilisateur
         $utilisateur = DB::table('utilisateurs')->where('email', $email)->first();
-    
+
         if (!$utilisateur) {
             return back()->withErrors(['email' => 'Adresse e-mail non trouvée.']);
         }
-    
+
         // vérification du mot de passe hashé
         if (!Hash::check($motDePasse, $utilisateur->mdp)) {
             return back()->withErrors(['mdp' => 'Mot de passe incorrect.']);
@@ -53,7 +53,7 @@ class AuthController extends Controller
 
         // connexion de l'utilisateur
         Auth::loginUsingId($utilisateur->idUtilisateur);
-    
+
         // redirection vers la page de compte
         return redirect('/compte');
     }
@@ -71,19 +71,18 @@ class AuthController extends Controller
      */
     public function inscrire(Request $requete)
     {
-
         $validatedData = $requete->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:utilisateurs,email',
-            'mdp' => 'required|string|min:8|confirmed'
+            'mdp' => 'required|string|min:8|confirmed',
         ]);
 
         $idUtilisateur = DB::table('utilisateurs')->insertGetId([
             'nom' => $validatedData['nom'],
             'prenom' => $validatedData['prenom'],
             'email' => $validatedData['email'],
-            'mdp' => Hash::make($validatedData['mdp'])
+            'mdp' => Hash::make($validatedData['mdp']),
         ]);
 
         // mise en place des cookies
