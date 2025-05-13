@@ -52,13 +52,10 @@
                             <a href="/admin/salle-securite" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Salle et Sécurité</p>
                             </a>
-<<<<<<< HEAD
                             
-=======
                             <a href="/admin/events" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Events</p>
                             </a>
->>>>>>> 3f3fe3f3f8c28112250c7cc90aab81ce354f0cce
                         </div>
                     </div>
                 @endcan
