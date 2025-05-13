@@ -4,7 +4,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
         @include("head")
-        <title>Gestion des ingrédients</title>
+        <title>Inventaire</title>
         <style>
             dialog {
                 background-color: #2a2a2a;
@@ -121,7 +121,7 @@
                                 </th>
                             @endif
 
-                            <th class="py-2 px-4 border-b">Catégorie</th>
+                            <th class="py-2 px-4 border-b text-left">Catégorie</th>
                             <th class="py-2 px-4 border-b">Actions</th>
                         </tr>
                     </thead>
@@ -138,12 +138,24 @@
                                 <td class="py-2 px-4 border-b" id="categorie-{{ $ingredient->idIngredient }}">
                                     {{ $categories[$ingredient->categorieIngredient] ?? "Inconnu" }}
                                 </td>
-                                <td class="py-2 px-4 border-b">
-                                    <div class="flex">
-                                        <img src="{{ asset("images/icons/edit.svg") }}" alt="Modifier" class="action-icon edit-btn" data-id="{{ $ingredient->idIngredient }}" />
-                                        <img src="{{ asset("images/icons/delete.svg") }}" alt="Supprimer" class="action-icon delete-btn" data-id="{{ $ingredient->idIngredient }}" />
+                                <td class="py-2 px-4 border-b text-center w-24 md:w-32">
+                                    <div class="flex justify-center">
+                                        <img src="{{ asset('images/icons/edit.svg') }}" alt="Modifier"
+                                             class="action-icon edit-btn"
+                                             data-id="{{ $ingredient->idIngredient }}" />
+                                
+                                        <img src="{{ asset('images/icons/delete.svg') }}" alt="Supprimer"
+                                             class="action-icon delete-btn"
+                                             data-id="{{ $ingredient->idIngredient }}" />
+                                
+                                        @if($ingredient->commentaire)
+                                            <img src="{{ asset('images/icons/commentaire.svg') }}" alt="Commentaire"
+                                                 class="action-icon comment-btn cursor-pointer"
+                                                 onclick="showComment('{{ addslashes($ingredient->nom) }}', `{{ addslashes($ingredient->commentaire) }}`)" />
+                                        @endif
                                     </div>
                                 </td>
+                                
                             </tr>
                             <tr id="edit-row-{{ $ingredient->idIngredient }}" class="hidden bg-gray-200">
                                 <td class="py-2 px-4 border-b">
@@ -175,6 +187,43 @@
                                 </td>
                             </tr>
                         @endforeach
+
+                        <!-- Modale -->
+                        <dialog id="commentDialog" class="backdrop:bg-gray-800/80 p-6 rounded-lg shadow-lg">
+                            <div class="min-w-[300px]">
+                                <h3 class="text-xl font-bold mb-4" id="dialogTitle"></h3>
+                                <p class="mb-4 bg-gray-100 p-3 rounded text-black" id="dialogContent"></p>
+                                <div class="flex justify-end">
+                                    <button onclick="commentDialog.close()" 
+                                            class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                                        Fermer
+                                    </button>
+                                </div>
+                            </div>
+                        </dialog>
+
+                        <script>
+                        const commentDialog = document.getElementById('commentDialog');
+
+                        function showComment(nom, commentaire) {
+                            document.getElementById('dialogTitle').textContent = nom;
+                            document.getElementById('dialogContent').textContent = commentaire;
+                            commentDialog.showModal();
+                        }
+
+                        // Fermer la modale en cliquant à l'extérieur
+                        commentDialog.addEventListener('click', (e) => {
+                            const dialogDimensions = commentDialog.getBoundingClientRect();
+                            if (
+                                e.clientX < dialogDimensions.left ||
+                                e.clientX > dialogDimensions.right ||
+                                e.clientY < dialogDimensions.top ||
+                                e.clientY > dialogDimensions.bottom
+                            ) {
+                                commentDialog.close();
+                            }
+                        });
+                        </script>
                     </tbody>
                 </table>
             </div>
