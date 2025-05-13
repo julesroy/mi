@@ -5,7 +5,7 @@
         <title>Le nom de votre page</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
         @include('header')
 
         Le contenu de votre page ici

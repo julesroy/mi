@@ -300,24 +300,24 @@
                 }
 
                 document.getElementById('btn-ajouter-element').addEventListener('click', () => {
-    // Ajoute la commande actuelle au tableau
-    commandes.push({ ...panier });
+                    // Ajoute la commande actuelle au tableau
+                    commandes.push({ ...panier });
 
-    // Réinitialise le panier courant
-    panier = {
-        menu: null,
-        plat: null,
-        viande: null,
-        ingredient: null
-    };
+                    // Réinitialise le panier courant
+                    panier = {
+                        menu: null,
+                        plat: null,
+                        viande: null,
+                        ingredient: null,
+                    };
 
-    viandeSelectionnee = null;
-    ingredientSelectionne = null;
+                    viandeSelectionnee = null;
+                    ingredientSelectionne = null;
 
-    // Retour au début
-    ecranPanier.classList.add('hidden');
-    ecranBase.classList.remove('hidden');
-});
+                    // Retour au début
+                    ecranPanier.classList.add('hidden');
+                    ecranBase.classList.remove('hidden');
+                });
             });
         </script>
     </body>

@@ -10,3 +10,13 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@font-face {
+    font-family: 'lobstertwo';
+    src: url('/fonts/LobsterTwo-Regular.ttf');
+}
+
+@theme {
+    --color-primaire: #407829;
+    --color-secondaire: #539d35;
+}

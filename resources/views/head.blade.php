@@ -28,3 +28,9 @@
 
 <!-- CSS -->
 <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+
+<style>
+    body {
+        font-family: 'lobstertwo', sans-serif;
+    }
+</style>
