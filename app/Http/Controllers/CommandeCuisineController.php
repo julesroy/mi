@@ -18,16 +18,7 @@ class CommandeCuisineController extends Controller
         try {
             $query = DB::table('commandes')
                 ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
-                ->select(
-                    'commandes.idCommande',
-                    'commandes.numeroCommande',
-                    'utilisateurs.nom as nomClient',
-                    'commandes.categorieCommande',
-                    'commandes.prix',
-                    'commandes.date',
-                    'commandes.commentaire',
-                    'commandes.etat'
-                )
+                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient', 'commandes.categorieCommande', 'commandes.prix', 'commandes.date', 'commandes.commentaire', 'commandes.etat')
                 ->whereDate('commandes.date', Carbon::today())
                 ->whereIn('commandes.etat', [0, 1])
                 ->orderBy('commandes.date', 'asc');
@@ -87,7 +78,7 @@ class CommandeCuisineController extends Controller
         try {
             $validated = $request->validate([
                 'commentaire' => 'nullable|string',
-                'items' => 'nullable|array'
+                'items' => 'nullable|array',
             ]);
 
             DB::table('commandes')
@@ -126,10 +117,10 @@ class CommandeCuisineController extends Controller
             'numeroCommande' => 'CMD-TEST',
             'nomClient' => 'Client Test',
             'categorieCommande' => 2,
-            'prix' => 12.50,
+            'prix' => 12.5,
             'date' => now()->toDateTimeString(),
             'commentaire' => 'COMMANDE TEST - Vérifiez la connexion à la base de données',
-            'etat' => 1
+            'etat' => 1,
         ];
     }
 
@@ -140,7 +131,7 @@ class CommandeCuisineController extends Controller
             1 => 'Payée',
             2 => 'Prête',
             3 => 'Servie',
-            4 => 'Annulée'
+            4 => 'Annulée',
         ];
         return $etats[$etat] ?? 'Inconnu';
     }
@@ -150,7 +141,7 @@ class CommandeCuisineController extends Controller
         $types = [
             0 => 'Froid',
             1 => 'Hot-dog',
-            2 => 'Chaud'
+            2 => 'Chaud',
         ];
         return $types[$type] ?? 'Non spécifié';
     }

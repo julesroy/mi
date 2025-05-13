@@ -38,17 +38,13 @@ class ConnexionDepuisCookies
                 $emailUtilisateur = Crypt::decryptString($cookieEmailUtilisateur);
 
                 // on vérifie que l'utilisateur existe dans la base de données
-                $utilisateur = DB::table('utilisateurs')
-                                ->where('idUtilisateur', $idUtilisateur)
-                                ->where('email', $emailUtilisateur)
-                                ->first();
+                $utilisateur = DB::table('utilisateurs')->where('idUtilisateur', $idUtilisateur)->where('email', $emailUtilisateur)->first();
 
                 // si l'utilisateur existe, on le connecte
                 if ($utilisateur) {
                     Auth::loginUsingId($utilisateur->idUtilisateur);
                     $request->session()->regenerate(); // par sécurité, on régénère la session
                 }
-
             } catch (DecryptException $e) {
                 /** si le déchiffrement échoue (cookie invalide, modifié, clé changée, etc...), on supprime les cookies
                  */

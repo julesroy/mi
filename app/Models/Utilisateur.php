@@ -10,14 +10,9 @@ class Utilisateur extends Authenticatable
     protected $primaryKey = 'idUtilisateur';
     public $timestamps = false;
 
-    protected $fillable = [
-        'email',
-        'mdp',
-    ];
+    protected $fillable = ['email', 'mdp'];
 
-    protected $hidden = [
-        'mdp',
-    ];
+    protected $hidden = ['mdp'];
 
     // nom du champ (dans le formulaire blade)
     public function getAuthPassword()

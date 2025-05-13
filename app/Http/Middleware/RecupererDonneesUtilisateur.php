@@ -24,9 +24,7 @@ class RecupererDonneesUtilisateur
         // si l'utilisateur est connecté, on récupère ses données
         if (Auth::check()) {
             // on récupère les données de l'utilisateur
-            $donneesUtilisateur = DB::table('utilisateurs')
-                                ->where('idUtilisateur', Auth::id())
-                                ->first();
+            $donneesUtilisateur = DB::table('utilisateurs')->where('idUtilisateur', Auth::id())->first();
         }
 
         // on partage la donnée récupérée avec toutes les vues

@@ -15,10 +15,11 @@ class MessageThrottleMiddleware extends ThrottleRequests
     {
         // avec un message flash, on indique à l'utilisateur qu'il a atteint la limite de tentatives de connexion
         throw new HttpResponseException(
-            redirect()->back()
+            redirect()
+                ->back()
                 ->withInput()
                 ->withErrors([
-                    'email' => 'Trop de tentatives de connexion. Réessaye dans une minute.'
+                    'email' => 'Trop de tentatives de connexion. Réessaye dans une minute.',
                 ])
         );
     }

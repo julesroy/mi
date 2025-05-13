@@ -19,13 +19,13 @@
                     <div class="flex flex-col justify-between m-0 md:m-4 p-4 w-full md:w-72 h-full bg-[#151515] rounded-lg shadow">
                         <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-white">Admin</h2>
                         <div class="flex flex-col items-center gap-4">
-                            <a href="/tresorerie" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/tresorerie" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Trésorerie</p>
                             </a>
-                            <a href="/gestion-comptes" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/gestion-comptes" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Gestion des comptes</p>
                             </a>
-                            <a href="/parametres" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/parametres" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Paramètres</p>
                             </a>
                         </div>
@@ -43,10 +43,10 @@
                             <a href="/admin/gestion-stocks" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Gestion des stocks</p>
                             </a>
-                            <a href="/gestion-carte" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/gestion-carte" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Gestion de la carte</p>
                             </a>
-                            <a href="/gestion-actus" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/gestion-actus" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Gestion des actus</p>
                             </a>
                             <a href="/admin/salle-securite" class="text-center text-base md:text-lg font-bold hover:underline">
@@ -64,7 +64,7 @@
                     <div class="flex flex-col justify-between m-0 md:m-4 p-4 w-full md:w-72 h-full bg-[#151515] rounded-lg shadow">
                         <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-white">Serveurs</h2>
                         <div class="flex flex-col items-center gap-4">
-                            <a href="/affichage-cuisine" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/affichage-cuisine" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Affichage pour la cuisine</p>
                             </a>
                             <a href="/admin/planning" class="text-center text-base md:text-lg font-bold hover:underline">

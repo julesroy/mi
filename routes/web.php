@@ -7,6 +7,7 @@ use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\CommandeCuisineController;
 use App\Http\Controllers\GestionStocksController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\SalleSecuriteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -68,6 +69,21 @@ Route::prefix('admin')->group(function () {
     //page gestion des comptes
     Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
         ->name('gestion-comptes');
+
+    // page Salle et sécurité
+    Route::get('/admin/salle-securite', function () {
+        return view('admin.salle-securite');
+    });
+    Route::prefix('admin/salle-securite')->group(function () {
+        Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
+            ->name('admin.salle-securite');
+            
+        Route::post('salle-securite/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
+            ->name('admin.salle-securite.ajouter-releve-frigo');
+            
+        Route::post('salle-securite/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
+            ->name('admin.salle-securite.ajouter-nettoyage');
+    });
 
     // Page de validation/modifier... des commande 
     Route::prefix('commandes')->group(function () {

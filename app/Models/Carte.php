@@ -9,14 +9,6 @@ class Carte extends Model
     protected $table = 'carte';
     protected $primaryKey = 'idElement';
     public $timestamps = false;
-    
-    protected $fillable = [
-        'nom', 
-        'typePlat', 
-        'ingredientsElements', 
-        'prix', 
-        'prixServeur',
-        'description',
-        'ref'
-    ];
+
+    protected $fillable = ['nom', 'typePlat', 'ingredientsElements', 'prix', 'prixServeur', 'description', 'ref'];
 }
