@@ -9,6 +9,7 @@ use App\Http\Controllers\GestionStocksController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\SalleSecuriteController;
 use App\Http\Controllers\CarteController;
+use App\Http\Controllers\CommandeUtilisateurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -35,9 +36,7 @@ Route::get('/compte', function () {
 })->middleware('auth');
 
 // page commander
-Route::get('/commander', function () {
-    return view('commander');
-});
+Route::get('/commander', [CommandeUtilisateurController::class, 'index'])->middleware('auth');
 
 /**-----------------------------------------------
  * ADMIN

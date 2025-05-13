@@ -186,112 +186,118 @@
 
         <script>
             // Dialog management
-            const addDialog = document.getElementById('addDialog');
-            document.getElementById('openAddDialog').addEventListener('click', () => addDialog.showModal());
-            document.getElementById('closeDialog').addEventListener('click', () => addDialog.close());
+                        const addDialog = document.getElementById('addDialog');
+                        document.getElementById('openAddDialog').addEventListener('click', () => addDialog.showModal());
+                        document.getElementById('closeDialog').addEventListener('click', () => addDialog.close());
 
-            // Event listeners for editing rows
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.id;
-                    document.getElementById(`row-${id}`).classList.add('hidden');
-                    document.getElementById(`edit-row-${id}`).classList.remove('hidden');
-                });
-            });
-
-            document.querySelectorAll('.cancel-btn').forEach(btn =>
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.id;
-                    document.getElementById(`row-${id}`).classList.remove('hidden');
-                    document.getElementById(`edit-row-${id}`).classList.add('hidden');
-                })
-            );
-
-            document.querySelectorAll('.save-btn').forEach(btn =>
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.id;
-                    const formData = new FormData();
-                    formData.append('id', id);
-                    formData.append('nom', document.getElementById(`edit-nom-${id}`).value);
-                    formData.append('categorieIngredient', document.getElementById(`edit-categorie-${id}`).value);
-
-                    fetch('/admin/ingredients/update', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        },
-                        body: formData,
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) location.reload();
-                            else alert('Erreur lors de la modification');
+                        // Event listeners for editing rows
+                        document.querySelectorAll('.edit-btn').forEach(btn => {
+                            btn.addEventListener('click', () => {
+                                const id = btn.dataset.id;
+                                document.getElementById(`row-${id}`).classList.add('hidden');
+                                document.getElementById(`edit-row-${id}`).classList.remove('hidden');
+                            });
                         });
-                })
-            );
 
-            // Add ingredient composition groups
-            document.addEventListener('DOMContentLoaded', () => {
-                const addGroupButton = document.getElementById('addGroup');
-                const compositionContainer = document.getElementById('compositionContainer');
+                        document.querySelectorAll('.cancel-btn').forEach(btn =>
+                            btn.addEventListener('click', () => {
+                                const id = btn.dataset.id;
+                                document.getElementById(`row-${id}`).classList.remove('hidden');
+                                document.getElementById(`edit-row-${id}`).classList.add('hidden');
+                            })
+                        );
 
-                function addGroup() {
-                    const group = document.createElement('div');
-                    group.className = 'composition-group flex items-center mb-2';
-                    group.innerHTML = `
-                        <select name="elementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
-                            <option value=""></option>
-                            @foreach ($elementsMenus as $elementMenus)
-                                <option value="{{ $elementMenus->idElementMenu }}">{{ $elementMenus->nom }}</option>
-                            @endforeach
-                            @foreach ($elementsInventaire as $elementInventaire)
-                                <option value="{{ $elementInventaire->idIngredient }}">{{ $elementInventaire->nom }}</option>
-                            @endforeach
-                        </select>
-                        <select name="quantiteElementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                        </select>
-                        <select name="choixElementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
-                            <option value="0">Libre</option>
-                            <option value="1">Défaut</option>
-                            <option value="2">Obligatoire</option>
-                        </select>
-                        <button type="button" class="remove-group px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2">Supprimer</button>
-                    `;
-                    group.querySelector('.remove-group').addEventListener('click', () => group.remove());
-                    compositionContainer.appendChild(group);
-                }
+                        document.querySelectorAll('.save-btn').forEach(btn =>
+                            btn.addEventListener('click', () => {
+                                const id = btn.dataset.id;
+                                const formData = new FormData();
+                                formData.append('id', id);
+                                formData.append('nom', document.getElementById(`edit-nom-${id}`).value);
+                                formData.append('categorieIngredient', document.getElementById(`edit-categorie-${id}`).value);
 
-                addGroupButton.addEventListener('click', addGroup);
-            });
+                                fetch('/admin/ingredients/update', {
+                                    method: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                    },
+                                    body: formData,
+                                })
+                                    .then(res => res.json())
+                                    .then(data => {
+                                        if (data.success) location.reload();
+                                        else alert('Erreur lors de la modification');
+                                    });
+                            })
+                        );
 
-            // Submit the form
+                        // Add ingredient composition groups
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const addGroupButton = document.getElementById('addGroup');
+                            const compositionContainer = document.getElementById('compositionContainer');
+
+                            function addGroup() {
+                                const group = document.createElement('div');
+                                group.className = 'composition-group flex items-center mb-2';
+                                group.innerHTML = `
+                                    <select name="elementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                                        <option value=""></option>
+                                        @foreach ($elementsMenus as $elementMenus)
+                                            <option value="{{ $elementMenus->idElementMenu }}">{{ $elementMenus->nom }}</option>
+                                        @endforeach
+                                        @foreach ($elementsInventaire as $elementInventaire)
+                                            <option value="{{ $elementInventaire->idIngredient }}|{{ $elementInventaire->categorieIngredient }}">{{ $elementInventaire->nom }}</option>
+                                        @endforeach
+                                    </select>
+                                    <select name="quantiteElementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                    </select>
+                                    <select name="choixElementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                                        <option value="0">Libre</option>
+                                        <option value="1">Défaut</option>
+                                        <option value="2">Obligatoire</option>
+                                    </select>
+                                    <button type="button" class="remove-group px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2">Supprimer</button>
+                                `;
+                                group.querySelector('.remove-group').addEventListener('click', () => group.remove());
+                                compositionContainer.appendChild(group);
+                            }
+
+                            addGroupButton.addEventListener('click', addGroup);
+                        });
+
+                        // Submit the form
             document.getElementById('ajouterElementCarte').addEventListener('submit', e => {
                 e.preventDefault();
-                const elements = Array.from(document.querySelectorAll('#compositionContainer .composition-group')).map(group => ({
-                    nomIngredient: group.querySelector('select[name="elementCompositionCarte[]"] option:checked').textContent.trim(),
-                    quantite: group.querySelector('select[name="quantiteElementCompositionCarte[]"]').value,
-                    choix: group.querySelector('select[name="choixElementCompositionCarte[]"]').value,
-                }));
+                const elements = Array.from(document.querySelectorAll('#compositionContainer .composition-group')).map(group => {
+                    const selectedOption = group.querySelector('select[name="elementCompositionCarte[]"] option:checked');
+                    const [idIngredient, categorieIngredient] = selectedOption.value.split('|');
+                    return {
+                        idIngredient: idIngredient,
+                        categorieIngredient: categorieIngredient || null,
+                        nomIngredient: selectedOption.textContent.trim(),
+                        quantite: group.querySelector('select[name="quantiteElementCompositionCarte[]"]').value,
+                        choix: group.querySelector('select[name="choixElementCompositionCarte[]"]').value,
+                    };
+                });
 
                 document.getElementById('composition').value = JSON.stringify({ elements });
                 const formData = new FormData(e.target);
 
-                fetch('{{ route('carte.ajouter') }}', {
-                    method: 'POST',
-                    body: formData,
-                }).then(() => {
-                    addDialog.close();
-                    location.reload();
-                });
-            });
+                            fetch('{{ route('carte.ajouter') }}', {
+                                method: 'POST',
+                                body: formData,
+                            }).then(() => {
+                                addDialog.close();
+                                location.reload();
+                            });
+                        });
         </script>
     </body>
 </html>
