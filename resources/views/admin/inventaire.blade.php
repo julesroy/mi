@@ -62,9 +62,7 @@
                 <p class="min-w-full mb-2 text-sm text-gray-400">@if (request("sort"))
                     Trié
                     par
-                    <span
-                        class="font-semibold text-white"
-                    >
+                    <span class="font-semibold text-white">
                         {{
                             request("sort") == "nom"
                                 ? "Nom"
@@ -72,9 +70,18 @@
                                     ? "Quantité"
                                     : (request("sort") == "marque"
                                         ? "Marque"
-                                        : "Prix"))
+                                        : (request("sort") == "estimationPrix"
+                                            ? "Prix"
+                                            : (request("sort") == "categorieIngredient"
+                                                ? "Catégorie"
+                                                : "Nom"
+                                            )
+                                        )
+                                    )
+                                )
                         }}
                     </span>
+                    
                     ({{ request("direction", "asc") === "asc" ? "croissant" : "décroissant" }})
                 @else
                     Tri
@@ -83,154 +90,175 @@
                 @endif</p>
 
                 <!-- Tableau d'inventaire -->
-                <table class="min-w-full bg-white text-black rounded shadow">
-                    <thead>
-                        <tr class="bg-gray-700 text-white">
-                            <th class="py-2 px-4 border-b">
-                                <a href="{{
-                                    request()->fullUrlWithQuery([
-                                        "sort" => "nom",
-                                        "direction" => request("sort") === "nom" && request("direction") === "asc" ? "desc" : "asc",
-                                    ])
-                                }}" class="flex items-center gap-1 text-white">Nom {!! request("sort") === "nom" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                            </th>
-                            <th class="py-2 px-4 border-b">
-                                <a href="{{
-                                    request()->fullUrlWithQuery([
-                                        "sort" => "quantite",
-                                        "direction" => request("sort") === "quantite" && request("direction") === "asc" ? "desc" : "asc",
-                                    ])
-                                }}" class="flex items-center gap-1 text-white">Quantité {!! request("sort") === "quantite" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                            </th>
-                            <th class="py-2 px-4 border-b">
-                                <a href="{{
-                                    request()->fullUrlWithQuery([
-                                        "sort" => "marque",
-                                        "direction" => request("sort") === "marque" && request("direction") === "asc" ? "desc" : "asc",
-                                    ])
-                                }}" class="flex items-center gap-1 text-white">Marque {!! request("sort") === "marque" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                            </th>
-                            @if (Auth::user() && Auth::user()->acces == 3)
-                                <th class="py-2 px-4 border-b">
+                <div class="max-h-[280px] overflow-y-auto hide-scrollbar">
+                    <table class="min-w-full table-fixed bg-white text-black rounded shadow border-collapse"">
+                        <thead class="bg-gray-700 text-white">
+                            <tr>
+                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
                                     <a href="{{
                                         request()->fullUrlWithQuery([
-                                            "sort" => "estimationPrix",
-                                            "direction" => request("sort") === "estimationPrix" && request("direction") === "asc" ? "desc" : "asc",
+                                            "sort" => "nom",
+                                            "direction" => request("sort") === "nom" && request("direction") === "asc" ? "desc" : "asc",
                                         ])
-                                    }}" class="flex items-center gap-1 text-white">Prix estimé {!! request("sort") === "estimationPrix" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
+                                    }}" class="flex items-center gap-1 text-white">Nom {!! request("sort") === "nom" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
                                 </th>
-                            @endif
-
-                            <th class="py-2 px-4 border-b text-left">Catégorie</th>
-                            <th class="py-2 px-4 border-b">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($ingredients as $ingredient)
-                            <tr id="row-{{ $ingredient->idIngredient }}" class="hover:bg-gray-100">
-                                <td class="py-2 px-4 border-b" id="nom-{{ $ingredient->idIngredient }}">{{ $ingredient->nom }}</td>
-                                <td class="py-2 px-4 border-b" id="quantite-{{ $ingredient->idIngredient }}">{{ $ingredient->quantite }}</td>
-                                <td class="py-2 px-4 border-b" id="marque-{{ $ingredient->idIngredient }}">{{ $ingredient->marque }}</td>
+                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
+                                    <a href="{{
+                                        request()->fullUrlWithQuery([
+                                            "sort" => "quantite",
+                                            "direction" => request("sort") === "quantite" && request("direction") === "asc" ? "desc" : "asc",
+                                        ])
+                                    }}" class="flex items-center gap-1 text-white">Quantité {!! request("sort") === "quantite" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
+                                </th>
+                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
+                                    <a href="{{
+                                        request()->fullUrlWithQuery([
+                                            "sort" => "marque",
+                                            "direction" => request("sort") === "marque" && request("direction") === "asc" ? "desc" : "asc",
+                                        ])
+                                    }}" class="flex items-center gap-1 text-white">Marque {!! request("sort") === "marque" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
+                                </th>
                                 @if (Auth::user() && Auth::user()->acces == 3)
-                                    <td class="py-2 px-4 border-b" id="prix-{{ $ingredient->idIngredient }}">{{ $ingredient->estimationPrix }}</td>
+                                    <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
+                                        <a href="{{
+                                            request()->fullUrlWithQuery([
+                                                "sort" => "estimationPrix",
+                                                "direction" => request("sort") === "estimationPrix" && request("direction") === "asc" ? "desc" : "asc",
+                                            ])
+                                        }}" class="flex items-center gap-1 text-white">Prix estimé {!! request("sort") === "estimationPrix" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
+                                    </th>
                                 @endif
-
-                                <td class="py-2 px-4 border-b" id="categorie-{{ $ingredient->idIngredient }}">
-                                    {{ $categories[$ingredient->categorieIngredient] ?? "Inconnu" }}
-                                </td>
-                                <td class="py-2 px-4 border-b text-center w-24 md:w-32">
-                                    <div class="flex justify-center">
-                                        <img src="{{ asset('images/icons/edit.svg') }}" alt="Modifier"
-                                             class="action-icon edit-btn"
-                                             data-id="{{ $ingredient->idIngredient }}" />
-                                
-                                        <img src="{{ asset('images/icons/delete.svg') }}" alt="Supprimer"
-                                             class="action-icon delete-btn"
-                                             data-id="{{ $ingredient->idIngredient }}" />
-                                
-                                        @if($ingredient->commentaire)
-                                            <img src="{{ asset('images/icons/commentaire.svg') }}" alt="Commentaire"
-                                                 class="action-icon comment-btn cursor-pointer"
-                                                 onclick="showComment('{{ addslashes($ingredient->nom) }}', `{{ addslashes($ingredient->commentaire) }}`)" />
-                                        @endif
-                                    </div>
-                                </td>
-                                
+                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b text-left">
+                                    <a href="{{
+                                        request()->fullUrlWithQuery([
+                                            "sort" => "categorieIngredient",
+                                            "direction" => request("sort") === "categorieIngredient" && request("direction") === "asc" ? "desc" : "asc",
+                                        ])
+                                    }}" class="flex items-center gap-1 text-white">
+                                        Catégorie
+                                        {!! request("sort") === "categorieIngredient" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}
+                                    </a>
+                                </th>
+                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">Actions</th>
                             </tr>
-                            <tr id="edit-row-{{ $ingredient->idIngredient }}" class="hidden bg-gray-200">
-                                <td class="py-2 px-4 border-b">
-                                    <input type="text" class="w-full p-1 border" id="edit-nom-{{ $ingredient->idIngredient }}" value="{{ $ingredient->nom }}" />
-                                </td>
-                                <td class="py-2 px-4 border-b">
-                                    <input type="number" class="w-full p-1 border" id="edit-quantite-{{ $ingredient->idIngredient }}" value="{{ $ingredient->quantite }}" />
-                                </td>
-                                <td class="py-2 px-4 border-b">
-                                    <input type="text" class="w-full p-1 border" id="edit-marque-{{ $ingredient->idIngredient }}" value="{{ $ingredient->marque }}" />
-                                </td>
-                                @if (Auth::user() && Auth::user()->acces == 3)
-                                    <td class="py-2 px-4 border-b">
-                                        <input type="number" step="0.01" class="w-full p-1 border" id="edit-prix-{{ $ingredient->idIngredient }}" value="{{ $ingredient->estimationPrix }}" />
+                        </thead>
+                        <tbody>
+                            @foreach ($ingredients as $ingredient)
+                                <tr id="row-{{ $ingredient->idIngredient }}" class="hover:bg-gray-100">
+                                    <td class="w-1/6 py-2 px-4 border-b" id="nom-{{ $ingredient->idIngredient }}">{{ $ingredient->nom }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="quantite-{{ $ingredient->idIngredient }}">{{ $ingredient->quantite }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="marque-{{ $ingredient->idIngredient }}">{{ $ingredient->marque }}</td>
+                                    @if (Auth::user() && Auth::user()->acces == 3)
+                                        <td class="w-1/6 py-2 px-4 border-b" id="prix-{{ $ingredient->idIngredient }}">{{ $ingredient->estimationPrix }}</td>
+                                    @endif
+
+                                    <td class="w-1/6 py-2 px-4 border-b" id="categorie-{{ $ingredient->idIngredient }}">
+                                        {{ $categories[$ingredient->categorieIngredient] ?? "Inconnu" }}
                                     </td>
-                                @endif
+                                    <td class="w-1/6 py-2 px-4 border-b text-center">
+                                        <div class="flex justify-center">
+                                            <img src="{{ asset('images/icons/edit.svg') }}" alt="Modifier"
+                                                class="action-icon edit-btn"
+                                                data-id="{{ $ingredient->idIngredient }}" />
+                                    
+                                            <img src="{{ asset('images/icons/delete.svg') }}" alt="Supprimer"
+                                                class="action-icon delete-btn"
+                                                data-id="{{ $ingredient->idIngredient }}" />
+                                    
+                                            @if($ingredient->commentaire)
+                                                <img src="{{ asset('images/icons/commentaire.svg') }}" alt="Commentaire"
+                                                    class="action-icon comment-btn cursor-pointer"
+                                                    onclick="showComment('{{ addslashes($ingredient->nom) }}', `{{ addslashes($ingredient->commentaire) }}`)" />
+                                            @endif
+                                        </div>
+                                    </td>
+                                    
+                                </tr>
+                                <tr id="edit-row-{{ $ingredient->idIngredient }}" class="hidden bg-gray-200">
+                                    <td class="w-1/6 py-2 px-4 border-b">
+                                        <input type="text" class="w-full p-1 border" id="edit-nom-{{ $ingredient->idIngredient }}" value="{{ $ingredient->nom }}" />
+                                    </td>
+                                    <td class="w-1/6 py-2 px-4 border-b">
+                                        <input type="number" class="w-full p-1 border" id="edit-quantite-{{ $ingredient->idIngredient }}" value="{{ $ingredient->quantite }}" />
+                                    </td>
+                                    <td class="w-1/6 py-2 px-4 border-b">
+                                        <input type="text" class="w-full p-1 border" id="edit-marque-{{ $ingredient->idIngredient }}" value="{{ $ingredient->marque }}" />
+                                    </td>
+                                    @if (Auth::user() && Auth::user()->acces == 3)
+                                        <td class="w-1/6 py-2 px-4 border-b">
+                                            <input type="number" step="0.01" class="w-full p-1 border" id="edit-prix-{{ $ingredient->idIngredient }}" value="{{ $ingredient->estimationPrix }}" />
+                                        </td>
+                                    @endif
 
-                                <td class="py-2 px-4 border-b">
-                                    <select class="w-full p-1 border" id="edit-categorie-{{ $ingredient->idIngredient }}">
-                                        <option value="0" {{ $ingredient->categorieIngredient == 0 ? "selected" : "" }}>Ingrédient</option>
-                                        <option value="1" {{ $ingredient->categorieIngredient == 1 ? "selected" : "" }}>Viande</option>
-                                        <option value="2" {{ $ingredient->categorieIngredient == 2 ? "selected" : "" }}>Extra</option>
-                                        <option value="3" {{ $ingredient->categorieIngredient == 3 ? "selected" : "" }}>Snack/Boisson</option>
-                                    </select>
-                                </td>
-                                <td class="py-2 px-4 border-b">
-                                    <button class="px-4 py-2 bg-green-600 text-white rounded save-btn w-28" data-id="{{ $ingredient->idIngredient }}">Enregistrer</button>
-                                    <button class="px-4 py-2 bg-gray-400 text-white rounded cancel-btn w-28 mt-1" data-id="{{ $ingredient->idIngredient }}">Annuler</button>
-                                </td>
-                            </tr>
-                        @endforeach
+                                    <td class="w-1/6 py-2 px-4 border-b">
+                                        <select class="w-full p-1 border" id="edit-categorie-{{ $ingredient->idIngredient }}">
+                                            <option value="0" {{ $ingredient->categorieIngredient == 0 ? "selected" : "" }}>Ingrédient</option>
+                                            <option value="1" {{ $ingredient->categorieIngredient == 1 ? "selected" : "" }}>Viande</option>
+                                            <option value="2" {{ $ingredient->categorieIngredient == 2 ? "selected" : "" }}>Extra</option>
+                                            <option value="3" {{ $ingredient->categorieIngredient == 3 ? "selected" : "" }}>Snack/Boisson</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center w-1/6 py-2 px-4 border-b">
+                                        <button class="px-4 py-2 bg-green-600 text-white rounded save-btn w-28" data-id="{{ $ingredient->idIngredient }}">Enregistrer</button>
+                                        <button class="px-4 py-2 bg-gray-400 text-white rounded cancel-btn w-28 mt-1" data-id="{{ $ingredient->idIngredient }}">Annuler</button>
+                                    </td>
+                                </tr>
+                            @endforeach
 
-                        <!-- Modale -->
-                        <dialog id="commentDialog" class="backdrop:bg-gray-800/80 p-6 rounded-lg shadow-lg">
-                            <div class="min-w-[300px]">
-                                <h3 class="text-xl font-bold mb-4" id="dialogTitle"></h3>
-                                <p class="mb-4 bg-gray-100 p-3 rounded text-black" id="dialogContent"></p>
-                                <div class="flex justify-end">
-                                    <button onclick="commentDialog.close()" 
-                                            class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
-                                        Fermer
-                                    </button>
+                            <!-- Modale -->
+                            <dialog id="commentDialog" class="backdrop:bg-gray-800/80 p-6 rounded-lg shadow-lg">
+                                <div class="min-w-[300px]">
+                                    <h3 class="text-xl font-bold mb-4" id="dialogTitle"></h3>
+                                    <p class="mb-4 bg-gray-100 p-3 rounded text-black" id="dialogContent"></p>
+                                    <div class="flex justify-end">
+                                        <button onclick="commentDialog.close()" 
+                                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
+                                            Fermer
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        </dialog>
+                            </dialog>
 
-                        <script>
-                        const commentDialog = document.getElementById('commentDialog');
+                            <script>
+                            const commentDialog = document.getElementById('commentDialog');
 
-                        function showComment(nom, commentaire) {
-                            document.getElementById('dialogTitle').textContent = nom;
-                            document.getElementById('dialogContent').textContent = commentaire;
-                            commentDialog.showModal();
-                        }
-
-                        // Fermer la modale en cliquant à l'extérieur
-                        commentDialog.addEventListener('click', (e) => {
-                            const dialogDimensions = commentDialog.getBoundingClientRect();
-                            if (
-                                e.clientX < dialogDimensions.left ||
-                                e.clientX > dialogDimensions.right ||
-                                e.clientY < dialogDimensions.top ||
-                                e.clientY > dialogDimensions.bottom
-                            ) {
-                                commentDialog.close();
+                            function showComment(nom, commentaire) {
+                                document.getElementById('dialogTitle').textContent = nom;
+                                document.getElementById('dialogContent').textContent = commentaire;
+                                commentDialog.showModal();
                             }
-                        });
-                        </script>
-                    </tbody>
-                </table>
+
+                            // Fermer la modale en cliquant à l'extérieur
+                            commentDialog.addEventListener('click', (e) => {
+                                const dialogDimensions = commentDialog.getBoundingClientRect();
+                                if (
+                                    e.clientX < dialogDimensions.left ||
+                                    e.clientX > dialogDimensions.right ||
+                                    e.clientY < dialogDimensions.top ||
+                                    e.clientY > dialogDimensions.bottom
+                                ) {
+                                    commentDialog.close();
+                                }
+                            });
+                            </script>
+                        </tbody>
+                    </table>
+                </div>
+
+                <style>
+                    .hide-scrollbar {
+                        scrollbar-width: none; /* Firefox */
+                        -ms-overflow-style: none; /* IE/Edge */
+                    }
+                    .hide-scrollbar::-webkit-scrollbar {
+                        display: none; /* Chrome/Safari/Webkit */
+                    }
+                </style>
             </div>
         </div>
 
         <!-- Dialog pour l'ajout d'un ingrédient -->
-        <dialog id="addDialog">
+        <dialog id="addDialog" class="hide-scrollbar">
             <h2 class="text-xl font-bold mb-4">Ajouter un article</h2>
             <form id="addIngredientForm" class="space-y-4">
                 @csrf
