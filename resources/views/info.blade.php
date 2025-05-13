@@ -92,7 +92,8 @@
 
         <div>
             <?php // Appel direct de phpinfo()
-            phpinfo(); ?>
+// Appel direct de phpinfo()
+phpinfo(); ?>
         </div>
     </body>
 </html>

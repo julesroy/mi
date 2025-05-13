@@ -81,16 +81,16 @@ Route::prefix('admin')->group(function () {
     Route::get('/salle-securite', function () {
         return view('admin.salle-securite');
     });
-    Route::prefix('/salle-securite')->group(function () {
-        Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
-            ->name('admin.salle-securite');
-            
-        Route::post('salle-securite/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
-            ->name('admin.salle-securite.ajouter-releve-frigo');
-            
-        Route::post('salle-securite/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
-            ->name('admin.salle-securite.ajouter-nettoyage');
-    });
+  Route::prefix('admin/salle-securite')->group(function() {
+    Route::get('/', [SalleSecuriteController::class, 'index'])
+         ->name('admin.salle-securite');
+         
+    Route::post('/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
+         ->name('admin.salle-securite.ajouter-releve-frigo');
+         
+    Route::post('/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
+         ->name('admin.salle-securite.ajouter-nettoyage');
+});
 
     // Page de validation/modifier... des commande 
     Route::prefix('commandes')->group(function () {
