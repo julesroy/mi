@@ -57,6 +57,7 @@ Route::get('/panneau-admin', function () {
     return view('panneau-admin');
 });
 
+
 // page tresorerie
 Route::get('/tresorerie', [TresorerieController::class, 'afficher'])
     ->middleware('auth')
@@ -105,6 +106,8 @@ Route::prefix('admin/commandes')->group(function() {
     Route::post('/annuler-commande/{id}', [CommandeCuisineController::class, 'annulerCommande'])
          ->name('admin.commandes.annuler');
 });
+
+//page commandes
 Route::get('/admin/commandes', function () {
     return view('admin/commandes');
 })->middleware('auth')
