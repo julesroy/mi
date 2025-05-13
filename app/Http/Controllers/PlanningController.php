@@ -14,26 +14,6 @@ class PlanningController extends Controller
 {
     public function afficher(Request $req)
     {
-        // Durée à chercher sur la DB (jour, semaine ou mois)
-        $timeRange = $req->input('scope');
-        // Date autour de laquelle chercher (valeur par défaut : aujourd'hui)
-        $date = strtotime($req->input('date') ?? "Today");
-
-        // Query de la réservation + nom prénom de la personne inscrite
-        $query = DB::table('planning')
-            ->leftJoin('utilisateurs', 'utilisateurs.idUtilisateur', '=', 'planning.numeroCompte')
-            ->select(['date', 'poste', 'idInscription', 'utilisateurs.prenom', 'utilisateurs.nom', 'planning.numeroCompte'])
-            ->orderBy('date');
-
-        // Fetch pour 1 mois (t = nb de jours dans le mois)
-        if ($timeRange == "month") $query = $query->where([['date', '>=', date('Ym01', $date)], ['date', '<=', date('Ymt', $date)]]);
-
-        // Fetch pour 1 jour
-        else if ($timeRange == "day") $query = $query->where('date', '=', date('Ymd', $date));
-
-        // Sinon, fetch pour 1 semaine
-        else $query = $query->where([['date', '>=', date("Ymd", strtotime("Monday this week", $date))], ['date', '<=', date("Ymd", strtotime("Sunday this week", $date))]]);
-
         $servers = [];
         // Récupère les serveurs et leurs noms si l'utilisateur actuel est un superadmin
         if ($req->acces == 3) $servers = DB::table('utilisateurs')
@@ -41,7 +21,22 @@ class PlanningController extends Controller
             ->where('acces', '>', '0')
             ->get();
 
-        return view('admin.planning', ['planning' => $query->get(), 'scope' => $timeRange, 'date' => date('Y-m-d', $date), 'userId' => Auth::id(), 'servers' => $servers]);
+        return view('admin.planning', ['userId' => Auth::id(), 'servers' => $servers]);
+    }
+
+    public function donnees(Request $req, $date)
+    {
+        // Date autour de laquelle chercher (valeur par défaut : aujourd'hui)
+        $date = strtotime($date);
+
+        // Query de la réservation + nom prénom de la personne inscrite
+        $query = DB::table('planning')
+            ->leftJoin('utilisateurs', 'utilisateurs.idUtilisateur', '=', 'planning.numeroCompte')
+            ->select(['date', 'poste', 'idInscription', 'utilisateurs.prenom', 'utilisateurs.nom', 'planning.numeroCompte'])
+            ->orderBy('date')
+            ->where([['date', '>=', date('Ym01', $date)], ['date', '<=', date('Ymt', $date)]]);
+
+        return response()->json($query->get());
     }
 
     public function supprimer(Request $req, $idInscription)

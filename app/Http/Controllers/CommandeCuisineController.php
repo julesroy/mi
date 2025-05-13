@@ -8,12 +8,6 @@ use Carbon\Carbon;
 
 class CommandeCuisineController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('can:verifier-acces-cuisine');
-    }
-
     public function index()
     {
         return view('admin.commandes');
@@ -45,7 +39,6 @@ class CommandeCuisineController extends Controller
             }
 
             return response()->json($commandes);
-            
         } catch (\Exception $e) {
             return response()->json([$this->getTestCommande()]);
         }
@@ -63,7 +56,6 @@ class CommandeCuisineController extends Controller
                 ->update(['etat' => 2]);
 
             return response()->json(['success' => true]);
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -81,7 +73,6 @@ class CommandeCuisineController extends Controller
                 ->update(['etat' => 3]);
 
             return response()->json(['success' => true]);
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -106,7 +97,6 @@ class CommandeCuisineController extends Controller
                 ]);
 
             return response()->json(['success' => true]);
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -124,7 +114,6 @@ class CommandeCuisineController extends Controller
                 ->update(['etat' => 4]);
 
             return response()->json(['success' => true]);
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

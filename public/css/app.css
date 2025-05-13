@@ -421,6 +421,9 @@
   .min-h-full {
     min-height: 100%;
   }
+  .w-2 {
+    width: calc(var(--spacing) * 2);
+  }
   .w-4 {
     width: calc(var(--spacing) * 4);
   }
@@ -543,6 +546,9 @@
   }
   .gap-6 {
     gap: calc(var(--spacing) * 6);
+  }
+  .gap-8 {
+    gap: calc(var(--spacing) * 8);
   }
   .gap-10 {
     gap: calc(var(--spacing) * 10);
@@ -1670,6 +1676,68 @@
   .\[\&_th\,\&_td\]\:border-white {
     & th,& td {
       border-color: var(--color-white);
+    }
+  }
+  .\[\&\>\*\]\:rounded-2xl {
+    &>* {
+      border-radius: var(--radius-2xl);
+    }
+  }
+  .\[\&\>\*\]\:border {
+    &>* {
+      border-style: var(--tw-border-style);
+      border-width: 1px;
+    }
+  }
+  .\[\&\>\*\]\:border-gray-700 {
+    &>* {
+      border-color: var(--color-gray-700);
+    }
+  }
+  .\[\&\>\*\]\:bg-gray-800 {
+    &>* {
+      background-color: var(--color-gray-800);
+    }
+  }
+  .\[\&\>\*\]\:p-5 {
+    &>* {
+      padding: calc(var(--spacing) * 5);
+    }
+  }
+  .\[\&\>button\]\:cursor-pointer {
+    &>button {
+      cursor: pointer;
+    }
+  }
+  .\[\&\>button\]\:rounded-md {
+    &>button {
+      border-radius: var(--radius-md);
+    }
+  }
+  .\[\&\>button\]\:px-1\.5 {
+    &>button {
+      padding-inline: calc(var(--spacing) * 1.5);
+    }
+  }
+  .\[\&\>button\]\:text-\[\#5d52f2\] {
+    &>button {
+      color: #5d52f2;
+    }
+  }
+  .\[\&\>button\]\:transition-all {
+    &>button {
+      transition-property: all;
+      transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+      transition-duration: var(--tw-duration, var(--default-transition-duration));
+    }
+  }
+  .\[\&\>button\]\:hover\:bg-gray-700 {
+    &>button {
+      &:hover {
+        @media (hover: hover) {
+          background-color: var(--color-gray-700);
+        }
+      }
     }
   }
   .\[\&\>input\,\&\>select\]\:mb-1\.5 {
