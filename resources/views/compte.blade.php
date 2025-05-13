@@ -36,44 +36,47 @@
                     <div class="flex flex-row">
                         <!-- Nom -->
                         <p class="font-bold pr-3">Nom :</p>
-                        <p> {{ $donneesUtilisateur->nom }} </p>
+                        <p>{{ $donneesUtilisateur->nom }}</p>
                     </div>
 
                     <div class="flex flex-row">
                         <!-- Prenom -->
                         <p class="font-bold pr-3">Prenom :</p>
-                        <p> {{ $donneesUtilisateur->prenom }} </p>
+                        <p>{{ $donneesUtilisateur->prenom }}</p>
                     </div>
 
                     <div class="flex flex-row">
                         <!-- Adresse mail -->
-                        <p class="font-bold pr-3">Adresse mail : </p>
-                        <p> {{ $donneesUtilisateur->email }} </p>
+                        <p class="font-bold pr-3">Adresse mail :</p>
+                        <p>{{ $donneesUtilisateur->email }}</p>
                     </div>
 
                     <div class="flex flex-row">
                         <!-- Numéro compte (identifiant) -->
                         <p class="font-bold pr-3">Numéro de compte :</p>
-                        <p> {{ $donneesUtilisateur->numeroCompte }} </p>
+                        <p>{{ $donneesUtilisateur->numeroCompte }}</p>
                     </div>
 
                     <div class="flex flex-row">
                         <!-- Nombre de commande passé -->
                         <p class="font-bold pr-3">Nombre de commande passé :</p>
-                        <p> 100 </p>
+                        <p>100</p>
                     </div>
                 </div>
             </div>
 
-            <div class="flex flex-col justify-center min-h-40 min-w-80"><!-- Changer mot de passe ? & Déconnexion-->
-            
-                <div><!-- Changer mot de passe ? -->
+            <div class="flex flex-col justify-center min-h-40 min-w-80">
+                <!-- Changer mot de passe ? & Déconnexion-->
+
+                <div>
+                    <!-- Changer mot de passe ? -->
                     <button class="bg-gray-800 px-5 py-2 hover:bg-gray-400 hover:cursor-pointer mb-1 min-w-full min-h-full">
                         Changer votre mot de passe
                     </button>
                 </div>
 
-                <div><!-- Déconnexion -->        
+                <div>
+                    <!-- Déconnexion -->
                     <button type="submit" class="bg-red-950 px-5 py-2 hover:bg-red-900 hover:cursor-pointer mt-1 min-w-full min-h-full">
                         <a href="/deconnexion">Déconnexion</a>
                     </button>

@@ -91,10 +91,8 @@
         <hr />
 
         <div>
-            <?php
-            // Appel direct de phpinfo()
-            phpinfo();
-            ?>
+            <?php // Appel direct de phpinfo()
+            phpinfo(); ?>
         </div>
     </body>
 </html>

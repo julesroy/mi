@@ -23,10 +23,7 @@ class GestionStocksController extends Controller
         }
 
         // Colonnes autorisées pour le tri
-        $sortable = [
-            'nom', 'categorieElement', 'numeroLot', 'datePeremption',
-            'nombrePortions', 'dateOuverture', 'dateFermeture', 'etat'
-        ];
+        $sortable = ['nom', 'categorieElement', 'numeroLot', 'datePeremption', 'nombrePortions', 'dateOuverture', 'dateFermeture', 'etat'];
 
         $sort = $request->get('sort', 'nom');
         $direction = $request->get('direction', 'asc');
@@ -45,7 +42,4 @@ class GestionStocksController extends Controller
 
         return view('admin/gestion-stocks', compact('stocks', 'sort', 'direction'));
     }
-
 }
-
-

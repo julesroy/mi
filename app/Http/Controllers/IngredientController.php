@@ -15,9 +15,8 @@ class IngredientController extends Controller
         // Filtre de recherche
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('nom', 'like', "%{$search}%")
-                  ->orWhere('marque', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->where('nom', 'like', "%{$search}%")->orWhere('marque', 'like', "%{$search}%");
             });
         }
 
@@ -32,11 +31,10 @@ class IngredientController extends Controller
         if (!in_array($direction, ['asc', 'desc'])) {
             $direction = 'asc';
         }
-        
+
         if ($request->filled('categorie')) {
             $query->where('categorieIngredient', $request->categorie);
         }
-        
 
         $query->orderBy($sort, $direction);
 
@@ -63,12 +61,12 @@ class IngredientController extends Controller
             $ingredient->quantite = $validated['quantite'];
             $ingredient->marque = $validated['marque'];
             $ingredient->commentaire = $validated['commentaire'] ?? null;
-            
+
             // Vérifier le niveau d'accès pour le prix
             if (Auth::user() && Auth::user()->acces == 3 && isset($validated['estimationPrix'])) {
                 $ingredient->estimationPrix = $validated['estimationPrix'];
             }
-            
+
             $ingredient->save();
 
             return response()->json(['success' => true]);
@@ -78,32 +76,30 @@ class IngredientController extends Controller
     }
 
     public function update(Request $request)
-{
-    $validated = $request->validate([
-        'id' => 'required|exists:inventaire,idIngredient',
-        'nom' => 'required|string|max:255',
-        'quantite' => 'required|numeric',
-        'marque' => 'required|string|max:255',
-        'categorieIngredient' => 'required',
-        'estimationPrix' => 'nullable|numeric',
-        'commentaire' => 'nullable|string',
-    ]);
+    {
+        $validated = $request->validate([
+            'id' => 'required|exists:inventaire,idIngredient',
+            'nom' => 'required|string|max:255',
+            'quantite' => 'required|numeric',
+            'marque' => 'required|string|max:255',
+            'categorieIngredient' => 'required',
+            'estimationPrix' => 'nullable|numeric',
+            'commentaire' => 'nullable|string',
+        ]);
 
-    $item = \App\Models\Ingredient::findOrFail($validated['id']);
-    $item->nom = $validated['nom'];
-    $item->quantite = $validated['quantite'];
-    $item->marque = $validated['marque'];
-    $item->categorieIngredient = $validated['categorieIngredient'];
-    if (Auth::user() && Auth::user()->acces == 3) {
-        $item->estimationPrix = $validated['estimationPrix'] ?? null;
+        $item = \App\Models\Ingredient::findOrFail($validated['id']);
+        $item->nom = $validated['nom'];
+        $item->quantite = $validated['quantite'];
+        $item->marque = $validated['marque'];
+        $item->categorieIngredient = $validated['categorieIngredient'];
+        if (Auth::user() && Auth::user()->acces == 3) {
+            $item->estimationPrix = $validated['estimationPrix'] ?? null;
+        }
+        $item->commentaire = $validated['commentaire'] ?? null;
+        $item->save();
+
+        return response()->json(['success' => true]);
     }
-    $item->commentaire = $validated['commentaire'] ?? null;
-    $item->save();
-
-    return response()->json(['success' => true]);
-}
-
-
 
     public function delete(Request $request)
     {

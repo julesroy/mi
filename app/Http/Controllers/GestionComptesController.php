@@ -12,7 +12,7 @@ class GestionComptesController extends Controller
         // On vérifie l'entrée de l'utilisateur
         $requete->validate([
             'recherche' => 'nullable|string|max:255|regex:/^[a-zA-Z0-9\s]+/',
-            'triage' => 'nullable|string|in:solde_desc,solde_asc,nom_asc,nom_desc,prenom_asc,prenom_desc,numeroCompte_asc,numeroCompte_desc'
+            'triage' => 'nullable|string|in:solde_desc,solde_asc,nom_asc,nom_desc,prenom_asc,prenom_desc,numeroCompte_asc,numeroCompte_desc',
         ]);
 
         // On récupère la valeur de recherche
@@ -24,11 +24,12 @@ class GestionComptesController extends Controller
         // On récupère les données de la table utilisateurs selon le terme de recherche utilisé
         $utilisateurs = DB::table('utilisateurs')
             ->when($recherche, function ($requete, $recherche) {
-                $requete->where('nom', 'LIKE', "%{$recherche}%")
-                        ->orWhere('prenom', 'LIKE', "%{$recherche}%")
-                        ->orWhere('numeroCompte', 'LIKE', "%{$recherche}%")
-                        ->orWhereRaw("CONCAT(nom, ' ', prenom) LIKE ?", ["%{$recherche}%"])
-                        ->orWhereRaw("CONCAT(prenom, ' ', nom) LIKE ?", ["%{$recherche}%"]);
+                $requete
+                    ->where('nom', 'LIKE', "%{$recherche}%")
+                    ->orWhere('prenom', 'LIKE', "%{$recherche}%")
+                    ->orWhere('numeroCompte', 'LIKE', "%{$recherche}%")
+                    ->orWhereRaw("CONCAT(nom, ' ', prenom) LIKE ?", ["%{$recherche}%"])
+                    ->orWhereRaw("CONCAT(prenom, ' ', nom) LIKE ?", ["%{$recherche}%"]);
             })
             ->when($triage, function ($requete, $triage) {
                 switch ($triage) {

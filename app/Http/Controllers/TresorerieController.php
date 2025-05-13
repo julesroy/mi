@@ -11,9 +11,7 @@ class TresorerieController extends Controller
     private function obtenirSoldeTotal()
     {
         // On récupère le solde total de tous les utilisateurs
-        $resultat = DB::table('utilisateurs')
-            ->select(DB::raw('SUM(solde) as solde_total'))
-            ->first();
+        $resultat = DB::table('utilisateurs')->select(DB::raw('SUM(solde) as solde_total'))->first();
 
         return $resultat->solde_total ?? 0; // Si aucun solde n'est trouvé, on retourne 0
     }
@@ -73,14 +71,10 @@ class TresorerieController extends Controller
             ->count();
 
         // Comptes non crédités
-        $comptesNonCredites = DB::table('utilisateurs')
-            ->where('solde', '=', 0)
-            ->get();
-        
+        $comptesNonCredites = DB::table('utilisateurs')->where('solde', '=', 0)->get();
+
         // Comptes à découvert
-        $comptesDecouverts = DB::table('utilisateurs')
-            ->where('solde', '<', 0)
-            ->get();
+        $comptesDecouverts = DB::table('utilisateurs')->where('solde', '<', 0)->get();
 
         return view('tresorerie', [
             'utilisateurs' => $utilisateurs,
