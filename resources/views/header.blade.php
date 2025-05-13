@@ -12,7 +12,7 @@
                 <a href="/actus" class="w-full text-center px-8 h-full flex items-center">Actus</a>
             </div>
         </span>
-        <img src="{{ asset('images/logo.png') }}" alt="Logo Par'MI'Giano" class="hidden md:block w-48 h-auto relative -mb-20"/>
+        <img src="{{ asset('images/logo.png') }}" alt="Logo Par'MI'Giano" class="hidden md:block w-48 h-auto relative -mb-20" />
         <span class="flex justify-between w-5/12 items-center h-full">
             <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
                 <a href="/commander" class="w-full text-center px-8 h-full flex items-center">Commander</a>
@@ -36,12 +36,14 @@
                 </button>
                 <div id="compte-dropdown" class="overflow-hidden max-h-0 text-2xl text-center md:text-left transition-all duration-500 bg-secondaire w-full absolute left-0 top-full z-10">
                     @auth
-                        @can("verifier-acces-serveur")
+                        @can('verifier-acces-serveur')
                             <a href="/admin/panneau-admin" class="block px-4 py-2 hover:bg-secondaire">Admin</a>
                         @endcan
+
                         <a href="/compte" class="block px-4 py-2 hover:bg-secondaire">Profil</a>
                         <a href="/deconnexion" class="block px-4 py-2 hover:bg-secondaire">Déconnexion</a>
                     @endauth
+
                     @guest
                         <a href="/connexion" class="block px-4 py-2 hover:bg-secondaire">Connexion</a>
                         <a href="/inscription" class="block px-4 py-2 hover:bg-secondaire">Inscription</a>
@@ -71,12 +73,14 @@
                     </button>
                     <div id="compte-dropdown" class="overflow-hidden max-h-0 text-xl text-center md:text-left transition-all duration-500 bg-secondaire w-full absolute left-0 z-10">
                         @auth
-                            @can("verifier-acces-serveur")
+                            @can('verifier-acces-serveur')
                                 <a href="/admin/panneau-admin" class="block px-4 py-2 hover:bg-secondaire">Admin</a>
                             @endcan
+
                             <a href="/compte" class="block px-4 py-2 hover:bg-secondaire">Profil</a>
                             <a href="/deconnexion" class="block px-4 py-2 hover:bg-secondaire">Déconnexion</a>
                         @endauth
+
                         @guest
                             <a href="/connexion" class="block px-4 py-2 hover:bg-secondaire">Connexion</a>
                             <a href="/inscription" class="block px-4 py-2 hover:bg-secondaire">Inscription</a>

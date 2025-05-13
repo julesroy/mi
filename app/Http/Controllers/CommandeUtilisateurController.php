@@ -13,7 +13,8 @@ class CommandeUtilisateurController extends Controller
         $viandes = DB::table('inventaire')->where('categorieIngredient', 1)->get();
         $ingredients = DB::table('inventaire')->where('categorieIngredient', 0)->get();
         $snacks = DB::table('carte')->where('typePlat', 1)->get();
+        $boissons = DB::table('carte')->where('typePlat', 2)->get();
 
-        return view('commander', compact('plats', 'menus', 'viandes', 'ingredients', 'snacks'));
+        return view('commander', compact('plats', 'menus', 'viandes', 'ingredients', 'snacks', 'boissons'));
     }
 }

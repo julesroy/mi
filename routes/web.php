@@ -75,6 +75,7 @@ Route::prefix('admin')->group(function () {
         ->middleware('auth')
         ->middleware('can:verifier-acces-serveur');
     Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
+    Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
     Route::get('/salle-securite', function () {
