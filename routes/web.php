@@ -8,6 +8,7 @@ use App\Http\Controllers\CommandeCuisineController;
 use App\Http\Controllers\GestionStocksController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\SalleSecuriteController;
+use App\Http\Controllers\CarteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -70,11 +71,17 @@ Route::prefix('admin')->group(function () {
     Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
         ->name('gestion-comptes');
 
+    // page de gestion de la carte
+    Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
+        ->middleware('auth')
+        ->middleware('can:verifier-acces-serveur');
+    Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
+
     // page Salle et sécurité
-    Route::get('/admin/salle-securite', function () {
+    Route::get('/salle-securite', function () {
         return view('admin.salle-securite');
     });
-    Route::prefix('admin/salle-securite')->group(function () {
+    Route::prefix('/salle-securite')->group(function () {
         Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
             ->name('admin.salle-securite');
             
