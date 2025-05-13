@@ -7,6 +7,7 @@ use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\CommandeCuisineController;
 use App\Http\Controllers\GestionStocksController;
 use App\Http\Controllers\IngredientController;
+use App\Http\Controllers\CarteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -77,6 +78,13 @@ Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherCompte
     ->middleware('adminAccess')
     ->name('gestion-comptes');
 
+// page de gestion de la carte
+Route::get('/admin/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
+  ->middleware('auth')
+  ->middleware('can:verifier-acces-serveur')
+  ->middleware('adminAccess');
+Route::post('/admin/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
+  
 // Page de validation/modifier... des commande 
 Route::prefix('admin/commandes')->group(function() {
     Route::get('/', [CommandeCuisineController::class, 'index'])

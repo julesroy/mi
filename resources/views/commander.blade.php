@@ -6,177 +6,217 @@
         <link rel="stylesheet" href="{{ asset('css/dialog.css') }}" />
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-20 md:pt-32">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
         @include('header')
 
-        <div class="flex flex-col items-center justify-center gap-10 mt-15 px-4">
-            <!-- Conteneur principal -->
-            <div class="w-full max-w-6xl">
-                <!-- Conteneur des blocs + dialog -->
-                <div class="hidden flex-col items-stretch justify-center md:gap-4 pb-6 transition-all duration-300 bg-white text-black rounded-2xl" id="ecran-1">
-                    <div class="pt-2 text-xl text-center">Fais ton choix</div>
-
-                    <div class="h-148 md:h-132 flex flex-col md:flex-row justify-around items-center" id="elements-commande">
-                        <div class="text-center border-2 h-4/10 w-10/12 md:h-128 md:w-1/3 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out" id="bouton-menus">
-                            <span>img menu</span>
-                            <p>Menus</p>
-                        </div>
-
-                        <div class="text-center border-2 h-4/10 w-10/12 md:h-128 md:w-1/3 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out">
-                            <span>img plat</span>
-                            <p>Plats individuels</p>
-                        </div>
-                    </div>
-
-                    <div class="text-center border-2 w-10/12 md:w-1/3 rounded-lg bg-black text-white flex justify-center mx-auto py-2">Ton panier : 0.0€</div>
+        <div class="flex flex-col items-center gap-6 bg-[#1a1a1a] p-6 rounded-2xl w-[90%] max-w-xl mx-auto">
+            <!-- Écran 1 -->
+            <div id="ecran-1" class="flex flex-col items-center gap-10">
+                <h1 class="text-2xl font-semibold">Fais ton choix</h1>
+                <div class="flex gap-4">
+                    <button id="btn-menus" class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Menus</button>
                 </div>
+            </div>
 
-                <div class="hidden flex-col items-stretch justify-center md:gap-4 pb-6 transition-all duration-300 bg-white text-black rounded-2xl" id="ecran-2">
-                    <div class="pt-2 text-xl text-center">Menus</div>
-
-                    <div class="h-148 md:h-132 flex flex-col md:flex-row justify-around items-center" id="elements-commande">
-                        <div class="text-center border-2 h-3/10 w-10/12 md:h-128 md:w-1/4 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out" id="bouton-menu-1">
-                            <span>img menu 1</span>
-                            <p>Menu 1</p>
-                        </div>
-
-                        <div class="text-center border-2 h-3/10 w-10/12 md:h-128 md:w-1/4 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out">
-                            <span>img menu 2</span>
-                            <p>Menu 2</p>
-                        </div>
-
-                        <div class="text-center border-2 h-3/10 w-10/12 md:h-128 md:w-1/4 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out">
-                            <span>img menu 3</span>
-                            <p>Menu 3</p>
-                        </div>
-                    </div>
-
-                    <div class="text-center border-2 w-10/12 md:w-1/3 rounded-lg bg-black text-white flex justify-center mx-auto py-2">Ton panier : 0.0€</div>
+            <!-- Écran 2 -->
+            <div id="ecran-2" class="hidden flex flex-col items-center gap-10">
+                <h1 class="text-2xl font-semibold">Choisis un menu</h1>
+                <div class="flex gap-4">
+                    <button id="btn-menu-1" class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Menu 1</button>
                 </div>
+                <button onclick="retourEcran('ecran-1', 'ecran-2')" class="text-sm underline">Retour</button>
+            </div>
 
-                <div class="hidden flex-col items-stretch justify-center md:gap-4 pb-6 transition-all duration-300 bg-white text-black rounded-2xl" id="ecran-menu-1">
-                    <div class="pt-2 text-xl text-center">Choisis ton plat</div>
-
-                    <div class="h-148 md:h-132 flex flex-col md:flex-row justify-around items-center" id="elements-commande">
-                        <div class="text-center border-2 h-3/10 w-10/12 md:h-128 md:w-1/4 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out">
-                            <span>img menu 1</span>
-                            <p>Menu 1</p>
-                        </div>
-
-                        <div class="text-center border-2 h-3/10 w-10/12 md:h-128 md:w-1/4 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out">
-                            <span>img menu 2</span>
-                            <p>Menu 2</p>
-                        </div>
-
-                        <div class="text-center border-2 h-3/10 w-10/12 md:h-128 md:w-1/4 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out">
-                            <span>img menu 3</span>
-                            <p>Menu 3</p>
-                        </div>
-                    </div>
-
-                    <div class="text-center border-2 w-10/12 md:w-1/3 rounded-lg bg-black text-white flex justify-center mx-auto py-2">Ton panier : 0.0€</div>
+            <!-- Écran Choix Type -->
+            <div id="ecran-choix-type" class="hidden flex flex-col items-center gap-10">
+                <h1 class="text-2xl font-semibold">Choisis ton type</h1>
+                <div class="flex gap-4">
+                    <button class="btn-type bg-white text-black px-6 py-3 rounded-2xl" data-type="croque">Croque-Monsieur</button>
+                    <button class="btn-type bg-white text-black px-6 py-3 rounded-2xl" data-type="sandwich">Sandwich</button>
+                    <button class="btn-type bg-white text-black px-6 py-3 rounded-2xl" data-type="panini">Panini</button>
                 </div>
+                <button onclick="retourEcran('ecran-2', 'ecran-choix-type')" class="text-sm underline">Retour</button>
+            </div>
 
-                <div class="flex flex-col items-stretch justify-center md:gap-4 pb-6 transition-all duration-300 bg-white text-black rounded-2xl" id="ecran-snacks">
-                    <div class="pt-2 text-xl text-center">Choisis tes snacks/boissons</div>
-
-                    <div class="flex justify-around">
-                        <span id="onglet-snacks" class="border-b-2 border-black font-semibold">Snacks</span>
-                        <span id="onglet-boissons">Boissons</span>
-                    </div>
-
-                    <div class="h-148 md:h-128 grid grid-cols-5 md:grid-cols-10 justify-items-center" id="elements-snacks">
-                        <div class="border w-10/12 h-24 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out" data-selected="false" onclick="toggleSelection(this)">
-                            <span>img snack</span>
-                            <p>Snack</p>
-                        </div>
-                    </div>
-
-                    <div class="h-148 md:h-128 hidden grid-cols-5 md:grid-cols-10 justify-items-center" id="elements-boissons">
-                        <div class="border w-10/12 h-24 rounded-xl flex flex-col items-center justify-center hover:bg-black hover:text-white transition duration-300 ease-in-out" data-selected="false" onclick="toggleSelection(this)">
-                            <span>img boisson</span>
-                            <p>Boisson</p>
-                        </div>
-                    </div>
-
-                    <div class="text-center border-2 w-10/12 md:w-1/3 rounded-lg bg-black text-white flex justify-center mx-auto py-2">Ton panier : 0.0€</div>
+            <!-- Écran Composition -->
+            <div id="ecran-composition" class="hidden flex flex-col items-center gap-6">
+                <h1 class="text-2xl font-semibold">Choisis tes ingrédients</h1>
+                <div id="zone-composition" class="flex flex-wrap justify-center gap-4"></div>
+                <div class="flex gap-4">
+                    <button onclick="retourEcran('ecran-choix-type', 'ecran-composition')" class="text-sm underline">Retour</button>
+                    <button id="btn-suivant-composition" class="mt-4 bg-white text-black px-6 py-2 rounded-xl">Suivant</button>
                 </div>
+            </div>
+
+            <!-- Écran Snacks -->
+            <div id="ecran-snacks" class="hidden flex flex-col items-center gap-6">
+                <h1 class="text-2xl font-semibold">Choisis 2 snacks ou boissons</h1>
+                <div class="flex gap-6 text-lg">
+                    <span id="tab-snacks" class="cursor-pointer border-b-2 border-white pb-1">Snacks</span>
+                    <span id="tab-boissons" class="cursor-pointer text-gray-400 pb-1">Boissons</span>
+                </div>
+                <div id="zone-snacks" class="grid grid-cols-2 gap-4">
+                    <div class="snack-item bg-[#1a1a1a] px-4 py-3 rounded-xl cursor-pointer">🍪 Cookie</div>
+                    <div class="snack-item bg-[#1a1a1a] px-4 py-3 rounded-xl cursor-pointer">🍫 Barre</div>
+                </div>
+                <div id="zone-boissons" class="hidden grid grid-cols-2 gap-4">
+                    <div class="snack-item bg-[#1a1a1a] px-4 py-3 rounded-xl cursor-pointer">🥤 Soda</div>
+                    <div class="snack-item bg-[#1a1a1a] px-4 py-3 rounded-xl cursor-pointer">☕ Café</div>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="retourEcran('ecran-composition', 'ecran-snacks')" class="text-sm underline">Retour</button>
+                    <button class="mt-4 bg-white text-black px-6 py-2 rounded-xl" onclick="validerCommande()">Suivant</button>
+                </div>
+            </div>
+
+            <!-- Écran Panier -->
+            <div id="ecran-panier" class="hidden flex flex-col items-center gap-6">
+                <h2 class="text-2xl font-semibold">Récapitulatif de ta commande</h2>
+                <ul id="liste-panier" class="list-disc list-inside text-sm space-y-1 mb-2"></ul>
+                <p class="text-lg font-semibold">
+                    Total :
+                    <span id="total-panier">0.00€</span>
+                </p>
+                <button class="text-sm underline" onclick="ajouterUnElement()">Ajouter un autre élément</button>
             </div>
         </div>
 
         @include('footer')
 
-        <script src="{{ asset('js/dialog.js') }}"></script>
-
         <script>
-            // je dois le placer dans un fichier séparé quand le developpement sera terminé
+            document.addEventListener('DOMContentLoaded', () => {
+                const e1 = document.getElementById('ecran-1');
+                const e2 = document.getElementById('ecran-2');
+                const eType = document.getElementById('ecran-choix-type');
+                const eComp = document.getElementById('ecran-composition');
+                const eSnacks = document.getElementById('ecran-snacks');
+                const ePanier = document.getElementById('ecran-panier');
 
-            document.addEventListener('DOMContentLoaded', function () {
-                const ecran1 = document.getElementById('ecran-1');
-                const ecran2 = document.getElementById('ecran-2');
+                let panier = [];
+                let total = 0;
+                let plat = '';
+                let currentSelection = [];
 
-                const elements1 = ecran1.querySelector('#elements-commande');
-                const elements2 = ecran2.querySelector('#elements-commande');
-                const elementsMenu1 = document.getElementById('ecran-menu-1');
-                const boutonMenus = document.getElementById('bouton-menus');
-                const boutonMenu1 = document.getElementById('bouton-menu-1');
+                const compositions = {
+                    croque: ['Raclette', 'Emmental'],
+                    sandwich: ['Jambon', 'Poulet'],
+                    panini: ['Mozza', 'Thon'],
+                };
 
-                if (boutonMenus && elements1 && elements2) {
-                    boutonMenus.addEventListener('click', () => {
-                        elements1.classList.add('transition-opacity', 'duration-500', 'opacity-0');
-
-                        setTimeout(() => {
-                            ecran1.classList.add('hidden');
-                            ecran2.classList.remove('hidden');
-
-                            elements2.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                            void elements2.offsetWidth; // reflow
-                            elements2.classList.remove('opacity-0');
-                        }, 500);
-                    });
-
-                    boutonMenu1.addEventListener('click', () => {
-                        elements2.classList.add('transition-opacity', 'duration-500', 'opacity-0');
-
-                        setTimeout(() => {
-                            ecran2.classList.add('hidden');
-                            elementsMenu1.classList.remove('hidden');
-
-                            elementsMenu1.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-                            void elementsMenu1.offsetWidth; // reflow
-                            elementsMenu1.classList.remove('opacity-0');
-                        }, 500);
-                    });
+                function retourEcran(prevId, currentId) {
+                    document.getElementById(currentId).classList.add('hidden');
+                    document.getElementById(prevId).classList.remove('hidden');
                 }
-            });
 
-            /**
-             * Pour changer d'onglet snacks/boissons et la sélection des éléments
-             */
-            function toggleSelection(el) {
-                const selected = el.getAttribute('data-selected') === 'true';
-                el.setAttribute('data-selected', !selected);
-                el.classList.toggle('bg-black', !selected);
-                el.classList.toggle('text-white', !selected);
-            }
+                function updateTotal() {
+                    document.getElementById('total-panier').textContent = total.toFixed(2) + '€';
+                }
 
-            const ongletSnacks = document.getElementById('onglet-snacks');
-            const ongletBoissons = document.getElementById('onglet-boissons');
-            const sectionSnacks = document.getElementById('elements-snacks');
-            const sectionBoissons = document.getElementById('elements-boissons');
+                function validerCommande() {
+                    panier = panier.concat(currentSelection);
+                    const liste = document.getElementById('liste-panier');
+                    liste.innerHTML = '';
+                    panier.forEach((item) => {
+                        const li = document.createElement('li');
+                        li.textContent = item;
+                        liste.appendChild(li);
+                    });
+                    updateTotal();
+                    eSnacks.classList.add('hidden');
+                    ePanier.classList.remove('hidden');
+                }
 
-            ongletSnacks.addEventListener('click', () => {
-                sectionSnacks.classList.remove('hidden');
-                sectionBoissons.classList.add('hidden');
-                ongletSnacks.classList.add('border-b-2', 'border-black', 'font-semibold');
-                ongletBoissons.classList.remove('border-b-2', 'border-black', 'font-semibold');
-            });
+                function ajouterUnElement() {
+                    currentSelection = [];
+                    ePanier.classList.add('hidden');
+                    e1.classList.remove('hidden');
+                }
 
-            ongletBoissons.addEventListener('click', () => {
-                sectionBoissons.classList.remove('hidden');
-                sectionSnacks.classList.add('hidden');
-                ongletBoissons.classList.add('border-b-2', 'border-black', 'font-semibold');
-                ongletSnacks.classList.remove('border-b-2', 'border-black', 'font-semibold');
+                document.getElementById('btn-menus').onclick = () => {
+                    e1.classList.add('hidden');
+                    e2.classList.remove('hidden');
+                };
+
+                document.getElementById('btn-menu-1').onclick = () => {
+                    e2.classList.add('hidden');
+                    eType.classList.remove('hidden');
+                };
+
+                document.querySelectorAll('.btn-type').forEach((btn) => {
+                    btn.onclick = () => {
+                        plat = btn.dataset.type;
+                        currentSelection = [];
+                        eType.classList.add('hidden');
+                        eComp.classList.remove('hidden');
+
+                        const zone = document.getElementById('zone-composition');
+                        zone.innerHTML = '';
+                        compositions[plat].forEach((ing) => {
+                            const div = document.createElement('div');
+                            div.className = 'px-4 py-2 bg-[#1a1a1a] rounded-xl cursor-pointer hover:bg-white hover:text-black transition';
+                            div.textContent = ing;
+
+                            div.onclick = () => {
+                                const item = `${plat} - ${ing}`;
+                                if (currentSelection.includes(item)) {
+                                    currentSelection = currentSelection.filter((i) => i !== item);
+                                    total -= 5.0;
+                                    div.classList.remove('bg-white', 'text-black');
+                                } else {
+                                    currentSelection.push(item);
+                                    total += 5.0;
+                                    div.classList.add('bg-white', 'text-black');
+                                }
+                                updateTotal();
+                            };
+
+                            zone.appendChild(div);
+                        });
+                    };
+                });
+
+                document.getElementById('btn-suivant-composition').onclick = () => {
+                    eComp.classList.add('hidden');
+                    eSnacks.classList.remove('hidden');
+                    document.querySelectorAll('.snack-item').forEach((el) => el.classList.remove('selected', 'bg-white', 'text-black'));
+                };
+
+                document.getElementById('tab-snacks').onclick = () => {
+                    document.getElementById('tab-snacks').classList.add('border-white', 'text-white');
+                    document.getElementById('tab-boissons').classList.remove('border-white');
+                    document.getElementById('tab-boissons').classList.add('text-gray-400');
+                    document.getElementById('zone-snacks').classList.remove('hidden');
+                    document.getElementById('zone-boissons').classList.add('hidden');
+                };
+
+                document.getElementById('tab-boissons').onclick = () => {
+                    document.getElementById('tab-boissons').classList.add('border-white', 'text-white');
+                    document.getElementById('tab-snacks').classList.remove('border-white');
+                    document.getElementById('tab-snacks').classList.add('text-gray-400');
+                    document.getElementById('zone-snacks').classList.add('hidden');
+                    document.getElementById('zone-boissons').classList.remove('hidden');
+                };
+
+                document.querySelectorAll('.snack-item').forEach((item) => {
+                    item.onclick = () => {
+                        const snack = item.textContent.trim();
+                        if (item.classList.contains('selected')) {
+                            currentSelection = currentSelection.filter((i) => i !== snack);
+                            item.classList.remove('selected', 'bg-white', 'text-black');
+                            total -= 2.0;
+                        } else if (currentSelection.filter((i) => i === snack).length < 2) {
+                            currentSelection.push(snack);
+                            item.classList.add('selected', 'bg-white', 'text-black');
+                            total += 2.0;
+                        }
+                        updateTotal();
+                    };
+                });
+
+                // Expose les fonctions globales
+                window.retourEcran = retourEcran;
+                window.validerCommande = validerCommande;
+                window.ajouterUnElement = ajouterUnElement;
             });
         </script>
     </body>
