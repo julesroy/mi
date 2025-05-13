@@ -10,9 +10,5 @@ class Actu extends Model
     protected $primaryKey = 'idActu';
     public $timestamps = false;
 
-    protected $fillable = [
-        'date',
-        'titre',
-        'contenu',
-    ];
+    protected $fillable = ['date', 'titre', 'contenu'];
 }
