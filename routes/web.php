@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GestionComptesController;
+use App\Http\Controllers\TresorerieController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanningController;
@@ -57,6 +58,13 @@ Route::get('/panneau-admin', function () {
     return view('panneau-admin');
 });
 
+// page tresorerie
+Route::get('/tresorerie', [TresorerieController::class, 'afficher'])
+    ->middleware('auth')
+    ->middleware('can:verifier-acces-serveur')
+    ->middleware('adminAccess')
+    ->name('tresorerie');
+
 // Page de planning
 Route::get('/admin/planning', [PlanningController::class, 'afficher'])
     ->middleware('auth')
@@ -74,7 +82,7 @@ Route::post('/admin/planning/ajouter-inscription', [PlanningController::class, '
 //page gestion des comptes
 Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
     ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
+    ->middleware('can:verifier-acces-administrateur')
     ->middleware('adminAccess')
     ->name('gestion-comptes');
 
