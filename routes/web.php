@@ -39,6 +39,11 @@ Route::get('/commander', function () {
     return view('commander');
 });
 
+//page affichage cuisine
+    Route::get('/affichage-cuisine', function () {
+        return view('affichage-cuisine');
+    });
+
 /**-----------------------------------------------
  * ADMIN
  -----------------------------------------------*/
@@ -47,16 +52,18 @@ Route::get('/commander', function () {
 Route::prefix('admin')->group(function () {
 
 
-// page tresorerie
-Route::get('/tresorerie', [TresorerieController::class, 'afficher'])
+    // page tresorerie
+    Route::get('/tresorerie', [TresorerieController::class, 'afficher'])
     ->middleware('auth')
     ->middleware('can:verifier-acces-serveur')
     ->middleware('adminAccess')
     ->name('tresorerie');
+
     // page panneau admin
     Route::get('/panneau-admin', function () {
         return view('panneau-admin');
     });
+
 
     // page Gestion stocks
     Route::get('/gestion-stocks', [GestionStocksController::class, 'index']);
