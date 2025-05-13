@@ -70,7 +70,9 @@
 
                 <div>
                     <!-- Changer mot de passe ? -->
-                    <button class="bg-gray-800 px-5 py-2 hover:bg-gray-400 hover:cursor-pointer mb-1 min-w-full min-h-full">Changer votre mot de passe</button>
+                    <button class="bg-gray-800 px-5 py-2 hover:bg-gray-400 hover:cursor-pointer mb-1 min-w-full min-h-full">
+                        Changer votre mot de passe
+                    </button>
                 </div>
 
                 <div>
