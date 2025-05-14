@@ -62,6 +62,6 @@ class GestionComptesController extends Controller
             ->get();
 
         // On renvoie la vue avec les utilisateurs, le terme de recherche et le triage
-        return view('gestion-comptes', compact('utilisateurs', 'recherche', 'triage'));
+        return view('admin.gestion-comptes', compact('utilisateurs', 'recherche', 'triage'));
     }
 }

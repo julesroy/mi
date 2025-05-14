@@ -76,7 +76,7 @@ class TresorerieController extends Controller
         // Comptes à découvert
         $comptesDecouverts = DB::table('utilisateurs')->where('solde', '<', 0)->get();
 
-        return view('tresorerie', [
+        return view('admin.tresorerie', [
             'utilisateurs' => $utilisateurs,
             'solde' => $soldeTotal,
             'stats' => $statistiquesComptes,
