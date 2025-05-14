@@ -313,6 +313,9 @@
   .mx-auto {
     margin-inline: auto;
   }
+  .my-2 {
+    margin-block: calc(var(--spacing) * 2);
+  }
   .my-8 {
     margin-block: calc(var(--spacing) * 8);
   }
@@ -452,6 +455,9 @@
   }
   .min-h-40 {
     min-height: calc(var(--spacing) * 40);
+  }
+  .min-h-\[90\%\] {
+    min-height: 90%;
   }
   .min-h-full {
     min-height: 100%;
@@ -1366,6 +1372,13 @@
     &:hover {
       @media (hover: hover) {
         color: var(--color-black);
+      }
+    }
+  }
+  .hover\:text-blue-500 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-blue-500);
       }
     }
   }

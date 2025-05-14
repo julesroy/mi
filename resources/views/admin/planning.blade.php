@@ -5,6 +5,10 @@
     @include('head')
     <title>Planning admin</title>
     <style>
+        html {
+            min-height: 100vh;
+        }
+
         .week-job-0>*,
         .job-0 {
             background-color: rgba(41, 128, 185, 0.2);
@@ -48,9 +52,19 @@
 
 </head>
 
-<?php setlocale(LC_ALL, 'fr_FR'); ?>
+@php
+    setlocale(LC_ALL, 'fr_FR');
+    $date = date('Y-m-d');
+    // Si l'on est le weekend
+if (intval(date('w')) % 6 == 0) {
+    $date = date('Y-m-d', strtotime('Monday next week'));
+}
 
-<body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
+$weekDays = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
+
+@endphp
+
+<body class="bg-[#0a0a0a] text-white pt-28 md:pt-36 h-screen">
     @include('header')
 
     {{-- Dialogue de suppression d'inscription  --}}
@@ -167,7 +181,7 @@
 
     <!-- Wrapper global -->
     <div id="planningWrapper"
-        class="flex flex-col md:flex-row justify-center items-center gap-8
+        class="flex flex-col md:flex-row justify-center items-center gap-8 min-h-[90%]
       [&>*]:bg-gray-800 [&>*]:border-gray-700 [&>*]:border [&>*]:rounded-2xl
       day
     ">
@@ -206,8 +220,9 @@
 
         {{-- Affichage par jour --}}
         <div id="day" class="flex flex-col w-sm md:w-md lg:w-xl">
+            <h2 id="day__name" class="text-2xl text-center my-2 font-bold">Jour - dd/mm</h2>
             @foreach ([['blue', 'Bar'], ['red', 'Cuisine'], ['yellow', 'Transit'], ['green', 'Courses']] as $index => $job)
-                <section class="p-5 pb-3 border-t-gray-700 {{ $index == 0 ? '' : 'border-t' }}">
+                <section class="p-5 pb-3 border-t-gray-700 border-t">
                     <h3 class="flex flex-row gap-2 text-2xl font-bold relative">
                         <span class="bg-{{ $job[0] }}-600 w-2 block"></span>
                         {{ $job[1] }}
@@ -229,10 +244,12 @@
 
         {{-- Affichage par semaine --}}
         <div id="week" class="flex flex-col w-sm md:w-md lg:w-xl">
-            @foreach (['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'] as $index => $day)
+            @foreach ($weekDays as $index => $day)
                 <section class="p-5 pb-3 border-t-gray-700 {{ $index == 0 ? '' : 'border-t' }}">
                     <h3 class="flex flex-row gap-2 text-2xl font-bold relative">
-                        {{ $day }}
+                        <button class="cursor-pointer hover:text-blue-500"
+                            id="week__name__{{ $index }}">{{ $day }} - <span
+                                id="week__date__{{ $index }}"></span></button>
                         <button type="button" id="week__inscription__{{ $index }}"
                             class="absolute right-1 cursor-pointer rounded-full text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300"
                             aria-label="Inscription">
@@ -256,17 +273,9 @@
         </div>
     </div>
 
-    @php
-        $date = date('Y-m-d');
-        // Si l'on est le weekend
-if (intval(date('w')) % 6 == 0) {
-    $date = date('Y-m-d', strtotime('Monday next week'));
-        }
-
-    @endphp
-
     <script>
         const JOBS = ['Bar', 'Cuisine', 'Transit', 'Courses'];
+        const WEEKDAYS = {!! json_encode($weekDays) !!};
         const calendarTitle = document.getElementById('calendar__title');
         const inscriptionForm = document.getElementById('inscriptionDialog__form');
 
@@ -347,6 +356,11 @@ if (intval(date('w')) % 6 == 0) {
             // Met à jour la date sélectionnée
             currentDate = new Date(day);
 
+            // Met à jour le nom du jour sélectionné
+            document.getElementById('day__name').innerHTML = WEEKDAYS[currentDate.getDay() - 1] + ' - ' +
+                currentDate.getDate().toString().padStart(2, '0') +
+                '/' + (currentDate.getMonth() + 1).toString().padStart(2, '0');
+
             // Met à jour le contenu du détail du jour
             for (let job in planning[day]) {
                 let html = '';
@@ -367,7 +381,7 @@ if (intval(date('w')) % 6 == 0) {
             weekDate.setDate(weekDate.getDate() - weekDate.getDay());
 
             // Itère à travers tous les jours ouvrés de la semaine
-            for (let i = 0; i < 5; i++) {
+            for (let i in WEEKDAYS) {
                 weekDate.setDate(weekDate.getDate() + 1);
                 let day = dateSQLFormat(weekDate);
 
@@ -381,7 +395,13 @@ if (intval(date('w')) % 6 == 0) {
                 }
 
                 // Met à jour la date du bouton d'inscription de ce jour
+                document.getElementById('week__date__' + i).innerHTML = weekDate.getDate().toString().padStart(2, '0') +
+                    '/' + (weekDate.getMonth() + 1).toString().padStart(2, '0');
                 document.getElementById('week__inscription__' + i).onclick = showInscriptionDialog.bind(null, 0, day);
+                document.getElementById('week__name__' + i).onclick = () => {
+                    selectDay(day);
+                    setDisplayMode(true);
+                }
             }
         }
 
