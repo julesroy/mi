@@ -1,120 +1,143 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        @include('head')
-        <title>Salle et Sécurité</title>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    </head>
+<head>
+    @includeIf('head')
+    <title>Gestion Salle Sécurité</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    @include('header')
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
-        @include('header')
+    <main class="container mx-auto px-4 py-12">
+        <section class="mb-12">
+            <h1 class="text-3xl font-bold mb-6">Suivi des Températures</h1>
+            
+            <div class="bg-gray-800 p-6 rounded-lg mb-8">
+                <canvas id="tempChart" height="120"></canvas>
+            </div>
 
-        <main class="container mx-auto px-4 pb-20">
-            <!-- Section Relevés des températures -->
-            <section class="mb-16">
-                <h1 class="text-3xl font-bold mb-6">Relevés des températures</h1>
-                
-                <!-- Graphique des températures -->
-                <div class="mb-8 bg-gray-800 p-4 rounded-lg">
-                    <canvas id="temperatureChart"></canvas>
-                </div>
-                
-                <div class="mb-6">
-                    <h2 class="text-2xl font-semibold mb-4">Historique des relevés</h2>
-                    <button onclick="document.getElementById('addTemperatureDialog').showModal()" 
-                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded mb-4">
-                        + Ajouter un relevé
-                    </button>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-gray-800">
-                                    <th class="p-3 text-left">Date</th>
-                                    <th class="p-3 text-left">Temp frigo 1</th>
-                                    <th class="p-3 text-left">Temp frigo 2</th>
-                                    <th class="p-3 text-left">Membre</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($temperatureReleves as $releve)
-                                <tr class="border-b border-gray-700 hover:bg-gray-800">
-                                    <td class="p-3">{{ $releve->date->format('d/m/Y H:i') }}</td>
-                                    <td class="p-3">{{ $releve->temperature1 }}</td>
-                                    <td class="p-3">{{ $releve->temperature2 }}</td>
-                                    <td class="p-3">{{ $releve->nom }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <hr class="border-gray-700 my-8">
-
-            <!-- Section Nettoyages -->
-            <section>
-                <h1 class="text-3xl font-bold mb-6">Nettoyages</h1>
-                
-                <div class="mb-6">
-                    <h2 class="text-2xl font-semibold mb-4">Historique des nettoyages</h2>
-                    <button onclick="document.getElementById('addCleaningDialog').showModal()" 
-                            class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded mb-4">
-                        + Ajouter un nettoyage
-                    </button>
-                    
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse">
-                            <thead>
-                                <tr class="bg-gray-800">
-                                    <th class="p-3 text-left">Date et heure</th>
-                                    <th class="p-3 text-left">Commentaire</th>
-                                    <th class="p-3 text-left">Membre</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($cleaningReleves as $releve)
-                                <tr class="border-b border-gray-700 hover:bg-gray-800">
-                                    <td class="p-3">{{ $releve->date->format('d/m/Y H:i') }}</td>
-                                    <td class="p-3">{{ $releve->commentaire ?? '-' }}</td>
-                                    <td class="p-3">{{ $releve->nom }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Dialog pour ajouter un relevé de température -->
-        <dialog id="addTemperatureDialog" class="bg-gray-800 rounded-lg shadow-xl text-white p-6 w-full max-w-md">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Ajouter un relevé de température</h3>
-                <button onclick="document.getElementById('addTemperatureDialog').close()" class="text-gray-400 hover:text-white">
-                    &times;
+                <h2 class="text-xl font-semibold">Historique</h2>
+                <button onclick="showDialog('tempDialog')" 
+                        class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+                    + Nouveau relevé
                 </button>
             </div>
+
+            <div class="overflow-x-auto bg-gray-800 rounded-lg">
+                <table class="w-full">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="p-3 text-left">Date</th>
+                            <th class="p-3 text-left">Frigo 1</th>
+                            <th class="p-3 text-left">Frigo 2</th>
+                            <th class="p-3 text-left">Agent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($temperatureReleves ?? [] as $salleEtSecurite)
+                        <tr class="border-t border-gray-700 hover:bg-gray-700/50">
+                            <td class="p-3">{{ $salleEtSecurite->date->format('d/m/Y H:i') }}</td>
+                            <td class="p-3">{{ $salleEtSecurite->temperature1 }}°C</td>
+                            <td class="p-3">{{ $salleEtSecurite->temperature2 }}°C</td>
+                            <td class="p-3">{{ $salleEtSecurite->nom }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="4" class="p-3 text-center">Aucun relevé enregistré</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h1 class="text-3xl font-bold mb-6">Journal des Nettoyages</h1>
             
-            <form method="POST" action="{{ route('admin.salle-securite.ajouter-releve-frigo') }}" class="space-y-4">
-                @csrf
-                <input type="hidden" name="type" value="0">
-                
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold">Historique</h2>
+                <button onclick="showDialog('cleanDialog')" 
+                        class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded">
+                    + Nouveau nettoyage
+                </button>
+            </div>
+
+            <div class="overflow-x-auto bg-gray-800 rounded-lg">
+                <table class="w-full">
+                    <thead class="bg-gray-700">
+                        <tr>
+                            <th class="p-3 text-left">Date</th>
+                            <th class="p-3 text-left">Commentaire</th>
+                            <th class="p-3 text-left">Agent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($cleaningReleves ?? [] as $salleEtSecurite)
+                        <tr class="border-t border-gray-700 hover:bg-gray-700/50">
+                            <td class="p-3">{{ $salleEtSecurite->date->format('d/m/Y H:i') }}</td>
+                            <td class="p-3">{{ $salleEtSecurite->commentaire }}</td>
+                            <td class="p-3">{{ $salleEtSecurite->nom }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="3" class="p-3 text-center">Aucun nettoyage enregistré</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Dialog Température -->
+    <dialog id="tempDialog" class="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold">Nouveau Relevé</h3>
+            <button onclick="hideDialog('tempDialog')" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+        </div>
+        <form action="{{ route('admin.salle-securite.ajouter-releve-frigo') }}" method="POST">
+            @csrf
+            <div class="space-y-4">
                 <div>
-                    <label for="temperature1" class="block mb-2">Température frigo 1 (°C)</label>
-                    <input type="number" step="0.1" id="temperature1" name="temperature1" 
-                           class="w-full bg-gray-700 border border-gray-600 rounded p-2" required>
+                    <label class="block mb-2">Température Frigo 1 (°C)</label>
+                    <input type="number" step="0.1" name="temperature1" required 
+                           class="w-full bg-gray-700 border border-gray-600 rounded p-2">
                 </div>
-                
                 <div>
-                    <label for="temperature2" class="block mb-2">Température frigo 2 (°C)</label>
-                    <input type="number" step="0.1" id="temperature2" name="temperature2" 
-                           class="w-full bg-gray-700 border border-gray-600 rounded p-2" required>
+                    <label class="block mb-2">Température Frigo 2 (°C)</label>
+                    <input type="number" step="0.1" name="temperature2" required 
+                           class="w-full bg-gray-700 border border-gray-600 rounded p-2">
                 </div>
-                
-                <div class="flex justify-end space-x-4 pt-4">
-                    <button type="button" onclick="document.getElementById('addTemperatureDialog').close()" 
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="hideDialog('tempDialog')" 
+                            class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded">
+                        Annuler
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded">
+                        Enregistrer
+                    </button>
+                </div>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Dialog Nettoyage -->
+    <dialog id="cleanDialog" class="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold">Nouveau Nettoyage</h3>
+            <button onclick="hideDialog('cleanDialog')" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+        </div>
+        <form action="{{ route('admin.salle-securite.ajouter-nettoyage') }}" method="POST">
+            @csrf
+            <div class="space-y-4">
+                <div>
+                    <label class="block mb-2">Commentaire</label>
+                    <textarea name="commentaire" rows="3" required
+                              class="w-full bg-gray-700 border border-gray-600 rounded p-2"></textarea>
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="hideDialog('cleanDialog')" 
                             class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded">
                         Annuler
                     </button>
@@ -122,84 +145,56 @@
                         Enregistrer
                     </button>
                 </div>
-            </form>
-        </dialog>
-
-        <!-- Dialog pour ajouter un nettoyage -->
-        <dialog id="addCleaningDialog" class="bg-gray-800 rounded-lg shadow-xl text-white p-6 w-full max-w-md">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Ajouter un nettoyage</h3>
-                <button onclick="document.getElementById('addCleaningDialog').close()" class="text-gray-400 hover:text-white">
-                    &times;
-                </button>
             </div>
-            
-            <form method="POST" action="{{ route('admin.salle-securite.ajouter-nettoyage') }}" class="space-y-4">
-                @csrf
-                <input type="hidden" name="type" value="1">
-                
-                <div>
-                    <label for="commentaire" class="block mb-2">Commentaire</label>
-                    <textarea id="commentaire" name="commentaire" rows="3"
-                           class="w-full bg-gray-700 border border-gray-600 rounded p-2" required></textarea>
-                </div>
-                
-                <div class="flex justify-end space-x-4 pt-4">
-                    <button type="button" onclick="document.getElementById('addCleaningDialog').close()" 
-                            class="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded">
-                        Annuler
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded">
-                        Enregistrer
-                    </button>
-                </div>
-            </form>
-        </dialog>
+        </form>
+    </dialog>
 
-        @include('footer')
+    @include('footer')
 
-        <script>
-            // Fermer les dialogs quand on clique à l'extérieur
-            document.querySelectorAll('dialog').forEach(dialog => {
-                dialog.addEventListener('click', function(e) {
-                    if (e.target === dialog) {
-                        dialog.close();
-                    }
-                });
-            });
+    <script>
+        // Gestion des dialogs
+        function showDialog(id) {
+            document.getElementById(id).showModal();
+        }
+        function hideDialog(id) {
+            document.getElementById(id).close();
+        }
 
-            // Graphique des températures
-            document.addEventListener('DOMContentLoaded', function() {
-                const ctx = document.getElementById('temperatureChart').getContext('2d');
-                const temperatureChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: @json($temperatureDates),
-                        datasets: [
-                            {
-                                label: 'Frigo 1 (°C)',
-                                data: @json($temperature1Values),
-                                borderColor: 'rgb(75, 192, 192)',
-                                tension: 0.1
-                            },
-                            {
-                                label: 'Frigo 2 (°C)',
-                                data: @json($temperature2Values),
-                                borderColor: 'rgb(255, 99, 132)',
-                                tension: 0.1
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: false
-                            }
+        // Graphique des températures
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('tempChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: @json($chartData['dates'] ?? []),
+                    datasets: [
+                        {
+                            label: 'Frigo 1 (°C)',
+                            data: @json($chartData['temp1'] ?? []),
+                            borderColor: 'rgb(59, 130, 246)',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Frigo 2 (°C)',
+                            data: @json($chartData['temp2'] ?? []),
+                            borderColor: 'rgb(16, 185, 129)',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.3
                         }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' }
+                    },
+                    scales: {
+                        y: { beginAtZero: false }
                     }
-                });
+                }
             });
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>

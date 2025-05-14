@@ -1,69 +1,81 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use App\Models\Releve;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class SalleSecuriteController extends Controller
 {
     public function index()
     {
-        // Récupérer les relevés de température (type = 0)
-        $temperatureReleves = Releve::where('type', 0)->orderBy('date', 'desc')->get();
+        $temperatureReleves = DB::table('salleEtSecurite')
+                                ->where('type', 0)
+                                ->orderBy('date', 'desc')
+                                ->get();
 
-        // Récupérer les relevés de nettoyage (type = 1)
-        $cleaningReleves = Releve::where('type', 1)->orderBy('date', 'desc')->get();
+        $cleaningReleves = DB::table('salleEtSecurite')
+                             ->where('type', 1)
+                             ->orderBy('date', 'desc')
+                             ->get();
 
-        // Préparer les données pour le graphique (15 derniers relevés)
-        $lastTemperatureReleves = Releve::where('type', 0)->orderBy('date', 'desc')->take(15)->get()->reverse();
+        $lastTemperatureReleves = DB::table('salleEtSecurite')
+                                    ->where('type', 0)
+                                    ->orderBy('date', 'desc')
+                                    ->take(15)
+                                    ->get()
+                                    ->reverse();
 
-        $temperature1Values = $lastTemperatureReleves->pluck('temperature1');
-        $temperature2Values = $lastTemperatureReleves->pluck('temperature2');
+        $chartData = [
+            'dates' => collect($lastTemperatureReleves)->map(function($item) {
+                return Carbon::parse($item->date)->format('d/m H:i');
+            }),
+            'temp1' => collect($lastTemperatureReleves)->pluck('temperature1'),
+            'temp2' => collect($lastTemperatureReleves)->pluck('temperature2')
+        ];
 
-        return view('admin.salle-securite', [
-            'temperatureReleves' => $temperatureReleves,
-            'cleaningReleves' => $cleaningReleves,
-            'temperatureDates' => $temperatureDates,
-            'temperature1Values' => $temperature1Values,
-            'temperature2Values' => $temperature2Values,
-        ]);
+        return view('admin.salle-securite', compact(
+            'temperatureReleves',
+            'cleaningReleves',
+            'chartData'
+        ));
     }
 
     public function ajouterReleveFrigo(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'temperature1' => 'required|numeric',
             'temperature2' => 'required|numeric',
         ]);
 
-        Releve::create([
-            'type' => 0, // 0 = relevé température
-            'temperature1' => $request->temperature1,
-            'temperature2' => $request->temperature2,
-            'nom' => Auth::user()->name, // Utilisation directe du nom de l'utilisateur connecté
-            'numeroCompte' => Auth::id(),
-            // La date est automatiquement remplie par le timestamp
+        DB::table('salleEtSecurite')->insert([
+            'type' => 0,
+            'temperature1' => $validated['temperature1'],
+            'temperature2' => $validated['temperature2'],
+            'nom' => Auth::user()->nom . ' ' . Auth::user()->prenom,
+            'numeroCompte' => Auth::user()->numeroCompte,
         ]);
 
-        return redirect()->route('admin.salle-securite')->with('success', 'Relevé de température ajouté avec succès');
+        return back()->with('success', 'Relevé enregistré !');
     }
 
     public function ajouterNettoyage(Request $request)
     {
-        $request->validate([
-            'commentaire' => 'required|string|max:255',
+        $validated = $request->validate([
+            'commentaire' => 'required|string|max:255'
+        ]);
+        DB::table('salleEtSecurite')->insert([
+            'type' => 1,
+            'temperature1' => 0,
+            'temperature2' => 0,
+            'commentaire' => $validated['commentaire'],
+            'nom' => Auth::user()->nom  . ' ' . Auth::user()->prenom,
+            'numeroCompte' => Auth::user()->numeroCompte,
         ]);
 
-        Releve::create([
-            'type' => 1, // 1 = nettoyage
-            'commentaire' => $request->commentaire,
-            'nom' => Auth::user()->name, // Utilisation directe du nom de l'utilisateur connecté
-            'numeroCompte' => Auth::id(),
-            // La date est automatiquement remplie par le timestamp
-        ]);
-
-        return redirect()->route('admin.salle-securite')->with('success', 'Nettoyage enregistré avec succès');
+        return back()->with('success', 'Nettoyage enregistré !');
     }
+
+    
 }
