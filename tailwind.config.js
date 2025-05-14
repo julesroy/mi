@@ -4,7 +4,11 @@ module.exports = {
       './resources/**/*.js',
     ],
     theme: {
-      extend: {},
+      extend: {
+        fontFamily: {
+          regular: ['lobstertwo', 'sans-serif'],
+        },
+      },
     },
     plugins: [],
   }

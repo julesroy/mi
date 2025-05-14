@@ -5,7 +5,7 @@
         <title>Compte</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
         @include('header')
 
         <div class="flex place-self-center relative min-h-full flex-col justify-center px-6 py-6">
@@ -70,9 +70,7 @@
 
                 <div>
                     <!-- Changer mot de passe ? -->
-                    <button class="bg-gray-800 px-5 py-2 hover:bg-gray-400 hover:cursor-pointer mb-1 min-w-full min-h-full">
-                        Changer votre mot de passe
-                    </button>
+                    <button class="bg-gray-800 px-5 py-2 hover:bg-gray-400 hover:cursor-pointer mb-1 min-w-full min-h-full">Changer votre mot de passe</button>
                 </div>
 
                 <div>

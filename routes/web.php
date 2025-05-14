@@ -9,6 +9,7 @@ use App\Http\Controllers\GestionStocksController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\SalleSecuriteController;
 use App\Http\Controllers\CarteController;
+use App\Http\Controllers\CommandeUtilisateurController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -35,9 +36,8 @@ Route::get('/compte', function () {
 })->middleware('auth');
 
 // page commander
-Route::get('/commander', function () {
-    return view('commander');
-});
+Route::get('/commander', [CommandeUtilisateurController::class, 'index'])->middleware('auth');
+Route::post('/commander/valider', [CommandeUtilisateurController::class, 'validerCommande'])->name('commander.valider');
 
 //page affichage cuisine
     Route::get('/affichage-cuisine', function () {
@@ -90,6 +90,7 @@ Route::prefix('admin')->group(function () {
         ->middleware('auth')
         ->middleware('can:verifier-acces-serveur');
     Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
+    Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
     Route::get('/salle-securite', function () {

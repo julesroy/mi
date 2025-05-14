@@ -48,4 +48,36 @@ class CarteController extends Controller
             return response()->json(['success' => false, 'message' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
         }
     }
+
+    public function modifier(Request $request, $id)
+    {
+        try {
+            // Valider les données
+            $validated = $request->validate([
+                'nom' => 'required|string|max:255',
+                'categorieElementCarte' => 'required|integer',
+                'prix' => 'required|numeric',
+                'prixServeur' => 'required|numeric',
+                'description' => 'nullable|string',
+                'composition' => 'required|json', // La composition doit être un JSON valide
+            ]);
+
+            // Mettre à jour l'élément dans la table "carte"
+            DB::table('carte')
+                ->where('idElement', $id)
+                ->update([
+                    'nom' => $validated['nom'],
+                    'typePlat' => $validated['categorieElementCarte'],
+                    'prix' => $validated['prix'],
+                    'prixServeur' => $validated['prixServeur'],
+                    'description' => $validated['description'],
+                    'ingredientsElements' => $validated['composition'],
+                ]);
+
+            return response()->json(['success' => true, 'message' => 'Élément mis à jour avec succès']);
+        } catch (\Exception $e) {
+            // Gérer les erreurs et renvoyer une réponse JSON
+            return response()->json(['success' => false, 'message' => 'Une erreur est survenue : ' . $e->getMessage()], 500);
+        }
+    }
 }
