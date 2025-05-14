@@ -66,7 +66,7 @@ class PlanningController extends Controller
             ->where([['date', '>=', $startDay->format('Ymd')], ['date', '<=', $endDay->format('Ymd')]])->get();
 
         foreach ($data as $day) {
-            array_push($planning[$day->date][$day->poste], ['id' => $day->idInscription, 'numeroCompte' => $day->numeroCompte, 'nom' => $day->prenom . ' ' . strtoupper($day->nom)]);
+            array_push($planning[$day->date][$day->poste], ['id' => $day->idInscription, 'numeroCompte' => $day->numeroCompte, 'nom' => $day->prenom . ' ' . ucwords(strtolower($day->nom), ' -')]);
         }
 
         return response()->json($planning);
