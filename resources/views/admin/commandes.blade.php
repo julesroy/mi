@@ -12,6 +12,28 @@
         <main class="container mx-auto px-4 py-8">
             <h1 class="text-3xl font-bold mb-8 text-center">Commandes en Cuisine</h1>
 
+            <!-- Barre de filtrage -->
+            <div class="flex flex-wrap gap-2 mb-6 justify-center">
+                <button onclick="filterCommandes('all')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
+                    Toutes
+                </button>
+                <button onclick="filterCommandes(0)" class="px-4 py-2 bg-red-700 hover:bg-red-600 rounded-lg transition-colors">
+                    Non payées
+                </button>
+                <button onclick="filterCommandes(1)" class="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 rounded-lg transition-colors">
+                    Payées
+                </button>
+                <button onclick="filterCommandes(2)" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg transition-colors">
+                    Prêtes
+                </button>
+                <button onclick="filterCommandes(3)" class="px-4 py-2 bg-green-700 hover:bg-green-600 rounded-lg transition-colors">
+                    Servies
+                </button>
+                <button onclick="filterCommandes(4)" class="px-4 py-2 bg-gray-500 hover:bg-gray-400 rounded-lg transition-colors">
+                    Annulées
+                </button>
+            </div>
+
             <div id="commandesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="text-center py-10">
                     <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
@@ -57,9 +79,15 @@
                 opacity: 0.5;
                 cursor: not-allowed;
             }
+            .filter-btn.active {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 2px white;
+            }
         </style>
 
         <script>
+            let allCommandes = []; // Stocke toutes les commandes pour le filtrage
+            
             document.addEventListener('DOMContentLoaded', function () {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -90,11 +118,11 @@
 
                 function loadCommandes() {
                     document.getElementById('commandesContainer').innerHTML = `
-                <div class="text-center py-10">
-                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-                    <p class="mt-4">Chargement des commandes...</p>
-                </div>
-            `;
+                        <div class="text-center py-10">
+                            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+                            <p class="mt-4">Chargement des commandes...</p>
+                        </div>
+                    `;
 
                     fetch('/admin/commandes/data', {
                         headers: {
@@ -104,6 +132,7 @@
                     })
                         .then((response) => response.json())
                         .then((commandes) => {
+                            allCommandes = commandes; // Stocke toutes les commandes
                             displayCommandes(commandes);
                         })
                         .catch((error) => {
@@ -113,6 +142,7 @@
                                     idCommande: 999999,
                                     numeroCommande: 'FETCH-ERROR',
                                     nomClient: 'Erreur de chargement',
+                                    prenomClient: 'Erreur de chargement',
                                     categorieCommande: 0,
                                     prix: 0.0,
                                     date: new Date().toISOString(),
@@ -126,10 +156,10 @@
                 function displayCommandes(commandes) {
                     if (commandes.length === 0) {
                         document.getElementById('commandesContainer').innerHTML = `
-                    <div class="col-span-full text-center py-10 text-gray-400">
-                        <p>Aucune commande en cuisine pour le moment</p>
-                    </div>
-                `;
+                            <div class="col-span-full text-center py-10 text-gray-400">
+                                <p>Aucune commande correspondante</p>
+                            </div>
+                        `;
                         return;
                     }
 
@@ -138,66 +168,82 @@
                         const isTest = commande.idCommande === 999 || commande.numeroCommande === 'CMD-TEST';
 
                         html += `
-                    <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700 commande-card ${isTest ? 'commande-test' : ''}">
-                        <div class="p-5 border-b border-gray-700 flex justify-between items-center">
-                            <span class="font-bold text-xl">${commande.numeroCommande}</span>
-                            <span class="px-3 py-1 rounded-full text-xs font-bold etat-${commande.etat}">${getEtatText(commande.etat)}</span>
-                        </div>
+                            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700 commande-card ${isTest ? 'commande-test' : ''}">
+                                <div class="p-5 border-b border-gray-700 flex justify-between items-center">
+                                    <span class="font-bold text-xl">${commande.numeroCommande}</span>
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold etat-${commande.etat}">${getEtatText(commande.etat)}</span>
+                                </div>
 
-                        <div class="p-5">
-                            <div class="mb-3">
-                                <span class="text-gray-400 font-medium">Client:</span>
-                                <span class="ml-2">${commande.nomClient || 'Non spécifié'}</span>
-                            </div>
+                                <div class="p-5">
+                                    <div class="mb-3">
+                                        <span class="text-gray-400 font-medium">Client:</span>
+                                        <span class="ml-2">${commande.prenomClient || ''} ${commande.nomClient || 'Non spécifié'}</span>
+                                    </div>
 
-                            <div class="mb-3">
-                                <span class="text-gray-400 font-medium">Type:</span>
-                                <span class="ml-2">${getTypeText(commande.categorieCommande)}</span>
-                            </div>
+                                    <div class="mb-3">
+                                        <span class="text-gray-400 font-medium">Type:</span>
+                                        <span class="ml-2">${getTypeText(commande.categorieCommande)}</span>
+                                    </div>
 
-                            <div class="mb-3">
-                                <span class="text-gray-400 font-medium">Prix:</span>
-                                <span class="ml-2">${parseFloat(commande.prix).toFixed(2)} €</span>
-                            </div>
+                                    <div class="mb-3">
+                                        <span class="text-gray-400 font-medium">Prix:</span>
+                                        <span class="ml-2">${parseFloat(commande.prix).toFixed(2)} €</span>
+                                    </div>
 
-                            <div class="mb-3">
-                                <span class="text-gray-400 font-medium">Heure:</span>
-                                <span class="ml-2">${formatDate(commande.date)}</span>
-                            </div>
+                                    <div class="mb-3">
+                                        <span class="text-gray-400 font-medium">Heure:</span>
+                                        <span class="ml-2">${formatDate(commande.date)}</span>
+                                    </div>
 
-                            <div class="bg-gray-700 p-3 rounded-lg mb-4 ${isTest ? 'text-yellow-400' : 'text-gray-400'}">
-                                <p class="italic">${commande.commentaire || 'Pas de commentaire'}</p>
-                            </div>
+                                    <div class="bg-gray-700 p-3 rounded-lg mb-4 ${isTest ? 'text-yellow-400' : 'text-gray-400'}">
+                                        <p class="italic">${commande.commentaire || 'Pas de commentaire'}</p>
+                                    </div>
 
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="marquerPrete(${commande.idCommande})"
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
-                                    ${isTest ? 'disabled' : ''}>
-                                    Prête
-                                </button>
-                                <button onclick="marquerServie(${commande.idCommande})"
-                                    class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
-                                    ${isTest ? 'disabled' : ''}>
-                                    Servie
-                                </button>
-                                <button onclick="modifierCommande(${commande.idCommande})"
-                                    class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
-                                    ${isTest ? 'disabled' : ''}>
-                                    Modifier
-                                </button>
-                                <button onclick="annulerCommande(${commande.idCommande})"
-                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
-                                    ${isTest ? 'disabled' : ''}>
-                                    Annuler
-                                </button>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <button onclick="marquerPrete(${commande.idCommande})"
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
+                                            ${isTest ? 'disabled' : ''}>
+                                            Prête
+                                        </button>
+                                        <button onclick="marquerServie(${commande.idCommande})"
+                                            class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
+                                            ${isTest ? 'disabled' : ''}>
+                                            Servie
+                                        </button>
+                                        <button onclick="modifierCommande(${commande.idCommande})"
+                                            class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
+                                            ${isTest ? 'disabled' : ''}>
+                                            Modifier
+                                        </button>
+                                        <button onclick="annulerCommande(${commande.idCommande})"
+                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
+                                            ${isTest ? 'disabled' : ''}>
+                                            Annuler
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                `;
+                        `;
                     });
 
                     document.getElementById('commandesContainer').innerHTML = html;
                 }
+
+                // Fonction de filtrage
+                window.filterCommandes = function(etat) {
+                    // Mise à jour de l'UI des boutons
+                    document.querySelectorAll('.flex button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    event.target.classList.add('active');
+                    
+                    if (etat === 'all') {
+                        displayCommandes(allCommandes);
+                    } else {
+                        const filtered = allCommandes.filter(c => c.etat === etat);
+                        displayCommandes(filtered);
+                    }
+                };
 
                 window.marquerPrete = function (id) {
                     if (id === 999999) {

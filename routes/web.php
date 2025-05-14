@@ -10,7 +10,6 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\SalleSecuriteController;
 use App\Http\Controllers\CarteController;
 use App\Http\Controllers\CommandeUtilisateurController;
-use App\Http\Controllers\PriseCommandeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -65,14 +64,6 @@ Route::prefix('admin')->group(function () {
         return view('panneau-admin');
     });
 
-    // page prise commande
-    Route::get('/prise-commande', function () {
-        return view('admin/prise-commande');
-    });
-    Route::get('/prise-commande', [PriseCommandeController::class, 'index'])->name('prise-commande');
-
-
-
     // page Gestion stocks
     Route::get('/gestion-stocks', [GestionStocksController::class, 'index']);
 
@@ -92,8 +83,6 @@ Route::prefix('admin')->group(function () {
     //page gestion des comptes
     Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
         ->name('gestion-comptes');
-    Route::post('/gestion-comptes/update', [GestionComptesController::class, 'update'])->name('gestion-comptes.update');
-    Route::post('/gestion-comptes/delete', [GestionComptesController::class, 'delete'])->name('gestion-comptes.delete');
 
     // page de gestion de la carte
     Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
@@ -103,17 +92,17 @@ Route::prefix('admin')->group(function () {
     Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
+    Route::get('/salle-securite', function () {
+        return view('admin.salle-securite');
+    });
     Route::prefix('/salle-securite')->group(function () {
-        // Route pour la page d'index, qui est gérée par le contrôleur
-        Route::get('/', [SalleSecuriteController::class, 'index'])
+        Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
             ->name('admin.salle-securite');
 
-        // Route pour ajouter un relevé de température
-        Route::post('ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
+        Route::post('salle-securite/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
             ->name('admin.salle-securite.ajouter-releve-frigo');
 
-        // Route pour ajouter un nettoyage
-        Route::post('ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
+        Route::post('salle-securite/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
             ->name('admin.salle-securite.ajouter-nettoyage');
     });
 

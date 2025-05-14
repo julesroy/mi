@@ -18,9 +18,9 @@ class CommandeCuisineController extends Controller
         try {
             $query = DB::table('commandes')
                 ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
-                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient', 'commandes.categorieCommande', 'commandes.prix', 'commandes.date', 'commandes.commentaire', 'commandes.etat')
+                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient','utilisateurs.prenom as prenomClient', 'commandes.categorieCommande', 'commandes.prix', 'commandes.date', 'commandes.commentaire', 'commandes.etat')
                 ->whereDate('commandes.date', Carbon::today())
-                ->whereIn('commandes.etat', [0, 1])
+                ->whereIn('commandes.etat', [0, 1, 2, 3, 4])
                 ->orderBy('commandes.date', 'asc');
 
             $commandes = $query->get();
@@ -116,6 +116,7 @@ class CommandeCuisineController extends Controller
             'idCommande' => 999,
             'numeroCommande' => 'CMD-TEST',
             'nomClient' => 'Client Test',
+            'prenomClient' => 'Prénom Test',
             'categorieCommande' => 2,
             'prix' => 12.5,
             'date' => now()->toDateTimeString(),
