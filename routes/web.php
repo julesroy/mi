@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\GestionComptesController;
-use App\Http\Controllers\ActuController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanningController;
@@ -52,15 +51,6 @@ Route::prefix('admin')->group(function () {
         return view('panneau-admin');
     });
 
-
-    // page gestion actus
-    Route::get('/gestion-actus', [ActuController::class, 'index'])->name('gestion-actus');
-    Route::post('/gestion-actus', [ActuController::class, 'store'])->name('actus.store');
-    Route::put('/gestion-actus/{id}', [ActuController::class, 'update'])->name('actus.update');
-    Route::delete('/gestion-actus/{id}', [ActuController::class, 'destroy'])->name('actus.destroy');
-
-
-
     // page Gestion stocks
     Route::get('/gestion-stocks', [GestionStocksController::class, 'index']);
 
@@ -70,13 +60,11 @@ Route::prefix('admin')->group(function () {
     Route::post('/ingredients/update', [IngredientController::class, 'update'])->name('ingredients.update');
     Route::post('/ingredients/delete', [IngredientController::class, 'delete'])->name('ingredients.delete');
 
-    
-
 
     // Page de planning
     Route::get('/planning', [PlanningController::class, 'afficher']);
     Route::get('/planning/data/{month}', [PlanningController::class, 'donnees']);
-    Route::delete('/planning/supprimer-inscription/{idInscription}', [PlanningController::class, 'supprimer']);
+    Route::delete('/planning/supprimer-inscription/{idInscription}/{newDate}', [PlanningController::class, 'supprimer']);
     Route::post('/planning/ajouter-inscription', [PlanningController::class, 'ajouter']);
 
     //page gestion des comptes
@@ -93,16 +81,16 @@ Route::prefix('admin')->group(function () {
     Route::get('/salle-securite', function () {
         return view('admin.salle-securite');
     });
-  Route::prefix('admin/salle-securite')->group(function() {
-    Route::get('/', [SalleSecuriteController::class, 'index'])
-         ->name('admin.salle-securite');
-         
-    Route::post('/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
-         ->name('admin.salle-securite.ajouter-releve-frigo');
-         
-    Route::post('/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
-         ->name('admin.salle-securite.ajouter-nettoyage');
-});
+    Route::prefix('/salle-securite')->group(function () {
+        Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
+            ->name('admin.salle-securite');
+
+        Route::post('salle-securite/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
+            ->name('admin.salle-securite.ajouter-releve-frigo');
+
+        Route::post('salle-securite/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
+            ->name('admin.salle-securite.ajouter-nettoyage');
+    });
 
     // Page de validation/modifier... des commande 
     Route::prefix('commandes')->group(function () {
