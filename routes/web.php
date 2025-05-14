@@ -37,6 +37,7 @@ Route::get('/compte', function () {
 
 // page commander
 Route::get('/commander', [CommandeUtilisateurController::class, 'index'])->middleware('auth');
+Route::post('/commander/valider', [CommandeUtilisateurController::class, 'validerCommande'])->name('commander.valider');
 
 /**-----------------------------------------------
  * ADMIN

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
+        <meta name="csrf-token" content="{{ csrf_token() }}" />
         @include('head')
         <title>Commander</title>
         <link rel="stylesheet" href="{{ asset('css/dialog.css') }}" />
@@ -24,7 +25,7 @@
                         $elements = json_decode($menu->ingredientsElements)->elements;
                     @endphp
 
-                    <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $menu->nom }}" data-config="@json($elements)">
+                    <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $menu->nom }}" data-config='@json($elements)' data-id="{{ $menu->idElement }}" data-prix="{{ $menu->prix }}">
                         {{ $menu->nom }}
                     </button>
                 @endforeach
@@ -36,7 +37,7 @@
             <div id="ecran-plats" class="hidden flex flex-col items-center gap-10">
                 <h1 class="text-2xl font-semibold">Choisis un plat</h1>
                 @foreach ($plats as $plat)
-                    <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $plat->nom }}" data-prix="{{ $plat->prix }}" data-id="{{ $plat->idElement }}" data-ingredients="{!! $plat->ingredientsElements !!}">{{ $plat->nom }} - {{ $plat->prix }}€</button>
+                    <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $plat->nom }}" data-prix="{{ $plat->prix }}" data-id="{{ $plat->idElement }}" data-ingredients='{!! $plat->ingredientsElements !!}'>{{ $plat->nom }}</button>
                 @endforeach
 
                 <button id="btn-retour-menus" class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Retour</button>
@@ -90,6 +91,7 @@
                 <h1 class="text-2xl font-semibold">Ton panier</h1>
                 <div id="recap-panier" class="text-white"></div>
                 <button id="btn-nouvelle-commande" class="bg-cyan-600 text-white px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Commander autre chose</button>
+                <button id="btn-valider-commande" class="bg-green-600 text-white px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Valider la commande</button>
             </div>
         </div>
 
@@ -133,12 +135,12 @@
                     }
                     if (etape.nomIngredient === 'Plat') afficherEcran('plats');
                     else if (etape.nomIngredient === 'Snack') afficherEcran('snacks');
-                    else if (etape.nomIngredient === 'Boisson') afficherPanier(); // À implémenter si nécessaire
+                    else if (etape.nomIngredient === 'Boisson') afficherPanier();
                 }
 
                 function afficherPanier() {
                     panier.commandes.push({ ...commandeActuelle });
-                    const recap = panier.commandes.map((cmd, i) => `Commande ${i + 1}: ${cmd.menu} - ${cmd.plat} - ${cmd.viande || ''} - ${cmd.ingredient || ''} - Snacks: ${(cmd.snacks || []).join(', ')}`).join('<br>');
+                    const recap = panier.commandes.map((cmd, i) => `Commande ${i + 1}: ${cmd.menu} - ${cmd.plat} - ${cmd.viande || ''} - ${cmd.ingredient || ''} - Snacks: ${(cmd.snacks || []).join(', ')} - Prix: ${cmd.prix.toFixed(2)}€`).join('<br>');
                     document.getElementById('recap-panier').innerHTML = recap;
                     afficherEcran('panier');
                 }
@@ -161,7 +163,7 @@
                 boutonsMenu.forEach((btn) => {
                     btn.addEventListener('click', () => {
                         configActuelle = JSON.parse(btn.getAttribute('data-config'));
-                        commandeActuelle = { menu: btn.getAttribute('data-nom') };
+                        commandeActuelle = { menu: btn.getAttribute('data-id'), prix: parseFloat(btn.getAttribute('data-prix')) };
                         etapeIndex = -1;
                         suivant();
                     });
@@ -169,7 +171,7 @@
 
                 boutonsPlat.forEach((btn) => {
                     btn.addEventListener('click', () => {
-                        commandeActuelle.plat = btn.getAttribute('data-nom');
+                        commandeActuelle.plat = btn.getAttribute('data-id');
                         const data = JSON.parse(btn.getAttribute('data-ingredients'));
                         const ids = data.elements.map((e) => parseInt(e.idIngredient));
 
@@ -210,8 +212,8 @@
                 });
 
                 document.getElementById('btn-valider-ingredients').addEventListener('click', () => {
-                    commandeActuelle.viande = selectionViande?.getAttribute('data-nom') || '';
-                    commandeActuelle.ingredient = selectionIngredient?.getAttribute('data-nom') || '';
+                    commandeActuelle.viande = selectionViande?.getAttribute('data-id') || '';
+                    commandeActuelle.ingredient = selectionIngredient?.getAttribute('data-id') || '';
                     suivant();
                 });
 
@@ -231,6 +233,34 @@
                     commandeActuelle.snacks = snacksSelectionnes.map((b) => b.getAttribute('data-nom'));
                     snacksSelectionnes = [];
                     suivant();
+                    console.log(panier);
+                });
+
+                document.getElementById('btn-valider-commande').addEventListener('click', () => {
+                    const panierJson = JSON.stringify(panier);
+
+                    // on envoie le panier
+                    fetch('/commander/valider', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        },
+                        body: panierJson,
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.success) {
+                                alert('Commande validée avec succès !');
+                                location.reload();
+                            } else {
+                                alert('Erreur lors de la validation de la commande : ' + data.message);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("Erreur lors de l'envoi de la commande :", error);
+                            alert('Une erreur est survenue. Veuillez réessayer.');
+                        });
                 });
             });
         </script>
