@@ -10,6 +10,7 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\SalleSecuriteController;
 use App\Http\Controllers\CarteController;
 use App\Http\Controllers\CommandeUtilisateurController;
+use App\Http\Controllers\PriseCommandeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -63,6 +64,13 @@ Route::prefix('admin')->group(function () {
     Route::get('/panneau-admin', function () {
         return view('panneau-admin');
     });
+
+    // page prise commande
+    Route::get('/prise-commande', function () {
+        return view('admin/prise-commande');
+    });
+    Route::get('/prise-commande', [PriseCommandeController::class, 'index'])->name('prise-commande');
+
 
 
     // page Gestion stocks
