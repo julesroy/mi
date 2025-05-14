@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
-        @include('head')
+        @include("head")
         <title>Trésorerie</title>
     </head>
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
-        @include('header')
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
+        @include("header")
 
         <div class="max-w-4xl mx-auto py-4 px-4">
             <!-- Section Trésorerie -->
@@ -14,7 +14,7 @@
                 <div class="flex justify-center">
                     <div class="bg-gray-800 text-white p-4 rounded shadow-md w-full sm:w-auto">
                         <h3 class="text-lg font-semibold">Solde total des comptes</h3>
-                        <p class="text-3xl font-bold"><span class="font-bold">{{ number_format($solde, 2, ',', ' ') }}€</span></p>
+                        <p class="text-3xl font-bold"><span class="font-bold">{{ number_format($solde, 2, ",", " ") }}€</span></p>
                     </div>
                 </div>
             </section>
@@ -25,23 +25,23 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-gray-800 text-white p-4 rounded shadow-md flex flex-col items-center justify-center">
                         <h3 class="text-lg font-semibold">Total des comptes</h3>
-                        <p class="text-3xl font-bold">{{ $stats['total'] }}</p>
+                        <p class="text-3xl font-bold">{{ $stats["total"] }}</p>
                         <p class="text-sm">comptes</p>
                     </div>
                     <div class="bg-green-500 text-white p-4 rounded shadow-md flex flex-col items-center justify-center">
                         <h3 class="text-lg font-semibold">Comptes crédités</h3>
-                        <p class="text-3xl font-bold">{{ $stats['credites'] }}</p>
+                        <p class="text-3xl font-bold">{{ $stats["credites"] }}</p>
                         <p class="text-sm">comptes</p>
                     </div>
                     <div class="bg-orange-500 text-white p-4 rounded shadow-md flex flex-col items-center justify-center">
                         <h3 class="text-lg font-semibold">Comptes non crédités</h3>
-                        <p class="text-3xl font-bold">{{ $stats['non_credites'] }}</p>
+                        <p class="text-3xl font-bold">{{ $stats["non_credites"] }}</p>
                         <p class="text-sm">comptes</p>
                         <button class="mt-4 bg-white text-orange-500 px-4 py-2 rounded hover:bg-orange-100" onclick="document.getElementById('nonCreditesDialog').showModal()">Voir détails</button>
                     </div>
                     <div class="bg-red-500 text-white p-4 rounded shadow-md flex flex-col items-center justify-center">
                         <h3 class="text-lg font-semibold">Comptes à découvert</h3>
-                        <p class="text-3xl font-bold">{{ $stats['decouverts'] }}</p>
+                        <p class="text-3xl font-bold">{{ $stats["decouverts"] }}</p>
                         <p class="text-sm">comptes</p>
                         <button class="mt-4 bg-white text-red-500 px-4 py-2 rounded hover:bg-red-100" onclick="document.getElementById('decouvertsDialog').showModal()">Voir détails</button>
                     </div>
@@ -141,6 +141,6 @@
                 </div>
             </section>
         </div>
-        @include('footer')
+        @include("footer")
     </body>
 </html>

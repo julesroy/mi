@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
-        @include('head')
+        @include("head")
         <title>Accueil</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white min-h-screen flex flex-col">
-        @include('header')
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
+        @include("header")
         <div class="flex-grow flex flex-col items-center justify-center text-center">
             @guest
                 <h1 class="text-4xl font-bold mb-6">Bienvenue chez la Par'MI'Giano !</h1>
@@ -45,8 +45,8 @@
                     </a>
 
                     <!-- Panneau admin -->
-                    @can('verifier-acces-serveur')
-                        <a href="/panneau-admin" class="bg-red-500 text-white py-4 px-6 rounded-lg shadow-md hover:bg-red-600 transition transform hover:scale-105 flex flex-col items-center justify-center">
+                    @can("verifier-acces-serveur")
+                        <a href="/admin/panneau-admin" class="bg-red-500 text-white py-4 px-6 rounded-lg shadow-md hover:bg-red-600 transition transform hover:scale-105 flex flex-col items-center justify-center">
                             <h3 class="text-xl font-semibold">Panneau administratif</h3>
                             <p class="text-sm text-gray-200 mt-2">Accède au panneau administratif</p>
                         </a>
@@ -54,12 +54,11 @@
                 </div>
             @endauth
         </div>
-        @include('footer')
+        @include("footer")
     </body>
 
     <script>
         //Tri des comptes dans le rouge
         const comptes = document.querySelectorAll('.compte');
-        
     </script>
 </html>

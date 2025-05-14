@@ -11,6 +11,7 @@ use App\Http\Controllers\SalleSecuriteController;
 use App\Http\Controllers\CarteController;
 use App\Http\Controllers\CommandeUtilisateurController;
 use App\Http\Controllers\TresorerieController;
+use App\Http\Controllers\AffichageCuisineController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -40,26 +41,34 @@ Route::get('/compte', function () {
 Route::get('/commander', [CommandeUtilisateurController::class, 'index'])->middleware('auth');
 Route::post('/commander/valider', [CommandeUtilisateurController::class, 'validerCommande'])->name('commander.valider');
 
-//page affichage cuisine
-Route::get('/affichage-cuisine', function () {
-    return view('affichage-cuisine');
-});
-
 /**-----------------------------------------------
  * ADMIN
  -----------------------------------------------*/
 
 // Groupe de middlewares pour les pages admin : utilisateur authentifié, avec au minimum l'accès serveur
 Route::prefix('admin')->group(function () {
-    // Page tresorerie
+
+
+    // page tresorerie
     Route::get('/tresorerie', [TresorerieController::class, 'afficher'])
-        ->middleware('can:verifier-acces-administrateur')
-        ->name('tresorerie');
+    ->middleware('can:verifier-acces-super-administrateur')
+    ->name('admin.tresorerie');
 
     // page panneau admin
     Route::get('/panneau-admin', function () {
-        return view('panneau-admin');
-    });
+        return view('admin.panneau-admin');
+    }) ->middleware('can:verifier-acces-serveur');
+
+    //page affichage cuisine
+    Route::get('/affichage-cuisine', [AffichageCuisineController::class, 'afficher', 'updateEtat'])
+    ->middleware('can:verifier-acces-serveur')
+    ->name('admin.affichage-cuisine');
+
+    //page parametres
+    Route::get('/parametres', function () {
+        return view('admin.parametres');
+    })->middleware('can:verifier-acces-super-administrateur');
+    
 
     // page Gestion stocks
     Route::get('/gestion-stocks', [GestionStocksController::class, 'index']);
@@ -78,13 +87,16 @@ Route::prefix('admin')->group(function () {
     Route::post('/planning/ajouter-inscription', [PlanningController::class, 'ajouter']);
 
     //page gestion des comptes
-    Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
-        ->name('gestion-comptes');
+    Route::get('/admin/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
+        ->middleware('can:verifier-acces-super-administrateur')
+        ->name('admin.gestion-comptes');
 
     // page de gestion de la carte
-    Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte']);
+    Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
+        ->middleware('auth')
+        ->middleware('can:verifier-acces-serveur');
     Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
-    Route::post('/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
+    Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
     Route::get('/salle-securite', function () {
