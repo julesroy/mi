@@ -9,8 +9,8 @@
 
         <div class="flex flex-col items-center justify-center gap-10 mt-15 mb-35 px-4">
             <div class="text-center mt-1 pt-10">
-                <h1 class="text-3xl md:text-4xl font-bold mb-4">Bonjour {{ $donneesUtilisateur->prenom }}</h1>
-                <p class="text-base md:text-lg mb-4">Bienvenue sur le panneau d'administration !</p>
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">Bienvenue sur le panneau d'administration !</h1>
+                <p class="text-base md:text-lg mb-4">Accède à tout ce dont tu as besoin depuis ici</p>
             </div>
 
             <div class="flex flex-col md:flex-row items-stretch justify-center w-full gap-6">
@@ -52,6 +52,7 @@
                             <a href="/admin/salle-securite" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Salle et Sécurité</p>
                             </a>
+                            
                             <a href="/admin/events" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Events</p>
                             </a>

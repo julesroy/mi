@@ -53,9 +53,9 @@ class AuthController extends Controller
 
         // connexion de l'utilisateur
         Auth::loginUsingId($utilisateur->idUtilisateur);
-
-        // redirection vers la page de compte
-        return redirect('/compte');
+    
+        // redirection vers la page d'accueil
+        return redirect('/');
     }
 
     /**

@@ -37,21 +37,13 @@
                         <h3 class="text-lg font-semibold">Comptes non crédités</h3>
                         <p class="text-3xl font-bold">{{ $stats['non_credites'] }}</p>
                         <p class="text-sm">comptes</p>
-                        <button 
-                            class="mt-4 bg-white text-orange-500 px-4 py-2 rounded hover:bg-orange-100"
-                            onclick="document.getElementById('nonCreditesDialog').showModal()">
-                            Voir détails
-                        </button>
+                        <button class="mt-4 bg-white text-orange-500 px-4 py-2 rounded hover:bg-orange-100" onclick="document.getElementById('nonCreditesDialog').showModal()">Voir détails</button>
                     </div>
                     <div class="bg-red-500 text-white p-4 rounded shadow-md flex flex-col items-center justify-center">
                         <h3 class="text-lg font-semibold">Comptes à découvert</h3>
                         <p class="text-3xl font-bold">{{ $stats['decouverts'] }}</p>
                         <p class="text-sm">comptes</p>
-                        <button 
-                            class="mt-4 bg-white text-red-500 px-4 py-2 rounded hover:bg-red-100"
-                            onclick="document.getElementById('decouvertsDialog').showModal()">
-                            Voir détails
-                        </button>
+                        <button class="mt-4 bg-white text-red-500 px-4 py-2 rounded hover:bg-red-100" onclick="document.getElementById('decouvertsDialog').showModal()">Voir détails</button>
                     </div>
                 </div>
             </section>
@@ -84,11 +76,7 @@
                             @endif
                         </tbody>
                     </table>
-                    <button 
-                        class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                        onclick="document.getElementById('nonCreditesDialog').close()">
-                        Fermer
-                    </button>
+                    <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="document.getElementById('nonCreditesDialog').close()">Fermer</button>
                 </div>
             </dialog>
 
@@ -122,11 +110,7 @@
                             @endif
                         </tbody>
                     </table>
-                    <button 
-                        class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                        onclick="document.getElementById('decouvertsDialog').close()">
-                        Fermer
-                    </button>
+                    <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onclick="document.getElementById('decouvertsDialog').close()">Fermer</button>
                 </div>
             </dialog>
 
