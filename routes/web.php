@@ -95,17 +95,17 @@ Route::prefix('admin')->group(function () {
     Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
-    Route::get('/salle-securite', function () {
-        return view('admin.salle-securite');
-    });
     Route::prefix('/salle-securite')->group(function () {
-        Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
+        // Route pour la page d'index, qui est gérée par le contrôleur
+        Route::get('/', [SalleSecuriteController::class, 'index'])
             ->name('admin.salle-securite');
 
-        Route::post('salle-securite/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
+        // Route pour ajouter un relevé de température
+        Route::post('ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
             ->name('admin.salle-securite.ajouter-releve-frigo');
 
-        Route::post('salle-securite/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
+        // Route pour ajouter un nettoyage
+        Route::post('ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
             ->name('admin.salle-securite.ajouter-nettoyage');
     });
 

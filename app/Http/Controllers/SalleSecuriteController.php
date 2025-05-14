@@ -11,9 +11,9 @@ class SalleSecuriteController extends Controller
     public function index()
     {
         $temperatureReleves = DB::table('salleEtSecurite')
-                                ->where('type', 0)
-                                ->orderBy('date', 'desc')
-                                ->get();
+                            ->where('type', 0)
+                            ->orderBy('date', 'desc')
+                            ->get();
 
         $cleaningReleves = DB::table('salleEtSecurite')
                              ->where('type', 1)

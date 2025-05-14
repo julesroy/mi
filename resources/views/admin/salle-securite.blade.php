@@ -5,7 +5,7 @@
     <title>Gestion Salle Sécurité</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-900 text-gray-100">
+<body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
     @include('header')
 
     <main class="container mx-auto px-4 py-12">
@@ -37,7 +37,7 @@
                     <tbody>
                         @forelse($temperatureReleves ?? [] as $salleEtSecurite)
                         <tr class="border-t border-gray-700 hover:bg-gray-700/50">
-                            <td class="p-3">{{ $salleEtSecurite->date->format('d/m/Y H:i') }}</td>
+                            <td class="p-3">{{ $salleEtSecurite->date }}</td>
                             <td class="p-3">{{ $salleEtSecurite->temperature1 }}°C</td>
                             <td class="p-3">{{ $salleEtSecurite->temperature2 }}°C</td>
                             <td class="p-3">{{ $salleEtSecurite->nom }}</td>
@@ -75,7 +75,7 @@
                     <tbody>
                         @forelse($cleaningReleves ?? [] as $salleEtSecurite)
                         <tr class="border-t border-gray-700 hover:bg-gray-700/50">
-                            <td class="p-3">{{ $salleEtSecurite->date->format('d/m/Y H:i') }}</td>
+                            <td class="p-3">{{ $salleEtSecurite->date }}</td>
                             <td class="p-3">{{ $salleEtSecurite->commentaire }}</td>
                             <td class="p-3">{{ $salleEtSecurite->nom }}</td>
                         </tr>
@@ -162,39 +162,50 @@
 
         // Graphique des températures
         document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('tempChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: @json($chartData['dates'] ?? []),
-                    datasets: [
-                        {
-                            label: 'Frigo 1 (°C)',
-                            data: @json($chartData['temp1'] ?? []),
-                            borderColor: 'rgb(59, 130, 246)',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            tension: 0.3
-                        },
-                        {
-                            label: 'Frigo 2 (°C)',
-                            data: @json($chartData['temp2'] ?? []),
-                            borderColor: 'rgb(16, 185, 129)',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            tension: 0.3
-                        }
-                    ]
+    const ctx = document.getElementById('tempChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: @json($chartData['dates'] ?? []),  // Les dates sont au format ISO ici
+            datasets: [
+                {
+                    label: 'Frigo 1 (°C)',
+                    data: @json($chartData['temp1'] ?? []),
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.3
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { position: 'top' }
+                {
+                    label: 'Frigo 2 (°C)',
+                    data: @json($chartData['temp2'] ?? []),
+                    borderColor: 'rgb(16, 185, 129)',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' }
+            },
+            scales: {
+                y: { beginAtZero: false },
+                x: {
+                    type: 'time',  // Déclare que l'axe X utilise des dates
+                    time: {
+                        unit: 'minute', // Vous pouvez ajuster l'unité en fonction de vos besoins (minute, hour, day, etc.)
+                        tooltipFormat: 'll HH:mm', // Format dans les tooltips
                     },
-                    scales: {
-                        y: { beginAtZero: false }
+                    title: {
+                        display: true,
+                        text: 'Date'
                     }
                 }
-            });
-        });
+            }
+        }
+    });
+});
     </script>
 </body>
 </html>
