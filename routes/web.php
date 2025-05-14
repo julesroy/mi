@@ -10,6 +10,7 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\SalleSecuriteController;
 use App\Http\Controllers\CarteController;
 use App\Http\Controllers\CommandeUtilisateurController;
+use App\Http\Controllers\TresorerieController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -40,9 +41,9 @@ Route::get('/commander', [CommandeUtilisateurController::class, 'index'])->middl
 Route::post('/commander/valider', [CommandeUtilisateurController::class, 'validerCommande'])->name('commander.valider');
 
 //page affichage cuisine
-    Route::get('/affichage-cuisine', function () {
-        return view('affichage-cuisine');
-    });
+Route::get('/affichage-cuisine', function () {
+    return view('affichage-cuisine');
+});
 
 /**-----------------------------------------------
  * ADMIN
@@ -50,14 +51,10 @@ Route::post('/commander/valider', [CommandeUtilisateurController::class, 'valide
 
 // Groupe de middlewares pour les pages admin : utilisateur authentifié, avec au minimum l'accès serveur
 Route::prefix('admin')->group(function () {
-
-
-    // page tresorerie
+    // Page tresorerie
     Route::get('/tresorerie', [TresorerieController::class, 'afficher'])
-    ->middleware('auth')
-    ->middleware('can:verifier-acces-serveur')
-    ->middleware('adminAccess')
-    ->name('tresorerie');
+        ->middleware('can:verifier-acces-administrateur')
+        ->name('tresorerie');
 
     // page panneau admin
     Route::get('/panneau-admin', function () {
@@ -85,11 +82,9 @@ Route::prefix('admin')->group(function () {
         ->name('gestion-comptes');
 
     // page de gestion de la carte
-    Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
-        ->middleware('auth')
-        ->middleware('can:verifier-acces-serveur');
+    Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte']);
     Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
-    Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
+    Route::post('/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
     Route::get('/salle-securite', function () {

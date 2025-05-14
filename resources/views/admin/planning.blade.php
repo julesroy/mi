@@ -64,7 +64,7 @@ $weekDays = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
 
 @endphp
 
-<body class="bg-[#0a0a0a] text-white pt-28 md:pt-36 h-screen">
+<body class="bg-[#0a0a0a] text-white pt-28 md:pt-54 h-screen">
     @include('header')
 
     {{-- Dialogue de suppression d'inscription  --}}
@@ -432,10 +432,11 @@ $weekDays = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi'];
         function fetchCalendar() {
             document.getElementById('calendar__inner').innerHTML = '<span>Loading...</span>';
 
-            calendarTitle.innerText = currentDate.toLocaleString('fr-FR', {
+            let monthText = currentDate.toLocaleString('fr-FR', {
                 year: '2-digit',
                 month: 'long'
             });
+            calendarTitle.innerHTML = monthText[0].toUpperCase() + monthText.slice(1);
 
             let month = currentDate.getMonth(),
                 // L'année retournée est relative à 1900, donc 125 pour 2025 par exemple
