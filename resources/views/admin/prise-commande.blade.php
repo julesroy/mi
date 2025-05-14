@@ -13,7 +13,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
+<body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
 @include('header')
 
 <div class="max-w-7xl mx-auto px-4">

@@ -5,7 +5,7 @@
         <title>Accueil</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
         @include("header")
         <div class="flex-grow flex flex-col items-center justify-center text-center">
             @guest

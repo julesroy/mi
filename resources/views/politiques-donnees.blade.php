@@ -5,7 +5,7 @@
         <title>Politiques données personnelles</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36 mr-8 ml-8">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60 mr-8 ml-8">
         @include('header')
         <h1 class="my-8 text-center text-4xl font-bold">Politiques de données personnelles</h1>
         <div class="mx-auto w-auto h-0.5 bg-white"></div>

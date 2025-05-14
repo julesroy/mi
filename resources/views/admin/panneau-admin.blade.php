@@ -4,7 +4,7 @@
         @include("head")
         <title>Panneau Admin</title>
     </head>
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
         @include("header")
 
         <div class="flex flex-col items-center justify-center gap-10 m-5 px-4">

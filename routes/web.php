@@ -30,15 +30,15 @@ Route::get('/inscription', [AuthController::class, 'afficherFormulaireInscriptio
 Route::post('/inscription', [AuthController::class, 'inscrire'])->middleware('messagethrottle:2,1'); // on limite le nombre de tentatives de connexion à 2 par minute (à assouplir plus tard mais là c'est pour les tests)
 
 // déconnexion
-Route::get('/deconnexion', [AuthController::class, 'deconnecter'])->middleware('auth');
+Route::get('/deconnexion', [AuthController::class, 'deconnecter']);
 
 // page compte
 Route::get('/compte', function () {
     return view('compte');
-})->middleware('auth');
+});
 
 // page commander
-Route::get('/commander', [CommandeUtilisateurController::class, 'index'])->middleware('auth');
+Route::get('/commander', [CommandeUtilisateurController::class, 'index']);
 Route::post('/commander/valider', [CommandeUtilisateurController::class, 'validerCommande'])->name('commander.valider');
 
 /**-----------------------------------------------
@@ -87,29 +87,25 @@ Route::prefix('admin')->group(function () {
     Route::post('/planning/ajouter-inscription', [PlanningController::class, 'ajouter']);
 
     //page gestion des comptes
-    Route::get('/admin/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
+    Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
         ->middleware('can:verifier-acces-super-administrateur')
         ->name('admin.gestion-comptes');
 
     // page de gestion de la carte
     Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
-        ->middleware('auth')
         ->middleware('can:verifier-acces-serveur');
     Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
     Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
-    Route::get('/salle-securite', function () {
-        return view('admin.salle-securite');
-    });
     Route::prefix('/salle-securite')->group(function () {
-        Route::get('salle-securite', [SalleSecuriteController::class, 'index'])
+        Route::get('/', [SalleSecuriteController::class, 'index'])
             ->name('admin.salle-securite');
 
-        Route::post('salle-securite/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
+        Route::post('/ajouter-releve-frigo', [SalleSecuriteController::class, 'ajouterReleveFrigo'])
             ->name('admin.salle-securite.ajouter-releve-frigo');
 
-        Route::post('salle-securite/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
+        Route::post('/ajouter-nettoyage', [SalleSecuriteController::class, 'ajouterNettoyage'])
             ->name('admin.salle-securite.ajouter-nettoyage');
     });
 
@@ -137,7 +133,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/commandes', function () {
         return view('admin.commandes');
     });
-})->middleware(['auth', 'can:verifier-acces-serveur']);
+})->middleware('can:verifier-acces-serveur');
 
 // page contact
 Route::get('/contact', function () {

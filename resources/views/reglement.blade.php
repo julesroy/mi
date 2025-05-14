@@ -5,7 +5,7 @@
         <title>Réglement</title>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36 ml-8 mr-8">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60 ml-8 mr-8">
         @include('header')
 
         <h1 class="my-8 text-center text-4xl font-bold">Charte d’Utilisation de la Maison ISEN</h1>

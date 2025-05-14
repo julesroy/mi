@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
         @include('header')
 
         <main class="container mx-auto px-4 py-8">

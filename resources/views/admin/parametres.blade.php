@@ -6,7 +6,7 @@
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-48">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
         @include('header')
 
         <div class="flex flex-col items-center gap-10 bg-[#1a1a1a] p-6 rounded-2xl w-[90%] max-w-4xl mx-auto">
