@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="{{ asset('css/dialog.css') }}" />
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
+    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
         @include('header')
 
         <div class="flex flex-col items-center gap-6 bg-[#1a1a1a] p-6 rounded-2xl w-[90%] max-w-xl mx-auto">

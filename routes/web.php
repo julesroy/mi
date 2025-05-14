@@ -84,6 +84,8 @@ Route::prefix('admin')->group(function () {
     //page gestion des comptes
     Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
         ->name('gestion-comptes');
+    Route::post('/gestion-comptes/update', [GestionComptesController::class, 'update'])->name('gestion-comptes.update');
+    Route::post('/gestion-comptes/delete', [GestionComptesController::class, 'delete'])->name('gestion-comptes.delete');
 
     // page de gestion de la carte
     Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])

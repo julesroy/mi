@@ -64,4 +64,27 @@ class GestionComptesController extends Controller
         // On renvoie la vue avec les utilisateurs, le terme de recherche et le triage
         return view('gestion-comptes', compact('utilisateurs', 'recherche', 'triage'));
     }
+
+        public function update(Request $request)
+        {
+            $id = $request->input('id');
+            $nom = $request->input('nom');
+            $prenom = $request->input('prenom');
+            $email = $request->input('email');
+            $solde = $request->input('solde');
+            $acces = $request->input('acces');
+
+            // Mise à jour des données dans la base de données
+            DB::table('utilisateurs')
+                ->where('idUtilisateur', $id)
+                ->update([
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'email' => $email,
+                    'solde' => $solde,
+                    'acces' => $acces,
+                ]);
+
+            return response()->json(['success' => true]);
+        }
 }
