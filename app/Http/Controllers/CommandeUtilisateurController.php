@@ -25,54 +25,68 @@ class CommandeUtilisateurController extends Controller
         try {
             $panier = $request->input();
 
-            // on génère un identifiant unique pour la commande
-            $numeroCommande = strtoupper(Str::random(6));
+            // Génération d’un identifiant unique
             $numeroCommande = '';
             $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-
             for ($i = 0; $i < 6; $i++) {
                 $numeroCommande .= $caracteres[random_int(0, strlen($caracteres) - 1)];
             }
 
             foreach ($panier['commandes'] as $commande) {
-                // on récupère ingredientsElements pour le plat sélectionné
-                $ingredientsElements = DB::table('carte')->where('idElement', $commande['plat'])->value('ingredientsElements');
-                $ingredientsElements = json_decode($ingredientsElements, true);
+                foreach ($commande['plats'] as $plat) {
+                    // Récupération des données du plat
+                    $ingredientsElements = DB::table('carte')->where('idElement', $plat['plat'])->value('ingredientsElements');
+                    $ingredientsElements = json_decode($ingredientsElements, true);
 
-                // on initialise les quantités
-                $quantiteViande = 0;
-                $quantiteIngredient = 0;
+                    $quantiteViande = 0;
+                    $quantiteIngredient = 0;
 
-                // on parcourt les éléments pour trouver la quantité de l'idIngredient correspondant
-                foreach ($ingredientsElements['elements'] as $element) {
-                    if ($element['idIngredient'] == $commande['viande']) {
-                        $quantiteViande = $element['quantite'];
-                        break; // on sort de la boucle dès qu'on a trouvé l'élément
+                    // Quantité de viande
+                    foreach ($ingredientsElements['elements'] as $element) {
+                        if ($element['idIngredient'] == $plat['viande']) {
+                            $quantiteViande = $element['quantite'];
+                            break;
+                        }
                     }
+
+                    // Quantité d'ingrédient
+                    foreach ($ingredientsElements['elements'] as $element) {
+                        if ($element['idIngredient'] == $plat['ingredient']) {
+                            $quantiteIngredient = $element['quantite'];
+                            break;
+                        }
+                    }
+
+                    $categoriePlat = DB::table('carte')->where('idElement', $plat['plat'])->value('categoriePlat');
+
+                    // Insertion d’un plat
+                    DB::table('commandes')->insert([
+                        'numeroCommande' => $numeroCommande,
+                        'prix' => $commande['prix'],
+                        'etat' => 0,
+                        'stock' => json_encode([[$plat['viande'] => $quantiteViande, $plat['ingredient'] => $quantiteIngredient]]),
+                        'menu' => $commande['menu'],
+                        'commentaire' => '',
+                        'numeroCompte' => Auth::user()->numeroCompte,
+                        'categorieCommande' => $categoriePlat,
+                    ]);
                 }
 
-                // on parcourt les éléments pour trouver la quantité de l'idIngredient correspondant
-                foreach ($ingredientsElements['elements'] as $element) {
-                    if ($element['idIngredient'] == $commande['ingredient']) {
-                        $quantiteIngredient = $element['quantite'];
-                        break; // on sort de la boucle dès qu'on a trouvé l'élément
-                    }
+                // Insertion des snacks (en tant que commandes séparées)
+                foreach ($commande['snacks'] as $snack) {
+                    $categorieSnack = DB::table('carte')->where('idElement', $snack['id'])->value('categoriePlat');
+
+                    DB::table('commandes')->insert([
+                        'numeroCommande' => $numeroCommande,
+                        'prix' => 0, // ou un prix fixe si nécessaire
+                        'etat' => 0,
+                        'stock' => json_encode([[$snack['id'] => 1]]),
+                        'menu' => $commande['menu'],
+                        'commentaire' => '',
+                        'numeroCompte' => Auth::user()->numeroCompte,
+                        'categorieCommande' => $categorieSnack ?? 'Snack',
+                    ]);
                 }
-
-                // on récupère la catégorie du plat
-                $categoriePlat = DB::table('carte')->where('idElement', $commande['plat'])->value('categoriePlat');
-
-                DB::table('commandes')->insert([
-                    'numeroCommande' => $numeroCommande,
-                    'prix' => $commande['prix'],
-                    'etat' => 0,
-                    'stock' => json_encode([[$commande['viande'] => $quantiteViande, $commande['ingredient'] => $quantiteIngredient]]),
-                    'menu' => 1,
-                    'commentaire' => '',
-                    'numeroCompte' => Auth::user()->numeroCompte,
-                    'categorieCommande' => $categoriePlat,
-                    //'snacks' => json_encode($commande['snacks'] ?? [])
-                ]);
             }
 
             return response()->json(['success' => true, 'message' => 'Commande validée avec succès']);

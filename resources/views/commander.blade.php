@@ -45,7 +45,7 @@
 
             <!-- Écran des ingrédients -->
             <div id="ecran-ingredients" class="hidden flex-col items-center gap-10">
-                <h1 class="text-2xl font-semibold">Choisis un ingrédient</h1>
+                <h1 class="text-2xl font-semibold">Compose ton plat</h1>
                 <h4>Viandes</h4>
                 <div class="grid grid-cols-4" id="liste-viandes">
                     @foreach ($viandes as $viande)
@@ -95,174 +95,230 @@
             </div>
         </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                let configActuelle = [];
-                let etapeIndex = 0;
-                let panier = { commandes: [] };
-                let commandeActuelle = {};
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let configActuelle = [];
+        let etapeIndex = 0;
+        let panier = { commandes: [] };
+        let commandeActuelle = {};
 
-                const ecrans = {
-                    base: document.getElementById('ecran-base'),
-                    menus: document.getElementById('ecran-menus'),
-                    plats: document.getElementById('ecran-plats'),
-                    ingredients: document.getElementById('ecran-ingredients'),
-                    snacks: document.getElementById('ecran-snacks'),
-                    panier: document.getElementById('ecran-panier'),
-                };
+        const ecrans = {
+            base: document.getElementById('ecran-base'),
+            menus: document.getElementById('ecran-menus'),
+            plats: document.getElementById('ecran-plats'),
+            ingredients: document.getElementById('ecran-ingredients'),
+            snacks: document.getElementById('ecran-snacks'),
+            panier: document.getElementById('ecran-panier'),
+        };
 
-                const boutonsMenu = document.querySelectorAll('#ecran-menus button[data-config]');
-                const boutonsPlat = document.querySelectorAll('#ecran-plats button[data-ingredients]');
-                const boutonsViande = document.querySelectorAll('#liste-viandes button');
-                const boutonsIngredient = document.querySelectorAll('#liste-ingredients button');
-                const boutonsSnack = document.querySelectorAll('#liste-snacks button');
+        const boutonsMenu = document.querySelectorAll('#ecran-menus button[data-config]');
+        const boutonsPlat = document.querySelectorAll('#ecran-plats button[data-ingredients]');
+        const boutonsViande = document.querySelectorAll('#liste-viandes button');
+        const boutonsIngredient = document.querySelectorAll('#liste-ingredients button');
+        const boutonsSnack = document.querySelectorAll('#liste-snacks button');
 
-                let selectionViande = null;
-                let selectionIngredient = null;
-                let snacksSelectionnes = [];
+        let selectionPlat = null;
+        let selectionViande = null;
+        let selectionIngredient = null;
+        let snacksSelectionnes = [];
 
-                function afficherEcran(cle) {
-                    Object.values(ecrans).forEach((e) => e.classList.add('hidden'));
-                    ecrans[cle].classList.remove('hidden');
-                }
+        function afficherEcran(cle) {
+            Object.values(ecrans).forEach((e) => e.classList.add('hidden'));
+            ecrans[cle].classList.remove('hidden');
+        }
 
-                function suivant() {
-                    etapeIndex++;
-                    const etape = configActuelle[etapeIndex];
-                    if (!etape) {
-                        afficherPanier();
-                        return;
+        function suivant() {
+            etapeIndex++;
+            const etape = configActuelle[etapeIndex];
+            if (!etape) {
+                panier.commandes.push({ ...commandeActuelle });
+                afficherPanier();
+                return;
+            }
+
+            if (etape.nomIngredient === 'Plat') {
+                afficherEcran('plats');
+            } else if (etape.nomIngredient === 'Snack') {
+                afficherEcran('snacks');
+            }
+        }
+
+        function afficherPanier() {
+            const recap = panier.commandes.map((cmd, i) => {
+                const plats = cmd.plats.map(p => 
+                    `${p.plat} (${p.viande || 'aucune viande'}, ${p.ingredient || 'aucun ingrédient'})`
+                ).join(' / ');
+
+                const snacks = cmd.snacks.length > 0
+                    ? 'Snacks: ' + cmd.snacks.map(s => `${s.nom} (id ${s.id})`).join(', ')
+                    : '';
+
+                return `Commande ${i + 1} : ${cmd.menu} - ${plats}${snacks ? ' - ' + snacks : ''} - Prix: ${cmd.prix.toFixed(2)}€`;
+            }).join('<br>');
+
+            document.getElementById('recap-panier').innerHTML = recap;
+            afficherEcran('panier');
+            console.log(panier);
+        }
+
+        document.getElementById('btn-menus').addEventListener('click', () => afficherEcran('menus'));
+        document.getElementById('btn-retour').addEventListener('click', () => afficherEcran('base'));
+        document.getElementById('btn-retour-menus').addEventListener('click', () => afficherEcran('menus'));
+        document.getElementById('btn-retour-plats').addEventListener('click', () => afficherEcran('plats'));
+
+        document.getElementById('btn-nouvelle-commande').addEventListener('click', () => {
+            commandeActuelle = {};
+            selectionPlat = null;
+            selectionViande = null;
+            selectionIngredient = null;
+            snacksSelectionnes = [];
+            etapeIndex = 0;
+            configActuelle = [];
+            afficherEcran('base');
+        });
+
+        boutonsMenu.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                let configMenu = JSON.parse(btn.getAttribute('data-config'));
+                configActuelle = [];
+                configMenu.forEach((e) => {
+                    for (let i = 0; i < e.quantite; i++) {
+                        configActuelle.push({ 'nomIngredient': e.nomIngredient });
                     }
-                    if (etape.nomIngredient === 'Plat') afficherEcran('plats');
-                    else if (etape.nomIngredient === 'Snack') afficherEcran('snacks');
-                    else if (etape.nomIngredient === 'Boisson') afficherPanier();
+                });
+                commandeActuelle = {
+                    menu: btn.getAttribute('data-id'),
+                    prix: parseFloat(btn.getAttribute('data-prix')),
+                    plats: [],
+                    snacks: []
+                };
+                etapeIndex = -1;
+                console.log(configActuelle);
+                suivant();
+            });
+        });
+
+        boutonsPlat.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                selectionPlat = btn.getAttribute('data-id');
+                const data = JSON.parse(btn.getAttribute('data-ingredients'));
+                const ids = data.elements.map((e) => parseInt(e.idIngredient));
+
+                boutonsViande.forEach((b) => {
+                    const id = parseInt(b.getAttribute('data-id'));
+                    b.style.display = ids.includes(id) ? 'block' : 'none';
+                    b.classList.remove('selected', 'ring-2', 'ring-secondaire', 'bg-cyan-600');
+                });
+
+                boutonsIngredient.forEach((b) => {
+                    const id = parseInt(b.getAttribute('data-id'));
+                    b.style.display = ids.includes(id) ? 'block' : 'none';
+                    b.classList.remove('selected', 'ring-2', 'ring-secondaire', 'bg-cyan-600');
+                });
+
+                afficherEcran('ingredients');
+            });
+        });
+
+        boutonsViande.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (selectionViande) selectionViande.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600');
+                if (selectionViande === btn) selectionViande = null;
+                else {
+                    selectionViande = btn;
+                    btn.classList.add('ring-2', 'ring-secondaire', 'bg-cyan-600');
                 }
+            });
+        });
 
-                function afficherPanier() {
-                    panier.commandes.push({ ...commandeActuelle });
-                    const recap = panier.commandes.map((cmd, i) => `Commande ${i + 1}: ${cmd.menu} - ${cmd.plat} - ${cmd.viande || ''} - ${cmd.ingredient || ''} - Snacks: ${(cmd.snacks || []).join(', ')} - Prix: ${cmd.prix.toFixed(2)}€`).join('<br>');
-                    document.getElementById('recap-panier').innerHTML = recap;
-                    afficherEcran('panier');
+        boutonsIngredient.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (selectionIngredient) selectionIngredient.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600');
+                if (selectionIngredient === btn) selectionIngredient = null;
+                else {
+                    selectionIngredient = btn;
+                    btn.classList.add('ring-2', 'ring-secondaire', 'bg-cyan-600');
                 }
+            });
+        });
 
-                document.getElementById('btn-menus').addEventListener('click', () => afficherEcran('menus'));
+        document.getElementById('btn-valider-ingredients').addEventListener('click', () => {
+            commandeActuelle.plats.push({
+                plat: selectionPlat,
+                viande: selectionViande?.getAttribute('data-id') || '',
+                ingredient: selectionIngredient?.getAttribute('data-id') || ''
+            });
 
-                document.getElementById('btn-retour').addEventListener('click', () => afficherEcran('base'));
-                document.getElementById('btn-retour-menus').addEventListener('click', () => afficherEcran('menus'));
-                document.getElementById('btn-retour-plats').addEventListener('click', () => afficherEcran('plats'));
+            // reset pour l’étape suivante
+            selectionPlat = null;
+            selectionViande = null;
+            selectionIngredient = null;
 
-                document.getElementById('btn-nouvelle-commande').addEventListener('click', () => {
-                    commandeActuelle = {};
-                    selectionViande = null;
-                    selectionIngredient = null;
-                    snacksSelectionnes = [];
-                    etapeIndex = 0;
-                    afficherEcran('base');
-                });
+            // nettoyage visuel
+            boutonsViande.forEach((btn) => btn.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600'));
+            boutonsIngredient.forEach((btn) => btn.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600'));
 
-                boutonsMenu.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        configActuelle = JSON.parse(btn.getAttribute('data-config'));
-                        commandeActuelle = { menu: btn.getAttribute('data-id'), prix: parseFloat(btn.getAttribute('data-prix')) };
-                        etapeIndex = -1;
-                        suivant();
-                    });
-                });
+            suivant();
+        });
 
-                boutonsPlat.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        commandeActuelle.plat = btn.getAttribute('data-id');
-                        const data = JSON.parse(btn.getAttribute('data-ingredients'));
-                        const ids = data.elements.map((e) => parseInt(e.idIngredient));
 
-                        boutonsViande.forEach((b) => {
-                            const id = parseInt(b.getAttribute('data-id'));
-                            b.style.display = ids.includes(id) ? 'block' : 'none';
-                            b.classList.remove('selected');
-                        });
-                        boutonsIngredient.forEach((b) => {
-                            const id = parseInt(b.getAttribute('data-id'));
-                            b.style.display = ids.includes(id) ? 'block' : 'none';
-                            b.classList.remove('selected');
-                        });
-                        afficherEcran('ingredients');
-                    });
-                });
+        boutonsSnack.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                if (snacksSelectionnes.includes(btn)) {
+                    btn.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600');
+                    snacksSelectionnes = snacksSelectionnes.filter((b) => b !== btn);
+                } else if (snacksSelectionnes.length < 2) {
+                    snacksSelectionnes.push(btn);
+                    btn.classList.add('ring-2', 'ring-secondaire', 'bg-cyan-600');
+                }
+            });
+        });
 
-                boutonsViande.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        if (selectionViande) selectionViande.classList.remove('ring-2', 'ring-cyan-400', 'bg-cyan-600', 'text-white');
-                        if (selectionViande === btn) selectionViande = null;
-                        else {
-                            selectionViande = btn;
-                            btn.classList.add('ring-2', 'ring-cyan-400', 'bg-cyan-600', 'text-white');
-                        }
-                    });
-                });
-
-                boutonsIngredient.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        if (selectionIngredient) selectionIngredient.classList.remove('ring-2', 'ring-cyan-400', 'bg-cyan-600', 'text-white');
-                        if (selectionIngredient === btn) selectionIngredient = null;
-                        else {
-                            selectionIngredient = btn;
-                            btn.classList.add('ring-2', 'ring-cyan-400', 'bg-cyan-600', 'text-white');
-                        }
-                    });
-                });
-
-                document.getElementById('btn-valider-ingredients').addEventListener('click', () => {
-                    commandeActuelle.viande = selectionViande?.getAttribute('data-id') || '';
-                    commandeActuelle.ingredient = selectionIngredient?.getAttribute('data-id') || '';
-                    suivant();
-                });
-
-                boutonsSnack.forEach((btn) => {
-                    btn.addEventListener('click', () => {
-                        if (snacksSelectionnes.includes(btn)) {
-                            btn.classList.remove('ring-2', 'ring-cyan-400', 'bg-cyan-600', 'text-white');
-                            snacksSelectionnes = snacksSelectionnes.filter((b) => b !== btn);
-                        } else if (snacksSelectionnes.length < 2) {
-                            snacksSelectionnes.push(btn);
-                            btn.classList.add('ring-2', 'ring-cyan-400', 'bg-cyan-600', 'text-white');
-                        }
-                    });
-                });
-
-                document.getElementById('btn-valider-snacks').addEventListener('click', () => {
-                    commandeActuelle.snacks = snacksSelectionnes.map((b) => b.getAttribute('data-nom'));
-                    snacksSelectionnes = [];
-                    suivant();
-                    console.log(panier);
-                });
-
-                document.getElementById('btn-valider-commande').addEventListener('click', () => {
-                    const panierJson = JSON.stringify(panier);
-
-                    // on envoie le panier
-                    fetch('/commander/valider', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        },
-                        body: panierJson,
-                    })
-                        .then((response) => response.json())
-                        .then((data) => {
-                            if (data.success) {
-                                alert('Commande validée avec succès !');
-                                location.reload();
-                            } else {
-                                alert('Erreur lors de la validation de la commande : ' + data.message);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Erreur lors de l'envoi de la commande :", error);
-                            alert('Une erreur est survenue. Veuillez réessayer.');
-                        });
+        document.getElementById('btn-valider-snacks').addEventListener('click', () => {
+            snacksSelectionnes.forEach((btn) => {
+                commandeActuelle.snacks.push({
+                    id: btn.getAttribute('data-id'),
+                    nom: btn.getAttribute('data-nom')
                 });
             });
-        </script>
+
+            // Reset
+            snacksSelectionnes = [];
+
+            // nettoyage visuel
+            boutonsSnack.forEach((btn) => btn.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600'));
+
+            // Avancer à l'étape suivante
+            suivant();
+        });
+
+
+        document.getElementById('btn-valider-commande').addEventListener('click', () => {
+            const panierJson = JSON.stringify(panier);
+
+            fetch('/commander/valider', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                },
+                body: panierJson,
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        alert('Commande validée avec succès !');
+                        location.reload();
+                    } else {
+                        alert('Erreur lors de la validation de la commande : ' + data.message);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Erreur lors de l'envoi de la commande :", error);
+                    alert('Une erreur est survenue. Veuillez réessayer.');
+                });
+        });
+    });
+</script>
     </body>
 </html>
