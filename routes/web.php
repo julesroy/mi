@@ -64,7 +64,6 @@ Route::prefix('admin')->group(function () {
         return view('panneau-admin');
     });
 
-
     // page Gestion stocks
     Route::get('/gestion-stocks', [GestionStocksController::class, 'index']);
 
