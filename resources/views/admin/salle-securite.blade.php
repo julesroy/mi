@@ -151,61 +151,96 @@
 
     @include('footer')
 
-    <script>
-        // Gestion des dialogs
-        function showDialog(id) {
-            document.getElementById(id).showModal();
-        }
-        function hideDialog(id) {
-            document.getElementById(id).close();
-        }
+<script>
+    // Gestion des dialogs
+    function showDialog(id) {
+        document.getElementById(id).showModal();
+    }
+    function hideDialog(id) {
+        document.getElementById(id).close();
+    }
 
-        // Graphique des températures
-        document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('tempChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: @json($chartData['dates'] ?? []),  // Les dates sont au format ISO ici
-            datasets: [
-                {
-                    label: 'Frigo 1 (°C)',
-                    data: @json($chartData['temp1'] ?? []),
-                    borderColor: 'rgb(59, 130, 246)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.3
-                },
-                {
-                    label: 'Frigo 2 (°C)',
-                    data: @json($chartData['temp2'] ?? []),
-                    borderColor: 'rgb(16, 185, 129)',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    tension: 0.3
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'top' }
-            },
-            scales: {
-                y: { beginAtZero: false },
-                x: {
-                    type: 'time',  // Déclare que l'axe X utilise des dates
-                    time: {
-                        unit: 'minute', // Vous pouvez ajuster l'unité en fonction de vos besoins (minute, hour, day, etc.)
-                        tooltipFormat: 'll HH:mm', // Format dans les tooltips
+    // Graphique des températures
+    document.addEventListener('DOMContentLoaded', function() {
+        const ctx = document.getElementById('tempChart').getContext('2d');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: @json($chartData['dates']),
+                datasets: [
+                    {
+                        label: 'Frigo 1 (°C)',
+                        data: @json($chartData['temp1']),
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.3,
+                        borderWidth: 2
                     },
-                    title: {
-                        display: true,
-                        text: 'Date'
+                    {
+                        label: 'Frigo 2 (°C)',
+                        data: @json($chartData['temp2']),
+                        borderColor: 'rgb(16, 185, 129)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        tension: 0.3,
+                        borderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#fff',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(0,0,0,0.7)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff'
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 10,
+                        ticks: {
+                            stepSize: 0.5,
+                            color: '#fff',
+                            callback: function(value) {
+                                return value + '°C';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#fff'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                },
+                elements: {
+                    point: {
+                        radius: 4,
+                        hoverRadius: 6
                     }
                 }
             }
-        }
+        });
     });
-});
-    </script>
+</script>
 </body>
 </html>
