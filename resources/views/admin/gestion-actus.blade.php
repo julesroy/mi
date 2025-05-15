@@ -5,7 +5,7 @@
         <title>Gestion des actus</title>
     </head>
 
-    <body class="bg-[rgb(10,10,10)] text-white pt-28 md:pt-60">
+    <body class="bg-[rgb(10,10,10)] text-white pt-28 md:pt-45">
         @include('header')
 
         <div class="max-w-4xl mx-auto px-4">
@@ -215,5 +215,6 @@
                 form.submit();
             }
         </script>
+        @include('footer')
     </body>
 </html>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\GestionComptesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ActuController;
 use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\PriseCommandeController;
 use App\Http\Controllers\CommandeCuisineController;
@@ -82,6 +83,15 @@ Route::prefix('admin')->group(function () {
     Route::post('/ingredients/store', [IngredientController::class, 'store'])->name('ingredients.store');
     Route::post('/ingredients/update', [IngredientController::class, 'update'])->name('ingredients.update');
     Route::post('/ingredients/delete', [IngredientController::class, 'delete'])->name('ingredients.delete');
+
+    // gestion acus
+    Route::get('/gestion-actus', [ActuController::class, 'index'])->name('gestion-actus');
+    Route::get('/gestion-actus/ajouter', [ActuController::class, 'create'])->name('actus.create');
+    Route::post('/gestion-actus', [ActuController::class, 'store'])->name('actus.store');
+    Route::get('/gestion-actus/{id}/edit', [ActuController::class, 'edit'])->name('actus.edit');
+    Route::put('/gestion-actus/{id}', [ActuController::class, 'update'])->name('actus.update');
+    Route::delete('/gestion-actus/{id}', [ActuController::class, 'destroy'])->name('actus.destroy');
+
 
 
     // Page de planning

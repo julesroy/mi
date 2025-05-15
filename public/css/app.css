@@ -2012,6 +2012,11 @@
       padding-top: calc(var(--spacing) * 36);
     }
   }
+  .md\:pt-45 {
+    @media (width >= 48rem) {
+      padding-top: calc(var(--spacing) * 45);
+    }
+  }
   .md\:pt-54 {
     @media (width >= 48rem) {
       padding-top: calc(var(--spacing) * 54);
