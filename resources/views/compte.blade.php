@@ -59,8 +59,8 @@
 
                     <div class="flex flex-row">
                         <!-- Nombre de commande passé -->
-                        <p class="font-bold pr-3">Nombre de commande passé :</p>
-                        <p>100</p>
+                        <p class="font-bold pr-3">Nombre de commandes passées :</p>
+                        <p>...</p>
                     </div>
                 </div>
             </div>

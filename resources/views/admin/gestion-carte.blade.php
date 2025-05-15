@@ -61,25 +61,35 @@
                 </div>
 
                 <!-- Indication du tri actuel -->
-                <p class="text-sm text-gray-400 mb-2">
-                    @if (request('sort'))
-                        Trié par
-                        <span class="font-semibold text-white">
-                            {{
-                                request('sort') == 'nom'
-                                    ? 'Nom'
-                                    : (request('sort') == 'quantite'
-                                        ? 'Quantité'
-                                        : (request('sort') == 'marque'
-                                            ? 'Marque'
-                                            : 'Prix'))
-                            }}
-                        </span>
-                        ({{ request('direction', 'asc') === 'asc' ? 'croissant' : 'décroissant' }})
-                    @else
-                        Tri par défaut
-                    @endif
-                </p>
+                <p class="min-w-full mb-2 text-sm text-gray-400">@if (request("sort"))
+                    Trié
+                    par
+                    <span class="font-semibold text-white">
+                        {{
+                            request("sort") == "nom"
+                                ? "Nom"
+                                : (request("sort") == "quantite"
+                                    ? "Quantité"
+                                    : (request("sort") == "marque"
+                                        ? "Marque"
+                                        : (request("sort") == "estimationPrix"
+                                            ? "Prix"
+                                            : (request("sort") == "categorieIngredient"
+                                                ? "Catégorie"
+                                                : "Nom"
+                                            )
+                                        )
+                                    )
+                                )
+                        }}
+                    </span>
+                    
+                    ({{ request("direction", "asc") === "asc" ? "croissant" : "décroissant" }})
+                @else
+                    Tri
+                    par
+                    défaut
+                @endif</p>
 
                 <!-- Tableau de gestion de la carte -->
                 <table class="min-w-full bg-white text-black rounded shadow">
@@ -100,7 +110,17 @@
                                     </th>
                             @endif
 
-                            <th class="py-2 px-4 border-b">Catégorie</th>
+                            <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b text-left">
+                                <a href="{{
+                                    request()->fullUrlWithQuery([
+                                        "sort" => "categorieIngredient",
+                                        "direction" => request("sort") === "categorieIngredient" && request("direction") === "asc" ? "desc" : "asc",
+                                    ])
+                                }}" class="flex items-center gap-1 text-white">
+                                    Catégorie
+                                    {!! request("sort") === "categorieIngredient" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}
+                                </a>
+                            </th>
                             <th class="py-2 px-4 border-b">Actions</th>
                         </tr>
                     </thead>

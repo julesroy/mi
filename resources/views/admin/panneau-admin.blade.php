@@ -71,7 +71,7 @@
                             <a href="/admin/planning" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Planning</p>
                             </a>
-                            <a href="/commander" class="text-center text-base md:text-lg font-bold hover:underline">
+                            <a href="/admin/prise-commande" class="text-center text-base md:text-lg font-bold hover:underline">
                                 <p>Prise de commande</p>
                             </a>
                             <a href="/admin/commandes" class="text-center text-base md:text-lg font-bold hover:underline">

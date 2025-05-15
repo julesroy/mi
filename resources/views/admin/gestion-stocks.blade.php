@@ -8,8 +8,6 @@
     <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
         @include('header')
 
-        @include('header')
-
         <div class="container mx-auto p-4">
             <h1 class="text-2xl font-bold mb-4">Gestions des stocks</h1>
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\GestionComptesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PlanningController;
+use App\Http\Controllers\PriseCommandeController;
 use App\Http\Controllers\CommandeCuisineController;
 use App\Http\Controllers\GestionStocksController;
 use App\Http\Controllers\IngredientController;
@@ -58,6 +59,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/panneau-admin', function () {
         return view('admin.panneau-admin');
     }) ->middleware('can:verifier-acces-serveur');
+
+    // prise de commande
+    Route::get('/prise-commande', [PriseCommandeController::class, 'index'])->name('prise-commande');
 
     //page affichage cuisine
     Route::get('/affichage-cuisine', [AffichageCuisineController::class, 'afficher', 'updateEtat'])
