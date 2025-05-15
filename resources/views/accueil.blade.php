@@ -7,7 +7,7 @@
 
     <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
         @include("header")
-        <div class="flex-grow flex flex-col items-center justify-center text-center">
+        <div class="flex-grow flex flex-col items-center justify-center text-center pb-94">
             @guest
                 <h1 class="text-4xl font-bold mb-6">Bienvenue chez la Par'MI'Giano !</h1>
                 <p class="text-lg text-gray-400 mb-10">Inscris-toi ou connecte-toi pour profiter de nos services.</p>

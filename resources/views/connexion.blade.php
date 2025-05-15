@@ -13,7 +13,7 @@
                 <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight">Connexion</h2>
             </div>
 
-            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm pb-38">
                 @if ($errors->any())
                     <div style="color: red">
                         {{ $errors->first() }}
