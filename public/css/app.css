@@ -876,6 +876,9 @@
   .bg-\[\#232326\] {
     background-color: #232326;
   }
+  .bg-\[rgb\(10\,10\,10\)\] {
+    background-color: rgb(10,10,10);
+  }
   .bg-black {
     background-color: var(--color-black);
   }
