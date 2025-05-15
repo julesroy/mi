@@ -8,7 +8,7 @@
     <body class="bg-[rgb(10,10,10)] text-white pt-28 md:pt-45">
         @include('header')
 
-        <div class="max-w-4xl mx-auto px-4">
+        <div class="max-w-4xl mx-auto px-4 mb-10">
 
             {{-- Recherche et bouton d’ajout alignés --}}
             <div class="flex flex-col md:flex-row md:items-center md:justify-between rounded bg-gray-700 gap-4 mb-6 py-3 px-4">
