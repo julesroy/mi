@@ -23,6 +23,12 @@ Route::get('/', function () {
     return view('accueil');
 });
 
+//accueil test
+Route::get('/accueil-test', function () {
+    return view('accueil-test');
+});
+
+
 // connexion
 Route::get('/connexion', [AuthController::class, 'afficherFormulaireConnexion'])->middleware('guest')->name('connexion');
 Route::post('/connexion', [AuthController::class, 'connecter'])->middleware('messagethrottle:2,1'); // on limite le nombre de tentatives de connexion à 2 par minute (à assouplir plus tard mais là c'est pour les tests)
