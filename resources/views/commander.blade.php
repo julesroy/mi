@@ -158,14 +158,27 @@
             }, 300);
         }
 
+        function deleteCommande(index) {
+            commande.splice(index, 1);
+            renderPanier();
+        }
+
         function renderPanier() {
             const container = document.getElementById('step-content');
             let html = `<h2 class="text-xl font-bold mb-4">Panier</h2>`;
 
-            commande.push({ plats: selectedPlats, snacks: selectedSnacks });
+            if (selectedPlats.length || selectedSnacks.length) {
+                commande.push({ plats: selectedPlats, snacks: selectedSnacks });
+                selectedPlats = [];
+                selectedSnacks = [];
+            }
 
             commande.forEach((cmd, cmdIndex) => {
-                html += `<div class="mb-4"><h3 class="text-lg font-semibold">Commande ${cmdIndex + 1}</h3>`;
+                html += `<div class="mb-4 p-4 rounded bg-[#2a2a2a]">
+                            <h3 class="text-lg font-semibold flex justify-between items-center">
+                                Commande ${cmdIndex + 1}
+                                <button onclick="deleteCommande(${cmdIndex})" class="text-red-400 hover:text-red-600">Supprimer</button>
+                            </h3>`;
                 cmd.plats.forEach((platObj, i) => {
                     const plat = plats[platObj.platIndex];
                     html += `<div><strong>${plat.nom}</strong> avec :`;
