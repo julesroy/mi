@@ -64,16 +64,6 @@
             selectedPlatIndex = null;
 
             renderMenuSelection();
-            showPlatALaCarteButton(true);
-        }
-
-        function showPlatALaCarteButton(show) {
-            const container = document.getElementById('carte-button-container');
-            if(show) {
-                container.innerHTML = `<button onclick="startPlatALaCarte()" class="btn-main">Plat à la carte</button>`;
-            } else {
-                container.innerHTML = '';
-            }
         }
 
         function renderMenuSelection() {
@@ -82,13 +72,13 @@
             menus.forEach((menu, index) => {
                 html += `<button onclick="selectMenu(${index})" class="btn-main">${menu.nom}</button>`;
             });
+            html += `<button onclick="startPlatALaCarte()" class="btn-main">Plat à la carte</button>`;
             html += '</div>';
             container.innerHTML = html;
         }
 
         function selectMenu(index) {
             enModePlatALaCarte = false;
-            showPlatALaCarteButton(false);
             currentMenu = menus[index];
             const elements = currentMenu.elementsMenu.split(',');
             platsIndexes = elements.map((e,i) => e === '0' ? i : -1).filter(i => i !== -1);
@@ -104,7 +94,6 @@
         // ====================
         function startPlatALaCarte() {
             enModePlatALaCarte = true;
-            showPlatALaCarteButton(false);
             selectedPlatIndex = null;
             selectedPlats = [];
             selectedSnacks = [];
@@ -274,7 +263,6 @@
                 renderSnacks(0);
             } else {
                 renderPanier();
-                showPlatALaCarteButton(true);
             }
         }
 
@@ -297,7 +285,6 @@
                     renderSnacks(snackIndex + 1);
                 } else {
                     renderPanier();
-                    showPlatALaCarteButton(true);
                 }
             }, 300);
         }
@@ -305,7 +292,6 @@
         function deleteCommande(index) {
             commande.splice(index, 1);
             renderPanier();
-            showPlatALaCarteButton(true);
         }
 
         function renderPanier() {
@@ -348,10 +334,12 @@
 
             html += `<div class="mt-6 flex gap-4 justify-center">
                         <button onclick="startCommande()" class="btn-main">Ajouter une commande</button>
-                        <button class="btn-main">Valider la commande</button>
+                        <button onclick="submitCommande()" class="btn-main">Valider la commande</button>
                     </div>`;
 
             container.innerHTML = html;
+
+            console.log("Commande finale :", commande);
         }
 
         function goBackStep() {
@@ -365,6 +353,25 @@
         }
 
         document.addEventListener('DOMContentLoaded', startCommande);
+
+        function submitCommande() {
+            // S'assure que le panier est bien mis à jour avec les éléments sélectionnés
+            if (selectedPlats.length || selectedSnacks.length) {
+                commande.push({ plats: selectedPlats, snacks: selectedSnacks });
+                selectedPlats = [];
+                selectedSnacks = [];
+            }
+
+            const input = document.getElementById('panier-input');
+            input.value = JSON.stringify(commande);
+
+            document.getElementById('commande-form').submit();
+        }
     </script>
+
+    <form id="commande-form" method="POST" action="{{ route('commander.valider') }}" class="hidden">
+    @csrf
+    <input type="hidden" name="panier" id="panier-input">
+</form>
 </body>
 </html>
