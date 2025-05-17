@@ -13,6 +13,15 @@
         <div id="step-content"></div>
     </div>
 
+    <style>
+        .selectable {
+            @apply border border-gray-600 rounded-lg px-4 py-2 cursor-pointer hover:border-blue-400;
+        }
+        .selected {
+            @apply border-blue-600 bg-blue-700;
+        }
+    </style>
+
     <script>
         const menus = @json($menus);
         const plats = @json($plats);
@@ -20,12 +29,12 @@
         const ingredients = @json($ingredients);
 
         let currentMenu = null;
-        let currentStep = 0;
         let selectedMenuIndex = 0;
         let platsIndexes = [];
         let snacksCount = 0;
         let selectedPlats = [];
         let selectedSnacks = [];
+        let currentStep = 0;
 
         function startCommande() {
             renderMenuSelection();
@@ -36,7 +45,7 @@
             let html = '<h2 class="text-xl font-bold mb-4">Choisissez un menu</h2><div class="flex flex-col gap-2">';
 
             menus.forEach((menu, index) => {
-                html += `<button onclick="selectMenu(${index})" class="bg-blue-600 px-4 py-2 rounded">${menu.nom}</button>`;
+                html += `<div class="selectable" onclick="selectMenu(${index})">${menu.nom}</div>`;
             });
 
             html += '</div>';
@@ -51,10 +60,26 @@
             snacksCount = elements.filter(e => e === '4').length;
             selectedPlats = [];
             currentStep = 0;
-            renderPlat(0);
+            renderPlatSelection();
         }
 
-        function renderPlat(index) {
+        function renderPlatSelection() {
+            const container = document.getElementById('step-content');
+            let html = `<h2 class="text-xl font-bold mb-4">Choisissez un plat (${currentStep + 1}/${platsIndexes.length})</h2><div class="flex flex-col gap-2">`;
+
+            plats.forEach((plat, i) => {
+                html += `<div class="selectable" onclick="selectPlat(${i})">${plat.nom}</div>`;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function selectPlat(index) {
+            renderPlatComposition(index);
+        }
+
+        function renderPlatComposition(index) {
             const container = document.getElementById('step-content');
             const plat = plats[index];
 
@@ -65,74 +90,39 @@
                 ingredientsPlat.push({ id: idIngredient, quantite, choix });
             });
 
-            let html = `<h2 class="text-xl font-bold mb-4">${plat.nom}</h2><form id="composition-plat-${index}" class="flex flex-col gap-2">`;
-            const groupeChoix = [];
+            let html = `<h2 class="text-xl font-bold mb-4">Composer : ${plat.nom}</h2>`;
+            html += `<div id="ingredients-container" class="flex flex-col gap-2">`;
 
             ingredientsPlat.forEach((ing, i) => {
                 const ingredient = ingredients.find(obj => obj.idIngredient == ing.id);
                 if (!ingredient) return;
 
-                if (ing.choix === '2') {
-                    html += `<div><strong>${ingredient.nom}</strong> (obligatoire)</div>`;
-                } else if (ing.choix === '0') {
-                    html += `
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" name="ingredient-${i}" value="${ing.id}" checked />
-                            ${ingredient.nom}
-                        </label>`;
-                } else if (ing.choix === '1') {
-                    groupeChoix.push({ index: i, id: ing.id, nom: ingredient.nom });
-                }
+                html += `<div class="selectable" data-id="${ing.id}" onclick="toggleSelection(this)">${ingredient.nom}</div>`;
             });
 
-            if (groupeChoix.length) {
-                html += `<div class="mt-4"><strong>Choix obligatoire :</strong><div class="ml-2">`;
-                groupeChoix.forEach((g, i) => {
-                    html += `
-                        <label class="flex items-center gap-2">
-                            <input type="radio" name="choix_unique_${index}" value="${g.id}" ${i === 0 ? 'checked' : ''} />
-                            ${g.nom}
-                        </label>`;
-                });
-                html += `</div></div>`;
-            }
+            html += '</div>';
+            html += `<div class="mt-6 flex justify-between">
+                        <button onclick="renderPlatSelection()" class="bg-gray-600 px-4 py-2">Retour</button>
+                        <button onclick="saveSelectedIngredients(${index})" class="bg-blue-600 px-4 py-2">Valider</button>
+                     </div>`;
 
-            html += `</form>`;
             container.innerHTML = html;
-            renderNavigationButtons(index, plats.length, 'plat');
         }
 
-        function renderNavigationButtons(index, total, type) {
-            const container = document.getElementById('step-content');
-            let html = `<div class="mt-6 flex justify-between">`;
-
-            if (index > 0) {
-                html += `<button onclick="renderPlat(${index - 1})" class="bg-gray-600 px-4 py-2">Retour</button>`;
-            }
-
-            html += `<button onclick="saveAndContinue(${index})" class="bg-blue-600 px-4 py-2">Suivant</button>`;
-            html += `</div>`;
-
-            container.innerHTML += html;
+        function toggleSelection(element) {
+            element.classList.toggle('selected');
         }
 
-        function saveAndContinue(index) {
-            const form = document.querySelector(`#composition-plat-${index}`);
-            const formData = new FormData(form);
+        function saveSelectedIngredients(platIndex) {
             const selected = [];
-
-            form.querySelectorAll('input[type="checkbox"]:checked').forEach(input => {
-                selected.push(input.value);
+            document.querySelectorAll('#ingredients-container .selected').forEach(el => {
+                selected.push(el.getAttribute('data-id'));
             });
-
-            form.querySelectorAll('input[type="radio"]:checked').forEach(input => {
-                selected.push(input.value);
-            });
-
-            selectedPlats.push({ platIndex: index, ingredients: selected });
+            selectedPlats.push({ platIndex: platIndex, ingredients: selected });
 
             if (selectedPlats.length < platsIndexes.length) {
-                renderPlat(selectedPlats.length);
+                currentStep++;
+                renderPlatSelection();
             } else {
                 renderSnacks(0);
             }
@@ -140,10 +130,10 @@
 
         function renderSnacks(index) {
             const container = document.getElementById('step-content');
-            let html = `<h2 class="text-xl font-bold mb-4">Choisissez votre snack ou boisson (${index + 1}/${snacksCount})</h2><div class="flex flex-col gap-2">`;
+            let html = `<h2 class="text-xl font-bold mb-4">Choisissez un snack ou boisson (${index + 1}/${snacksCount})</h2><div class="flex flex-col gap-2">`;
 
             snacks.forEach((snack, i) => {
-                html += `<button onclick="selectSnack(${index}, ${i})" class="bg-green-600 px-4 py-2">${snack.nom}</button>`;
+                html += `<div class="selectable" onclick="selectSnack(${index}, ${i})">${snack.nom}</div>`;
             });
 
             html += '</div>';
@@ -185,7 +175,6 @@
             container.innerHTML = html;
         }
 
-        // Démarrage de la commande au chargement
         document.addEventListener('DOMContentLoaded', startCommande);
     </script>
 </body>
