@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
-        @include('head')
+        @include("head")
         <title>Carte</title>
     </head>
 
     <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
-        @include('header')
+        @include("header")
         <div class="max-w-4xl mx-auto p-6 bg-black shadow-lg rounded-lg">
             <h1 class="text-3xl font-bold text-center mb-8">Carte</h1>
             <div class="space-y-6">
@@ -114,6 +114,6 @@
                 </div>
             </div>
         </div>
-        @include('footer')
+        @include("footer")
     </body>
 </html>

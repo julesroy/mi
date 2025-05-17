@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
-        @include('head')
+        @include("head")
         <title>Connexion</title>
     </head>
 
     <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
-        @include('header')
+        @include("header")
 
         <div class="flex min-h-full flex-col justify-center px-6 py-6 lg:px-8">
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -53,6 +53,6 @@
             </div>
         </div>
 
-        @include('footer')
+        @include("footer")
     </body>
 </html>

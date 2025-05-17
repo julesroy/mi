@@ -1,37 +1,25 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
-        @include('head')
+        @include("head")
         <title>Affichage Cuisine - Commandes</title>
         <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
 
     <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
-        @include('header')
+        @include("header")
 
         <main class="container mx-auto px-4 py-8">
             <h1 class="text-3xl font-bold mb-8 text-center">Commandes en Cuisine</h1>
 
             <!-- Barre de filtrage -->
             <div class="flex flex-wrap gap-2 mb-6 justify-center">
-                <button onclick="filterCommandes('all')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-                    Toutes
-                </button>
-                <button onclick="filterCommandes(0)" class="px-4 py-2 bg-red-700 hover:bg-red-600 rounded-lg transition-colors">
-                    Non payées
-                </button>
-                <button onclick="filterCommandes(1)" class="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 rounded-lg transition-colors">
-                    Payées
-                </button>
-                <button onclick="filterCommandes(2)" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg transition-colors">
-                    Prêtes
-                </button>
-                <button onclick="filterCommandes(3)" class="px-4 py-2 bg-green-700 hover:bg-green-600 rounded-lg transition-colors">
-                    Servies
-                </button>
-                <button onclick="filterCommandes(4)" class="px-4 py-2 bg-gray-500 hover:bg-gray-400 rounded-lg transition-colors">
-                    Annulées
-                </button>
+                <button onclick="filterCommandes('all')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">Toutes</button>
+                <button onclick="filterCommandes(0)" class="px-4 py-2 bg-red-700 hover:bg-red-600 rounded-lg transition-colors">Non payées</button>
+                <button onclick="filterCommandes(1)" class="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 rounded-lg transition-colors">Payées</button>
+                <button onclick="filterCommandes(2)" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg transition-colors">Prêtes</button>
+                <button onclick="filterCommandes(3)" class="px-4 py-2 bg-green-700 hover:bg-green-600 rounded-lg transition-colors">Servies</button>
+                <button onclick="filterCommandes(4)" class="px-4 py-2 bg-gray-500 hover:bg-gray-400 rounded-lg transition-colors">Annulées</button>
             </div>
 
             <div id="commandesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -42,7 +30,7 @@
             </div>
         </main>
 
-        @include('footer')
+        @include("footer")
 
         <style>
             .etat-0 {
@@ -87,7 +75,7 @@
 
         <script>
             let allCommandes = []; // Stocke toutes les commandes pour le filtrage
-            
+
             document.addEventListener('DOMContentLoaded', function () {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
@@ -230,17 +218,17 @@
                 }
 
                 // Fonction de filtrage
-                window.filterCommandes = function(etat) {
+                window.filterCommandes = function (etat) {
                     // Mise à jour de l'UI des boutons
-                    document.querySelectorAll('.flex button').forEach(btn => {
+                    document.querySelectorAll('.flex button').forEach((btn) => {
                         btn.classList.remove('active');
                     });
                     event.target.classList.add('active');
-                    
+
                     if (etat === 'all') {
                         displayCommandes(allCommandes);
                     } else {
-                        const filtered = allCommandes.filter(c => c.etat === etat);
+                        const filtered = allCommandes.filter((c) => c.etat === etat);
                         displayCommandes(filtered);
                     }
                 };

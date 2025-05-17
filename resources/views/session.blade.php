@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
-        @include('head')
+        @include("head")
         <title>Le nom de votre page</title>
     </head>
 
     <body class="bg-[#0a0a0a] text-white pt-28 md:pt-36">
-        @include('header')
+        @include("header")
 
         <ul>
             @foreach ($session as $key => $value)
@@ -16,6 +16,6 @@
 
         <p>ID : {{ $id }}</p>
 
-        @include('footer')
+        @include("footer")
     </body>
 </html>

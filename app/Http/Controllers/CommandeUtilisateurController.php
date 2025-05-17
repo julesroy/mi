@@ -10,12 +10,12 @@ class CommandeUtilisateurController extends Controller
 {
     public function index()
     {
-        $plats = DB::table('carte')->where('typePlat', 0)->get();
-        $menus = DB::table('carte')->where('typePlat', 3)->get();
+        $plats = DB::table('carteElements')->where('typePlat', 0)->get();
+        $menus = DB::table('carteMenus')->get();
         $viandes = DB::table('inventaire')->where('categorieIngredient', 1)->get();
-        $ingredients = DB::table('inventaire')->where('categorieIngredient', 0)->get();
-        $snacks = DB::table('carte')->where('typePlat', 1)->get();
-        $boissons = DB::table('carte')->where('typePlat', 2)->get();
+        $ingredients = DB::table('inventaire')->get();
+        $snacks = DB::table('carteElements')->where('typePlat', 1)->get();
+        $boissons = DB::table('carteElements')->where('typePlat', 2)->get();
 
         return view('commander', compact('plats', 'menus', 'viandes', 'ingredients', 'snacks', 'boissons'));
     }

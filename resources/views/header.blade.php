@@ -12,7 +12,7 @@
                 <a href="/actus" class="w-full text-center px-8 h-full flex items-center">Actus</a>
             </div>
         </span>
-        <img src="{{ asset('images/logo.png') }}" alt="Logo Par'MI'Giano" class="hidden md:block w-48 h-auto relative -mb-20" />
+        <img src="{{ asset("images/logo.png") }}" alt="Logo Par'MI'Giano" class="hidden md:block w-48 h-auto relative -mb-20" />
         <span class="hidden md:flex justify-between w-5/12 items-center h-full">
             <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
                 <a href="/commander" class="w-full text-center px-8 h-full flex items-center">Commander</a>
@@ -36,13 +36,14 @@
                     @guest
                         Compte
                     @endguest
+
                     <svg id="compte-arrow" class="ml-2 w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
                 <div id="compte-dropdown" class="overflow-hidden max-h-0 text-2xl text-center md:text-left transition-all duration-500 bg-secondaire w-full absolute left-0 top-full z-10">
                     @auth
-                        @can('verifier-acces-serveur')
+                        @can("verifier-acces-serveur")
                             <a href="/admin/panneau-admin" class="block px-4 py-2 hover:bg-secondaire">Admin</a>
                         @endcan
 
@@ -68,20 +69,21 @@
                 <!-- dropdown (sous-menu) pour le compte -->
                 <div class="relative w-full">
                     <button id="compte-btn" class="w-full text-center px-8 py-6 hover:bg-secondaire flex items-center">
-                            @auth
-                                {{ $donneesUtilisateur->prenom }}
-                            @endauth
+                        @auth
+                            {{ $donneesUtilisateur->prenom }}
+                        @endauth
 
-                            @guest
-                                Compte
-                            @endguest
+                        @guest
+                            Compte
+                        @endguest
+
                         <svg id="compte-arrow" class="ml-2 w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </button>
                     <div id="compte-dropdown" class="overflow-hidden max-h-0 text-xl transition-all duration-500 bg-secondaire w-full absolute left-0 z-10">
                         @auth
-                            @can('verifier-acces-serveur')
+                            @can("verifier-acces-serveur")
                                 <a href="/admin/panneau-admin" class="block px-4 py-2 hover:bg-secondaire">Admin</a>
                             @endcan
 
