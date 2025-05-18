@@ -152,7 +152,9 @@
                     const ingredient = ingredients.find((obj) => obj.idIngredient == ing.id);
                     if (!ingredient) return;
 
-                    html += `<div class="selectable" data-id="${ing.id}" onclick="toggleSelection(this, '${ing.id}')">${ingredient.nom}</div>`;
+                    if (ing.choix != 2) {
+                        html += `<div class="selectable" data-id="${ing.id}" onclick="toggleSelection(this, '${ing.id}')">${ingredient.nom}</div>`;
+                    }
                 });
 
                 html += '</div><div class="mt-6 flex justify-between">';
@@ -231,7 +233,9 @@
                     const ingredient = ingredients.find((obj) => obj.idIngredient == ing.id);
                     if (!ingredient) return;
 
-                    html += `<div class="selectable" data-id="${ing.id}" onclick="toggleSelection(this, '${ing.id}')">${ingredient.nom}</div>`;
+                    if (ing.choix != 2) {
+                        html += `<div class="selectable" data-id="${ing.id}" onclick="toggleSelection(this, '${ing.id}')">${ingredient.nom}</div>`;
+                    }
                 });
 
                 html += '</div><div class="mt-6 flex justify-between">';
