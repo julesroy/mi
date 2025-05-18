@@ -111,8 +111,8 @@ Route::prefix('admin')->group(function () {
     // page de gestion de la carte
     Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
         ->middleware('can:verifier-acces-serveur');
-    Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
-    Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
+    Route::post('/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
+    Route::post('/modifier', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
     Route::prefix('/salle-securite')->group(function () {

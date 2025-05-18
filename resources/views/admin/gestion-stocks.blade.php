@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
-        @include('head')
+        @include("head")
         <title>Gestion stocks</title>
     </head>
 
     <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
-        @include('header')
+        @include("header")
 
         <div class="container mx-auto p-4">
             <h1 class="text-2xl font-bold mb-4">Gestions des stocks</h1>
@@ -14,11 +14,11 @@
             <form method="GET" action="{{ url()->current() }}" class="min-w-full text-black p-2 mb-4 bg-white flex flex-wrap gap-4 items-end border-4 border-gray-500">
                 <div>
                     <label for="nom" class="block text-sm">Nom</label>
-                    <input type="text" name="nom" id="nom" value="{{ request('nom') }}" class="border-1 border-black bg-gray-100 rounded p-1" />
+                    <input type="text" name="nom" id="nom" value="{{ request("nom") }}" class="border-1 border-black bg-gray-100 rounded p-1" />
                 </div>
                 <div>
                     <label for="categorie" class="block text-sm">Catégorie</label>
-                    <input type="text" name="categorie" id="categorie" value="{{ request('categorie') }}" class="border-1 border-black bg-gray-100 rounded p-1" />
+                    <input type="text" name="categorie" id="categorie" value="{{ request("categorie") }}" class="border-1 border-black bg-gray-100 rounded p-1" />
                 </div>
                 <div>
                     <label for="etat" class="block text-sm">État</label>
@@ -38,35 +38,35 @@
                     Trié par
                     <span class="font-semibold text-white">
                         @switch($sort)
-                            @case('nom')
+                            @case("nom")
                                 Nom
 
                                 @break
-                            @case('categorieElement')
+                            @case("categorieElement")
                                 Catégorie
 
                                 @break
-                            @case('numeroLot')
+                            @case("numeroLot")
                                 Lot
 
                                 @break
-                            @case('datePeremption')
+                            @case("datePeremption")
                                 Date péremption
 
                                 @break
-                            @case('nombrePortions')
+                            @case("nombrePortions")
                                 Portions
 
                                 @break
-                            @case('dateOuverture')
+                            @case("dateOuverture")
                                 Ouverture
 
                                 @break
-                            @case('dateFermeture')
+                            @case("dateFermeture")
                                 Fermeture
 
                                 @break
-                            @case('etat')
+                            @case("etat")
                                 État
 
                                 @break
@@ -74,7 +74,7 @@
                                 {{ $sort }}
                         @endswitch
                     </span>
-                    ({{ $direction === 'asc' ? 'croissant' : 'décroissant' }})
+                    ({{ $direction === "asc" ? "croissant" : "décroissant" }})
                 </p>
 
                 <table class="min-w-full bg-white text-black rounded shadow">
@@ -83,9 +83,9 @@
                         function sort_arrow($column, $sort, $direction)
                         {
                             if ($column !== $sort) {
-                                return '';
+                                return "";
                             }
-                            return $direction === 'asc' ? '▲' : '▼';
+                            return $direction === "asc" ? "▲" : "▼";
                         }
                     @endphp
 
@@ -94,66 +94,66 @@
                             <th class="py-2 px-4 border-b">
                                 <a href="{{
                                     request()->fullUrlWithQuery([
-                                        'sort' => 'nom',
-                                        'direction' => $sort === 'nom' && $direction === 'asc' ? 'desc' : 'asc',
+                                        "sort" => "nom",
+                                        "direction" => $sort === "nom" && $direction === "asc" ? "desc" : "asc",
                                     ])
-                                }}" class="flex items-center gap-1">Nom {!! sort_arrow('nom', $sort, $direction) !!}</a>
+                                }}" class="flex items-center gap-1">Nom {!! sort_arrow("nom", $sort, $direction) !!}</a>
                             </th>
                             <th class="py-2 px-4 border-b">
                                 <a href="{{
                                     request()->fullUrlWithQuery([
-                                        'sort' => 'categorieElement',
-                                        'direction' => $sort === 'categorieElement' && $direction === 'asc' ? 'desc' : 'asc',
+                                        "sort" => "categorieElement",
+                                        "direction" => $sort === "categorieElement" && $direction === "asc" ? "desc" : "asc",
                                     ])
-                                }}" class="flex items-center gap-1">Catégorie {!! sort_arrow('categorieElement', $sort, $direction) !!}</a>
+                                }}" class="flex items-center gap-1">Catégorie {!! sort_arrow("categorieElement", $sort, $direction) !!}</a>
                             </th>
                             <th class="py-2 px-4 border-b">
                                 <a href="{{
                                     request()->fullUrlWithQuery([
-                                        'sort' => 'numeroLot',
-                                        'direction' => $sort === 'numeroLot' && $direction === 'asc' ? 'desc' : 'asc',
+                                        "sort" => "numeroLot",
+                                        "direction" => $sort === "numeroLot" && $direction === "asc" ? "desc" : "asc",
                                     ])
-                                }}" class="flex items-center gap-1">Lot {!! sort_arrow('numeroLot', $sort, $direction) !!}</a>
+                                }}" class="flex items-center gap-1">Lot {!! sort_arrow("numeroLot", $sort, $direction) !!}</a>
                             </th>
                             <th class="py-2 px-4 border-b">
                                 <a href="{{
                                     request()->fullUrlWithQuery([
-                                        'sort' => 'datePeremption',
-                                        'direction' => $sort === 'datePeremption' && $direction === 'asc' ? 'desc' : 'asc',
+                                        "sort" => "datePeremption",
+                                        "direction" => $sort === "datePeremption" && $direction === "asc" ? "desc" : "asc",
                                     ])
-                                }}" class="flex items-center gap-1">Date péremption {!! sort_arrow('datePeremption', $sort, $direction) !!}</a>
+                                }}" class="flex items-center gap-1">Date péremption {!! sort_arrow("datePeremption", $sort, $direction) !!}</a>
                             </th>
                             <th class="py-2 px-4 border-b">
                                 <a href="{{
                                     request()->fullUrlWithQuery([
-                                        'sort' => 'nombrePortions',
-                                        'direction' => $sort === 'nombrePortions' && $direction === 'asc' ? 'desc' : 'asc',
+                                        "sort" => "nombrePortions",
+                                        "direction" => $sort === "nombrePortions" && $direction === "asc" ? "desc" : "asc",
                                     ])
-                                }}" class="flex items-center gap-1">Portions {!! sort_arrow('nombrePortions', $sort, $direction) !!}</a>
+                                }}" class="flex items-center gap-1">Portions {!! sort_arrow("nombrePortions", $sort, $direction) !!}</a>
                             </th>
                             <th class="py-2 px-4 border-b">
                                 <a href="{{
                                     request()->fullUrlWithQuery([
-                                        'sort' => 'dateOuverture',
-                                        'direction' => $sort === 'dateOuverture' && $direction === 'asc' ? 'desc' : 'asc',
+                                        "sort" => "dateOuverture",
+                                        "direction" => $sort === "dateOuverture" && $direction === "asc" ? "desc" : "asc",
                                     ])
-                                }}" class="flex items-center gap-1">Ouverture {!! sort_arrow('dateOuverture', $sort, $direction) !!}</a>
+                                }}" class="flex items-center gap-1">Ouverture {!! sort_arrow("dateOuverture", $sort, $direction) !!}</a>
                             </th>
                             <th class="py-2 px-4 border-b">
                                 <a href="{{
                                     request()->fullUrlWithQuery([
-                                        'sort' => 'dateFermeture',
-                                        'direction' => $sort === 'dateFermeture' && $direction === 'asc' ? 'desc' : 'asc',
+                                        "sort" => "dateFermeture",
+                                        "direction" => $sort === "dateFermeture" && $direction === "asc" ? "desc" : "asc",
                                     ])
-                                }}" class="flex items-center gap-1">Fermeture {!! sort_arrow('dateFermeture', $sort, $direction) !!}</a>
+                                }}" class="flex items-center gap-1">Fermeture {!! sort_arrow("dateFermeture", $sort, $direction) !!}</a>
                             </th>
                             <th class="py-2 px-4 border-b">
                                 <a href="{{
                                     request()->fullUrlWithQuery([
-                                        'sort' => 'etat',
-                                        'direction' => $sort === 'etat' && $direction === 'asc' ? 'desc' : 'asc',
+                                        "sort" => "etat",
+                                        "direction" => $sort === "etat" && $direction === "asc" ? "desc" : "asc",
                                     ])
-                                }}" class="flex items-center gap-1">État {!! sort_arrow('etat', $sort, $direction) !!}</a>
+                                }}" class="flex items-center gap-1">État {!! sort_arrow("etat", $sort, $direction) !!}</a>
                             </th>
                         </tr>
                     </thead>
@@ -163,10 +163,10 @@
                             @php
                                 // Détermine la couleur de fond selon l'état
                                 $bgColor = match ($stock->etat) {
-                                    0 => 'bg-green-200', // Fermé
-                                    1 => 'bg-blue-200', // Ouvert
-                                    2 => 'bg-red-500', // Périmé
-                                    default => 'bg-gray-200', // Inconnu
+                                    0 => "bg-green-200", // Fermé
+                                    1 => "bg-blue-200", // Ouvert
+                                    2 => "bg-red-500", // Périmé
+                                    default => "bg-gray-200", // Inconnu
                                 };
                             @endphp
 
@@ -195,6 +195,5 @@
                 </table>
             </div>
         </div>
-
     </body>
 </html>
