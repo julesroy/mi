@@ -7,32 +7,30 @@
         <link rel="stylesheet" href="{{ asset("css/dialog.css") }}" />
         <style>
             .selectable {
-                border: 2px solid #444;
+                border: 2px solid black;
                 border-radius: 0.5rem;
                 padding: 0.5rem;
                 cursor: pointer;
                 transition: border-color 0.2s;
             }
-            .selectable.selected {
-                border-color: #22c55e;
-            }
-            .btn-main {
-                background-color: #7c3aed; /* violet */
+
+            .selectable:hover {
+                border-color: #539d35;
+                background-color: #539d35;
                 color: white;
-                padding: 0.5rem 1rem;
-                border-radius: 0.5rem;
-                cursor: pointer;
-                font-weight: bold;
             }
-            .btn-main:hover {
-                background-color: #6d28d9;
+
+            .selectable.selected {
+                border-color: #539d35;
+                background-color: #539d35;
+                color: white;
             }
         </style>
     </head>
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
+    <body class="pt-28 md:pt-60">
         @include("header")
 
-        <div class="flex flex-col items-center gap-6 bg-[#1a1a1a] p-6 rounded-2xl w-[90%] max-w-xl mx-auto">
+        <div class="flex flex-col items-center gap-6 p-6 rounded-2xl w-[90%] max-w-xl mx-auto border-2 border-black">
             <div id="step-content"></div>
             <div id="carte-button-container" class="mt-6 w-full flex justify-center"></div>
         </div>
@@ -70,11 +68,11 @@
 
             function renderMenuSelection() {
                 const container = document.getElementById('step-content');
-                let html = '<h2 class="text-xl font-bold mb-4">Choisissez un menu</h2><div class="flex flex-col gap-2">';
+                let html = '<h2 class="text-xl font-bold mb-4">Choisissez votre commande</h2><div class="flex flex-col gap-2">';
                 menus.forEach((menu) => {
-                    html += `<button onclick="selectMenu(${menu.idMenu})" class="btn-main">${menu.nom}</button>`;
+                    html += `<button onclick="selectMenu(${menu.idMenu})" class="bg-primaire text-white rounded-2xl h-12 hover:cursor-pointer hover:bg-secondaire">${menu.nom}</button>`;
                 });
-                html += `<button onclick="startPlatALaCarte()" class="btn-main">Plat à la carte</button>`;
+                html += `<button onclick="startPlatALaCarte()" class="bg-primaire text-white rounded-2xl h-12 hover:cursor-pointer hover:bg-secondaire">Plat à la carte</button>`;
                 html += '</div>';
                 container.innerHTML = html;
             }
@@ -102,13 +100,13 @@
 
             function renderPlatSelectionPlatALaCarte() {
                 const container = document.getElementById('step-content');
-                let html = '<h2 class="text-xl font-bold mb-4">Choisissez un plat à la carte</h2><div class="grid grid-cols-1 gap-2">';
+                let html = '<h2 class="text-xl font-bold mb-4">Choisissez un plat à la carte</h2><div class="grid grid-cols-3 gap-2">';
                 plats.forEach((plat) => {
                     html += `<div class="selectable" onclick="selectPlat(${plat.idElement}, this)">${plat.nom}</div>`;
                 });
                 html += '</div><div class="mt-6 flex justify-between">';
-                html += `<button onclick="cancelPlatALaCarte()" class="bg-gray-600 px-4 py-2 rounded">Retour</button>`;
-                html += `<button onclick="continuePlatCompositionPlatALaCarte()" class="btn-main">Suivant</button>`;
+                html += `<button onclick="cancelPlatALaCarte()" class="bg-red-500 text-white  px-4 py-2 rounded-3xl hover:cursor-pointer">Retour</button>`;
+                html += `<button onclick="continuePlatCompositionPlatALaCarte()" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Suivant</button>`;
                 html += '</div>';
                 container.innerHTML = html;
             }
@@ -146,7 +144,7 @@
                     });
                 }
 
-                let html = `<h2 class="text-xl font-bold mb-4">Composition : ${plat.nom}</h2><div class="flex flex-col gap-2">`;
+                let html = `<h2 class="text-xl font-bold mb-4">Composition : ${plat.nom}</h2><div class="grid grid-cols-3 md:grid-cols-6 gap-2">`;
 
                 ingredientsPlat.forEach((ing) => {
                     const ingredient = ingredients.find((obj) => obj.idIngredient == ing.id);
@@ -158,8 +156,8 @@
                 });
 
                 html += '</div><div class="mt-6 flex justify-between">';
-                html += `<button onclick="renderPlatSelectionPlatALaCarte()" class="bg-gray-600 px-4 py-2 rounded">Retour</button>`;
-                html += `<button onclick="savePlatALaCarte(${id})" class="btn-main">Ajouter au panier</button>`;
+                html += `<button onclick="renderPlatSelectionPlatALaCarte()" class="bg-red-500 text-white  px-4 py-2 rounded-3xl hover:cursor-pointer">Retour</button>`;
+                html += `<button onclick="savePlatALaCarte(${id})" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Ajouter au panier</button>`;
                 html += '</div>';
 
                 container.innerHTML = html;
@@ -193,15 +191,15 @@
 
             function renderPlatSelection() {
                 const container = document.getElementById('step-content');
-                let html = '<h2 class="text-xl font-bold mb-4">Choisissez un plat</h2><div class="grid grid-cols-1 gap-2">';
+                let html = '<h2 class="text-xl font-bold mb-4">Choisissez un plat</h2><div class="grid grid-cols-3 gap-2">';
                 plats.forEach((plat) => {
                     html += `<div class="selectable" onclick="selectPlat(${plat.idElement}, this)">${plat.nom}</div>`;
                 });
                 html += '</div><div class="mt-6 flex justify-between">';
                 if (currentStep > 0) {
-                    html += `<button onclick="goBackStep()" class="bg-gray-600 px-4 py-2 rounded">Retour</button>`;
+                    html += `<button onclick="goBackStep()" class="bg-red-500 text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Retour</button>`;
                 }
-                html += `<button onclick="continuePlatComposition()" class="btn-main">Suivant</button>`;
+                html += `<button onclick="continuePlatComposition()" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Suivant</button>`;
                 html += '</div>';
                 container.innerHTML = html;
             }
@@ -227,7 +225,7 @@
                     });
                 }
 
-                let html = `<h2 class="text-xl font-bold mb-4">Composition : ${plat.nom}</h2><div class="flex flex-col gap-2">`;
+                let html = `<h2 class="text-xl font-bold mb-4">Composition : ${plat.nom}</h2><div class="grid grid-cols-3 md:grid-cols-6 gap-2">`;
 
                 ingredientsPlat.forEach((ing) => {
                     const ingredient = ingredients.find((obj) => obj.idIngredient == ing.id);
@@ -239,8 +237,8 @@
                 });
 
                 html += '</div><div class="mt-6 flex justify-between">';
-                html += `<button onclick="renderPlatSelection()" class="bg-gray-600 px-4 py-2 rounded">Retour</button>`;
-                html += `<button onclick="savePlat(${id})" class="btn-main">Suivant</button>`;
+                html += `<button onclick="renderPlatSelection()" class="bg-red-500 text-white  px-4 py-2 rounded-3xl hover:cursor-pointer">Retour</button>`;
+                html += `<button onclick="savePlat(${id})" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Suivant</button>`;
                 html += '</div>';
 
                 container.innerHTML = html;
@@ -277,7 +275,7 @@
 
             function renderSnacks(index) {
                 const container = document.getElementById('step-content');
-                let html = `<h2 class="text-xl font-bold mb-4">Choisissez votre snack/boisson (${index + 1}/${snacksCount})</h2><div class="grid grid-cols-1 gap-2">`;
+                let html = `<h2 class="text-xl font-bold mb-4">Choisissez votre snack/boisson (${index + 1}/${snacksCount})</h2><div class="grid grid-cols-4 md:grid-cols-6 gap-2">`;
                 snacks.forEach((snack, i) => {
                     html += `<div class="selectable" onclick="selectSnack(${index}, ${i}, this)">${snack.nom}</div>`;
                 });
@@ -322,9 +320,9 @@
                 }
 
                 commande.forEach((cmd, cmdIndex) => {
-                    html += `<div class="mb-4 p-4 rounded bg-[#2a2a2a]">
+                    html += `<div class="mb-4 p-4 border-1 border-black rounded-2xl">
                     <h3 class="text-lg font-semibold flex justify-between items-center">
-                        Commande ${cmdIndex + 1}
+                        Element ${cmdIndex + 1}
                         <button onclick="deleteCommande(${cmdIndex})" class="text-red-400 hover:text-red-600">Supprimer</button>
                     </h3>`;
 
@@ -352,8 +350,8 @@
                 });
 
                 html += `<div class="mt-6 flex gap-4 justify-center">
-                <button onclick="startCommande()" class="btn-main">Ajouter une commande</button>
-                <button onclick="submitCommande()" class="btn-main">Valider la commande</button>
+                <button onclick="startCommande()" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Ajouter une commande</button>
+                <button onclick="submitCommande()" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Valider la commande</button>
             </div>`;
 
                 container.innerHTML = html;

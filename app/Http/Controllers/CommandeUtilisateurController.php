@@ -14,10 +14,11 @@ class CommandeUtilisateurController extends Controller
         $menus = DB::table('carteMenus')->get();
         $viandes = DB::table('inventaire')->where('categorieIngredient', 1)->get();
         $ingredients = DB::table('inventaire')->get();
-        $snacks = DB::table('carteElements')->where('typePlat', 1)->get();
-        $boissons = DB::table('carteElements')->where('typePlat', 2)->get();
+        $snacks = DB::table('carteElements')
+            ->whereIn('typePlat', [1, 2])
+            ->get();
 
-        return view('commander', compact('plats', 'menus', 'viandes', 'ingredients', 'snacks', 'boissons'));
+        return view('commander', compact('plats', 'menus', 'viandes', 'ingredients', 'snacks'));
     }
 
     public function validerCommande(Request $request)
@@ -25,8 +26,6 @@ class CommandeUtilisateurController extends Controller
         try {
             $panier = $request->input('panier');
             $panier = json_decode($panier, true); // on décode le panier
-
-            var_dump($panier); // pour le debug
 
             // on génère un identifiant unique pour la commande
             $numeroCommande = '';
