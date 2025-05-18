@@ -15,14 +15,17 @@ use App\Http\Controllers\CarteController;
 use App\Http\Controllers\CommandeUtilisateurController;
 use App\Http\Controllers\TresorerieController;
 use App\Http\Controllers\AffichageCuisineController;
+use App\Http\Controllers\AccueilController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-// accueil
-Route::get('/', function () {
-    return view('accueil');
-});
+
+
+//accueil
+Route::get('/', [AccueilController::class, 'afficher'])
+->name('accueil');
+
 
 // connexion
 Route::get('/connexion', [AuthController::class, 'afficherFormulaireConnexion'])->middleware('guest')->name('connexion');
