@@ -22,7 +22,7 @@
                     <!-- Solde de la caisse -->
                     <div class="bg-gray-800 text-white p-6 rounded shadow-md flex flex-col items-center justify-center">
                         <h3 class="text-lg font-semibold">Solde de la caisse</h3>
-                        <p class="text-3xl font-bold"><span class="font-bold">{{ number_format($caisse, 2, ',', ' ') }}€</span></p>                        
+                        <p class="text-3xl font-bold"><span class="font-bold">{{ number_format($caisse, 2, ",", " ") }}€</span></p>
                         <button class="mt-4 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 transition transform hover:scale-105" onclick="openDialog('modifyCaisseDialog')">Modifier</button>
                     </div>
                 </div>
@@ -35,12 +35,10 @@
                     <form>
                         <label class="block mb-4">
                             <span class="text-gray-700 text-lg">Nouveau solde (€)</span>
-                            <input type="number" step="0.01" placeholder="Entrez un montant" required
-                                class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2">
+                            <input type="number" step="0.01" placeholder="Entrez un montant" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2" />
                         </label>
                         <div class="flex justify-end gap-4">
-                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                                onclick="closeDialog('modifyCaisseDialog')">Annuler</button>
+                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" onclick="closeDialog('modifyCaisseDialog')">Annuler</button>
                             <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Enregistrer</button>
                         </div>
                     </form>
@@ -76,7 +74,7 @@
                 </div>
             </section>
 
-           <!-- Dialog pour modifier le solde de la caisse -->
+            <!-- Dialog pour modifier le solde de la caisse -->
             <dialog id="modifyCaisseDialog" class="rounded-lg shadow-lg w-full max-w-2xl">
                 <div class="bg-white text-black p-6 rounded-lg flex flex-col max-h-[80vh]">
                     <div class="flex justify-between items-center mb-4">
@@ -86,12 +84,10 @@
                     <form>
                         <label class="block mb-4">
                             <span class="text-gray-700 text-lg">Nouveau solde (€)</span>
-                            <input type="number" step="0.01" placeholder="Entrez un montant" required
-                                class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2">
+                            <input type="number" step="0.01" placeholder="Entrez un montant" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2" />
                         </label>
                         <div class="flex justify-end gap-4">
-                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                                onclick="closeDialog('modifyCaisseDialog')">Annuler</button>
+                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" onclick="closeDialog('modifyCaisseDialog')">Annuler</button>
                             <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Enregistrer</button>
                         </div>
                     </form>
@@ -235,18 +231,17 @@
 
         @include("footer")
 
-        
         <script>
             // Scripte pour les dialogues
             function openDialog(id) {
-            const dialog = document.getElementById(id);
+                const dialog = document.getElementById(id);
                 if (dialog) {
                     dialog.showModal();
                 }
             }
 
             function closeDialog(id) {
-            const dialog = document.getElementById(id);
+                const dialog = document.getElementById(id);
                 if (dialog) {
                     dialog.close();
                 }
@@ -262,18 +257,19 @@
                 const ctx = document.getElementById('commandesChart').getContext('2d');
                 const timePeriodSelect = document.getElementById('timePeriod');
 
-                
                 let commandesChart = new Chart(ctx, {
-                    type: 'line', 
+                    type: 'line',
                     data: {
-                        labels: [], 
-                        datasets: [{
-                            label: 'Commandes',
-                            data: [], 
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderWidth: 1
-                        }]
+                        labels: [],
+                        datasets: [
+                            {
+                                label: 'Commandes',
+                                data: [],
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderWidth: 1,
+                            },
+                        ],
                     },
                     options: {
                         responsive: true,
@@ -281,18 +277,18 @@
                             x: {
                                 title: {
                                     display: true,
-                                    text: 'Période'
-                                }
+                                    text: 'Période',
+                                },
                             },
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'Nombre de commandes'
+                                    text: 'Nombre de commandes',
                                 },
-                                beginAtZero: true
-                            }
-                        }
-                    }
+                                beginAtZero: true,
+                            },
+                        },
+                    },
                 });
 
                 // MAJ des données du graphe
@@ -302,24 +298,23 @@
 
                     switch (timePeriod) {
                         case 'year':
-                            data = commandesAnnee.map(item => item.count);
-                            labels = commandesAnnee.map(item => `Mois ${item.month}`);
+                            data = commandesAnnee.map((item) => item.count);
+                            labels = commandesAnnee.map((item) => `Mois ${item.month}`);
                             break;
                         case 'month':
-                            data = commandesMois.map(item => item.count);
-                            labels = commandesMois.map(item => `Jour ${item.day}`);
+                            data = commandesMois.map((item) => item.count);
+                            labels = commandesMois.map((item) => `Jour ${item.day}`);
                             break;
                         case 'week':
-                            data = commandesSemaine.map(item => item.count);
-                            labels = commandesSemaine.map(item => `Jour ${item.day}`);
+                            data = commandesSemaine.map((item) => item.count);
+                            labels = commandesSemaine.map((item) => `Jour ${item.day}`);
                             break;
                         case 'day':
-                            data = commandesJour.map(item => item.count);
-                            labels = commandesJour.map(item => `${item.hour}h`);
+                            data = commandesJour.map((item) => item.count);
+                            labels = commandesJour.map((item) => `${item.hour}h`);
                             break;
                     }
 
-                    
                     commandesChart.data.labels = labels;
                     commandesChart.data.datasets[0].data = data;
                     commandesChart.update();
@@ -333,7 +328,6 @@
                     updateChart(this.value);
                 });
             });
-
         </script>
     </body>
 </html>

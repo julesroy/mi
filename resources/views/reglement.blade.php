@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
-        @include('head')
+        @include("head")
         <title>Réglement</title>
     </head>
 
     <body class="bg-white pt-28 md:pt-60">
-        @include('header')
+        @include("header")
         <div class="max-w-6xl mx-auto px-6 sm:px-8 md:px-10 py-6 border-2 border-black rounded-lg bg-white shadow-lg mb-20">
-
             <h1 class="my-8 text-center text-4xl font-bold">Charte d’Utilisation de la Maison ISEN</h1>
             <div class="mx-auto w-auto h-0.5 bg-black"></div>
             <div class="my-8">
@@ -62,6 +61,6 @@
                 </p>
             </div>
         </div>
-        @include('footer')
+        @include("footer")
     </body>
 </html>
