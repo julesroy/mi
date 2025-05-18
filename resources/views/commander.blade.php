@@ -43,6 +43,8 @@
             const snacks = @json($snacks);
             const ingredients = @json($ingredients);
 
+            console.log(plats);
+
             let currentMenu = null;
             let currentStep = 0;
             let platsIndexes = [];
@@ -165,7 +167,7 @@
                 el.classList.toggle('selected');
             }
 
-            function savePlatALaCarte(id) {
+            function savePlatALaCarte(index) {
                 const selected = Array.from(document.querySelectorAll('.selectable.selected')).map((el) => el.dataset.id);
 
                 if (selected.length === 0) {
@@ -173,7 +175,17 @@
                     return;
                 }
 
-                commande.push({ plats: [{ idElement: id, ingredients: selected }], snacks: [] });
+                const plat = plats.find((p) => p.idElement == index);
+                const platComplet = {
+                    ...plat,
+                    ingredients: selected,
+                };
+
+                commande.push({
+                    plats: [platComplet],
+                    snacks: [],
+                });
+
                 renderPanier();
             }
 
@@ -230,7 +242,7 @@
                 container.innerHTML = html;
             }
 
-            function savePlat(id) {
+            function savePlat(index) {
                 const selected = Array.from(document.querySelectorAll('.selectable.selected')).map((el) => el.dataset.id);
 
                 if (selected.length === 0) {
@@ -238,8 +250,16 @@
                     return;
                 }
 
-                selectedPlats.push({ idElement: id, ingredients: selected });
-                selectedPlatId = null;
+                const plat = plats.find((p) => p.idElement == index);
+                const platComplet = {
+                    ...plat,
+                    ingredients: selected,
+                };
+
+                console.log(plats[index]);
+
+                selectedPlats.push(platComplet);
+                selectedPlatIndex = null;
                 currentStep++;
 
                 if (currentStep < platsIndexes.length) {
@@ -284,7 +304,11 @@
                 let html = `<h2 class="text-xl font-bold mb-4">Panier</h2>`;
 
                 if (selectedPlats.length || selectedSnacks.length) {
-                    commande.push({ plats: selectedPlats, snacks: selectedSnacks });
+                    commande.push({
+                        idMenu: currentMenu ? currentMenu.idMenu : null,
+                        plats: selectedPlats,
+                        snacks: selectedSnacks,
+                    });
                     selectedPlats = [];
                     selectedSnacks = [];
                 }
@@ -295,15 +319,21 @@
 
                 commande.forEach((cmd, cmdIndex) => {
                     html += `<div class="mb-4 p-4 rounded bg-[#2a2a2a]">
-                        <h3 class="text-lg font-semibold flex justify-between items-center">
-                            Commande ${cmdIndex + 1}
-                            <button onclick="deleteCommande(${cmdIndex})" class="text-red-400 hover:text-red-600">Supprimer</button>
-                        </h3>`;
+                    <h3 class="text-lg font-semibold flex justify-between items-center">
+                        Commande ${cmdIndex + 1}
+                        <button onclick="deleteCommande(${cmdIndex})" class="text-red-400 hover:text-red-600">Supprimer</button>
+                    </h3>`;
 
-                    cmd.plats.forEach((platObj) => {
-                        const plat = plats.find((p) => p.idElement == platObj.idElement);
+                    if (cmd.idMenu) {
+                        const menu = menus.find((m) => m.idMenu === cmd.idMenu);
+                        if (menu) {
+                            html += `<div class="mb-2 text-sm italic text-gray-400">Menu : ${menu.nom}</div>`;
+                        }
+                    }
+
+                    cmd.plats.forEach((plat) => {
                         html += `<div><strong>${plat.nom}</strong> avec :`;
-                        const nomsIngredients = platObj.ingredients.map((id) => {
+                        const nomsIngredients = plat.ingredients.map((id) => {
                             const ingredient = ingredients.find((ing) => ing.idIngredient == id);
                             return ingredient ? ingredient.nom : '?';
                         });
@@ -318,13 +348,13 @@
                 });
 
                 html += `<div class="mt-6 flex gap-4 justify-center">
-                    <button onclick="startCommande()" class="btn-main">Ajouter une commande</button>
-                    <button onclick="submitCommande()" class="btn-main">Valider la commande</button>
-                </div>`;
+                <button onclick="startCommande()" class="btn-main">Ajouter une commande</button>
+                <button onclick="submitCommande()" class="btn-main">Valider la commande</button>
+            </div>`;
 
                 container.innerHTML = html;
 
-                console.log('Commande finale :', commande);
+                console.log(commande);
             }
 
             function goBackStep() {
@@ -341,7 +371,11 @@
 
             function submitCommande() {
                 if (selectedPlats.length || selectedSnacks.length) {
-                    commande.push({ plats: selectedPlats, snacks: selectedSnacks });
+                    commande.push({
+                        idMenu: currentMenu ? currentMenu.idMenu : null,
+                        plats: selectedPlats,
+                        snacks: selectedSnacks,
+                    });
                     selectedPlats = [];
                     selectedSnacks = [];
                 }
