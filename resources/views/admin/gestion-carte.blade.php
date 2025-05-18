@@ -402,66 +402,60 @@
                             });
             });
         </script>
-    
-<!-- Champ caché pour stocker la composition -->
-<input type="hidden" name="compositionFinale" id="compositionFinale" />
 
-<!-- Boutons pour générer et ajouter -->
-<div class="mt-4 space-x-2">
-    <button type="button" id="generer-composition" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-        Générer la composition
-    </button>
-    <button type="button" id="ajouter-composition" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-        Ajouter un ingrédient
-    </button>
-</div>
+        <!-- Champ caché pour stocker la composition -->
+        <input type="hidden" name="compositionFinale" id="compositionFinale" />
 
+        <!-- Boutons pour générer et ajouter -->
+        <div class="mt-4 space-x-2">
+            <button type="button" id="generer-composition" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Générer la composition</button>
+            <button type="button" id="ajouter-composition" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Ajouter un ingrédient</button>
+        </div>
 
-<script>
-document.getElementById('generer-composition').addEventListener('click', function () {
-    const groups = document.querySelectorAll('.composition-group');
-    let result = [];
+        <script>
+            document.getElementById('generer-composition').addEventListener('click', function () {
+                const groups = document.querySelectorAll('.composition-group');
+                let result = [];
 
-    groups.forEach(group => {
-        const elementSelect = group.querySelector('select[name="elementCompositionCarte[]"]');
-        const quantiteSelect = group.querySelector('select[name="quantiteElementCompositionCarte[]"]');
-        const choixSelect = group.querySelector('select[name="choixElementCompositionCarte[]"]');
+                groups.forEach((group) => {
+                    const elementSelect = group.querySelector('select[name="elementCompositionCarte[]"]');
+                    const quantiteSelect = group.querySelector('select[name="quantiteElementCompositionCarte[]"]');
+                    const choixSelect = group.querySelector('select[name="choixElementCompositionCarte[]"]');
 
-        const valeurElement = elementSelect.value.split('|')[0];
-        const quantite = quantiteSelect.value;
-        const choix = choixSelect.value;
+                    const valeurElement = elementSelect.value.split('|')[0];
+                    const quantite = quantiteSelect.value;
+                    const choix = choixSelect.value;
 
-        if (valeurElement) {
-            result.push(`${valeurElement},${quantite},${choix}`);
-        }
-    });
+                    if (valeurElement) {
+                        result.push(`${valeurElement},${quantite},${choix}`);
+                    }
+                });
 
-    const finalString = result.join(';');
-    document.getElementById('compositionFinale').value = finalString;
-    console.log("Composition générée :", finalString);
-});
+                const finalString = result.join(';');
+                document.getElementById('compositionFinale').value = finalString;
+                console.log('Composition générée :', finalString);
+            });
 
-document.getElementById('ajouter-composition').addEventListener('click', function () {
-    const container = document.querySelector('.composition-group').parentNode;
-    const firstGroup = document.querySelector('.composition-group');
-    const clone = firstGroup.cloneNode(true);
+            document.getElementById('ajouter-composition').addEventListener('click', function () {
+                const container = document.querySelector('.composition-group').parentNode;
+                const firstGroup = document.querySelector('.composition-group');
+                const clone = firstGroup.cloneNode(true);
 
-    clone.querySelector('select[name="elementCompositionCarte[]"]').selectedIndex = 0;
-    clone.querySelector('select[name="quantiteElementCompositionCarte[]"]').selectedIndex = 0;
-    clone.querySelector('select[name="choixElementCompositionCarte[]"]').selectedIndex = 0;
+                clone.querySelector('select[name="elementCompositionCarte[]"]').selectedIndex = 0;
+                clone.querySelector('select[name="quantiteElementCompositionCarte[]"]').selectedIndex = 0;
+                clone.querySelector('select[name="choixElementCompositionCarte[]"]').selectedIndex = 0;
 
-    container.appendChild(clone);
-});
+                container.appendChild(clone);
+            });
 
-document.addEventListener('click', function (e) {
-    if (e.target.classList.contains('remove-group')) {
-        const group = e.target.closest('.composition-group');
-        if (document.querySelectorAll('.composition-group').length > 1) {
-            group.remove();
-        }
-    }
-});
-</script>
-
-</body>
+            document.addEventListener('click', function (e) {
+                if (e.target.classList.contains('remove-group')) {
+                    const group = e.target.closest('.composition-group');
+                    if (document.querySelectorAll('.composition-group').length > 1) {
+                        group.remove();
+                    }
+                }
+            });
+        </script>
+    </body>
 </html>
