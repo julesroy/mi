@@ -4,6 +4,7 @@ use App\Http\Controllers\GestionComptesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ActuController;
+use App\Http\Controllers\CompteController;
 use App\Http\Controllers\PlanningController;
 use App\Http\Controllers\PriseCommandeController;
 use App\Http\Controllers\CommandeCuisineController;
@@ -35,9 +36,8 @@ Route::post('/inscription', [AuthController::class, 'inscrire'])->middleware('me
 Route::get('/deconnexion', [AuthController::class, 'deconnecter']);
 
 // page compte
-Route::get('/compte', function () {
-    return view('compte');
-});
+Route::get('/compte', [CompteController::class, 'show'])->name('compte')->middleware('auth');
+
 
 // page commander
 Route::get('/commander', [CommandeUtilisateurController::class, 'index']);

@@ -1,87 +1,205 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        @include('head')
-        <title>Compte</title>
-    </head>
+<head>
+    @include('head')
+    <title>Profil</title>
+    <style>
+        .transition-max-height {
+            transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
+            overflow: hidden;
+            max-height: 0;
+        }
+        .expanded {
+            max-height: 300px !important;
+        }
+        .arrow {
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+        .arrow-rotated {
+            transform: rotate(90deg);
+        }
+        html, body {
+            height: 100%;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="bg-white text-white pt-28 md:pt-45 min-h-screen flex flex-col">
+@include('header')
+<main class="flex-1 flex flex-col items-center">
+    <div class="w-full max-w-5xl flex flex-col md:flex-row gap-8 mt-8 px-4">
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
-        @include('header')
-
-        <div class="flex place-self-center relative min-h-full flex-col justify-center px-6 py-6">
-            <!-- div main compte -->
-
-            <div class="flex flex-col border-3 border-y-gray-600 mb-8">
-                <!-- liste des commandes actuelles -->
-                <div class="bg-gray-900">
-                    <p class="text-2xl place-self-center p-1">Vos commandes</p>
+        <!-- Profil décoré -->
+        <div class="flex-1 bg-white text-black rounded-2xl p-6 border-2 border-gray-800 min-w-[350px] max-w-[350px] mx-auto md:mx-0">
+            <!-- Bloc décoration titre -->
+            <div class="flex flex-col items-center mb-2 pb-5">
+                <div class="flex items-center justify-center mb-1">
+                    <!-- Feuille gauche -->
+                    <svg class="w-5 h-5 text-green-600 mx-1" fill="none" viewBox="0 0 24 24">
+                        <ellipse cx="12" cy="12" rx="4" ry="8" transform="rotate(-30 12 12)" fill="currentColor"/>
+                    </svg>
+                    <svg class="w-5 h-5 text-green-600 mx-1" fill="none" viewBox="0 0 24 24">
+                        <ellipse cx="12" cy="12" rx="4" ry="8" transform="rotate(-60 12 12)" fill="currentColor"/>
+                    </svg>
+                    <span class="text-xl font-semibold mx-2">Profil</span>
+                    <svg class="w-5 h-5 text-green-600 mx-1" fill="none" viewBox="0 0 24 24">
+                        <ellipse cx="12" cy="12" rx="4" ry="8" transform="rotate(60 12 12)" fill="currentColor"/>
+                    </svg>
+                    <svg class="w-5 h-5 text-green-600 mx-1" fill="none" viewBox="0 0 24 24">
+                        <ellipse cx="12" cy="12" rx="4" ry="8" transform="rotate(30 12 12)" fill="currentColor"/>
+                    </svg>
                 </div>
-
-                <div class="flex flex-col bg-gray-800 p-2">
-                    <p>...</p>
-                    <p>...</p>
-                </div>
+                <!-- Trait décoratif sous le titre -->
+                <div class="border-t-2 border-gray-400 w-3/4 mx-auto mt-2"></div>
             </div>
-
-            <div class="flex flex-col border-3 border-y-gray-600">
-                <!-- Données de compte -->
-
-                <div class="bg-gray-900">
-                    <!-- Titre -->
-                    <p class="text-2xl place-self-center p-1">Vos données</p>
-                </div>
-
-                <div class="flex flex-col bg-gray-800 p-2">
-                    <!-- Données -->
-                    <div class="flex flex-row">
-                        <!-- Nom -->
-                        <p class="font-bold pr-3">Nom :</p>
-                        <p>{{ $donneesUtilisateur->nom }}</p>
-                    </div>
-
-                    <div class="flex flex-row">
-                        <!-- Prenom -->
-                        <p class="font-bold pr-3">Prenom :</p>
-                        <p>{{ $donneesUtilisateur->prenom }}</p>
-                    </div>
-
-                    <div class="flex flex-row">
-                        <!-- Adresse mail -->
-                        <p class="font-bold pr-3">Adresse mail :</p>
-                        <p>{{ $donneesUtilisateur->email }}</p>
-                    </div>
-
-                    <div class="flex flex-row">
-                        <!-- Numéro compte (identifiant) -->
-                        <p class="font-bold pr-3">Numéro de compte :</p>
-                        <p>{{ $donneesUtilisateur->numeroCompte }}</p>
-                    </div>
-
-                    <div class="flex flex-row">
-                        <!-- Nombre de commande passé -->
-                        <p class="font-bold pr-3">Nombre de commandes passées :</p>
-                        <p>...</p>
-                    </div>
-                </div>
+            <div class="mb-5 pb-5">
+                <div class="mb-5"><span class="font-semibold">Nom :</span> {{ $user->nom }}</div>
+                <div class="mb-5"><span class="font-semibold">Prénom :</span> {{ $user->prenom }}</div>
+                <div class="mb-5"><span class="font-semibold">Email :</span> {{ $user->email }}</div>
+                <div class="mb-5"><span class="font-semibold">Numéro de compte :</span> {{ $user->numeroCompte }}</div>
             </div>
-
-            <div class="flex flex-col justify-center min-h-40 min-w-80">
-                <!-- Changer mot de passe ? & Déconnexion-->
-
-                <div>
-                    <!-- Changer mot de passe ? -->
-                    <button class="bg-gray-800 px-5 py-2 hover:bg-gray-400 hover:cursor-pointer mb-1 min-w-full min-h-full">Changer votre mot de passe</button>
-                </div>
-
-                <div>
-                    <!-- Déconnexion -->
-                    <button type="submit" class="bg-red-950 px-5 py-2 hover:bg-red-900 hover:cursor-pointer mt-1 min-w-full min-h-full">
-                        <a href="/deconnexion">Déconnexion</a>
-                    </button>
-                </div>
+            <hr class="my-2 border-gray-400">
+            <div class="text-center text-lg font-semibold mb-2">
+                Solde : {{ number_format($user->solde, 2, ',', ' ') }} €
+            </div>
+            <div class="text-xs text-center text-gray-700">
+                Rends toi au comptoir pour recharger ton compte.
             </div>
         </div>
 
-        @include('footer')
-    </body>
+        <!-- Historique des transactions -->
+        <div class="flex-1 bg-white text-black rounded-2xl p-6 border-2 border-gray-800 min-w-[340px]">
+            <div class="flex flex-col items-center mb-2">
+                <span class="text-xl font-semibold mb-2 border-b-2 border-gray-400 px-4 pb-1">Historique des transactions</span>
+            </div>
+            <div class="overflow-y-auto max-h-[300px]">
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-gray-800">
+                            <th class="py-2 px-3 text-left sticky top-0 z-10 bg-white">Date</th>
+                            <th class="py-2 px-3 text-left sticky top-0 z-10 bg-white">Mode paiement</th>
+                            <th class="hidden md:table-cell py-2 px-3 text-left sticky top-0 z-10 bg-white">N° Commande</th>
+                            <th class="py-2 px-3 text-right sticky top-0 z-10 bg-white">Prix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($paiements as $paiement)
+                        <tr class="bg-primaire hover:bg-secondaire cursor-pointer transition"
+                            onclick="toggleRow('{{ $paiement->idPaiement }}')">
+                            <td class="py-2 px-3 text-white min-w-[130px] rounded-l-2xl">
+                                {{ \Carbon\Carbon::parse($paiement->date)->translatedFormat('l d/m/Y') }}
+                                <span id="arrow-{{ $paiement->idPaiement }}" class="arrow">&#9654;</span>
+                            </td>
+                            <td class="text-white py-2 px-3">
+                                @if($paiement->type == 0) Espèces
+                                @elseif($paiement->type == 1) Carte bancaire
+                                @elseif($paiement->type == 2) Compte
+                                @endif
+                            </td>
+                            <td class="hidden md:table-cell py-2 px-3 text-white">#{{ $paiement->idPaiement }}</td>
+                            <td class="py-2 px-3 text-white text-right rounded-r-2xl">
+                                {{ number_format($paiement->montant, 2, ',', ' ') }}€
+                            </td>
+                        </tr>                    
+                        <tr>
+                            <td colspan="4" style="padding:0;">
+                                <div id="details-{{ $paiement->idPaiement }}" class="transition-max-height bg-gray-200 rounded-2xl"
+                                     style="overflow:hidden;">
+                                    <div class="px-6 py-2 text-black">
+                                        @php
+                                            $commandes = $commandesParPaiement[$paiement->idPaiement] ?? [];
+                                        @endphp
+                                        @if(count($commandes))
+                                            <ul class="list-disc pl-4">
+                                                @foreach($commandes as $commande)
+                                                    <li class="mb-2">
+                                                        <div>
+                                                            <span class="font-semibold">Articles :</span>
+                                                            <span>
+                                                                @php
+                                                                    $articles = [];
+                                                                    if($commande->stock) {
+                                                                        $stockArr = json_decode($commande->stock, true);
+                                                                        if(is_array($stockArr)) {
+                                                                            foreach($stockArr as $item) {
+                                                                                foreach($item as $idArticle => $quantite) {
+                                                                                    $nomArticle = $articlesMap[$idArticle] ?? 'Article #' . $idArticle;
+                                                                                    $articles[] = $quantite . ' x ' . $nomArticle;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                @endphp
+                                                                {{ implode(', ', $articles) }}
+                                                            </span>
+                                                        </div>
+                                                        @if($commande->commentaire)
+                                                            <div>
+                                                                <span class="font-semibold">Remarque :</span>
+                                                                <span>{{ $commande->commentaire }}</span>
+                                                            </div>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            <div class="text-gray-600 text-sm">Aucune commande associée à ce paiement.</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        @if(!$loop->last)
+                            <tr><td colspan="4" style="height:8px; padding:0; border:none; background:transparent;"></td></tr>
+                        @endif
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>            
+        </div>
+    </div>
+</main>
+
+@include('footer')
+
+<script>
+    let openId = null;
+    function toggleRow(id) {
+        let details = document.getElementById('details-' + id);
+        let arrow = document.getElementById('arrow-' + id);
+        if (!details) return;
+
+        // Si déjà ouvert, on referme et on ne rouvre rien
+        if (details.classList.contains('expanded')) {
+            details.classList.remove('expanded');
+            if (arrow) arrow.classList.remove('arrow-rotated');
+            openId = null;
+            return;
+        }
+
+        // Sinon, on ferme tous les autres puis on ouvre celui-ci
+        document.querySelectorAll('.transition-max-height.expanded').forEach(function(el) {
+            el.classList.remove('expanded');
+        });
+        document.querySelectorAll('.arrow.arrow-rotated').forEach(function(el) {
+            el.classList.remove('arrow-rotated');
+        });
+
+        details.classList.add('expanded');
+        if (arrow) arrow.classList.add('arrow-rotated');
+        openId = id;
+    }
+</script>
+</body>
 </html>
