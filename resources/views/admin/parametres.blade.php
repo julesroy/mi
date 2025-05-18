@@ -9,7 +9,7 @@
     <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
         @include('header')
 
-        <div class="flex flex-col items-center gap-10 bg-[#1a1a1a] p-6 rounded-2xl w-[90%] max-w-4xl mx-auto">
+        <section class="flex flex-col items-center gap-10 bg-[#1a1a1a] p-6 rounded-2xl w-[90%] max-w-4xl mx-auto">
             <h1 class="text-4xl font-bold text-center">Paramètres</h1>
 
             @if(session('success'))
@@ -19,7 +19,7 @@
             @endif
 
             <!-- Section Options Générales -->
-            <div x-data="options()" class="w-full bg-white rounded-xl shadow p-6">
+            <section x-data="options()" class="w-full bg-white rounded-xl shadow p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Options générales</h2>
                 <div class="flex flex-col gap-4 mb-6">
                     <!-- Mode événement -->
@@ -53,10 +53,10 @@
                     class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-green-700">
                     Confirmer les modifications
                 </button>
-            </div>
+            </section>
 
             <!-- Section Changer le logo -->
-            <div class="w-full bg-white rounded-xl shadow p-6">
+            <section class="w-full bg-white rounded-xl shadow p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Changer le logo</h2>
                 <div class="flex flex-col gap-4">
                     <label class="block">
@@ -67,10 +67,10 @@
                         Enregistrer le logo
                     </button>
                 </div>
-            </div>
+            </section>
 
             <!-- Section Modifier le titre -->
-            <div class="w-full bg-white rounded-xl shadow p-6">
+            <section class="w-full bg-white rounded-xl shadow p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Modifier le titre du site</h2>
                 <div class="flex flex-col gap-4">
                     <label class="block">
@@ -78,12 +78,12 @@
                         <input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-red-800 mt-2" placeholder="Entrez le nouveau titre">
                     </label>
                 </div>
-            </div>
-        </div>
+            </section>
+        </section>
 
         @include('footer')
 
-        <!-- Script Alpine.js -->
+        <!-- Script pour la mémorisation des états des boutons -->
         <script>
             function options() {
                 return {

@@ -228,7 +228,7 @@
                         <option value="day">Aujourd'hui</option>
                     </select>
                 </div>
-                <!-- Chart container -->
+                <!-- Graphe -->
                 <canvas id="commandesChart" class="w-full max-w-4xl mx-auto"></canvas>
             </section>
         </div>
@@ -262,14 +262,14 @@
                 const ctx = document.getElementById('commandesChart').getContext('2d');
                 const timePeriodSelect = document.getElementById('timePeriod');
 
-                // Initialize the chart
+                
                 let commandesChart = new Chart(ctx, {
-                    type: 'line', // You can change this to 'bar', 'pie', etc.
+                    type: 'line', 
                     data: {
-                        labels: [], // Labels will be dynamically updated
+                        labels: [], 
                         datasets: [{
                             label: 'Commandes',
-                            data: [], // Data will be dynamically updated
+                            data: [], 
                             borderColor: 'rgba(75, 192, 192, 1)',
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             borderWidth: 1
@@ -295,7 +295,7 @@
                     }
                 });
 
-                // Function to update chart data
+                // MAJ des données du graphe
                 function updateChart(timePeriod) {
                     let data = [];
                     let labels = [];
@@ -319,16 +319,16 @@
                             break;
                     }
 
-                    // Update chart data
+                    
                     commandesChart.data.labels = labels;
                     commandesChart.data.datasets[0].data = data;
                     commandesChart.update();
                 }
 
-                // Initial chart load
+                // Chargement initial du graphe
                 updateChart(timePeriodSelect.value);
 
-                // Update chart when the time period changes
+                // MAJ de la période de temps
                 timePeriodSelect.addEventListener('change', function () {
                     updateChart(this.value);
                 });
