@@ -34,24 +34,26 @@
 
         <style>
             .etat-0 {
-                background-color: rgba(251,44,54,0.4);
+                background-color: rgba(251,44,54,1);
                 color: black;
             }
             .etat-1 {
-                background-color: rgba(152,16,250,0.4);
+                background-color: rgba(152,16,250,1);
                 color: black;
             }
             .etat-2 {
-                background-color: rgba(255,105,0,0.4);
+                background-color: rgba(255,105,0,1);
                 color: black;
             }
             .etat-3 {
-                background-color: rgba(0,166,62,0.4);
+                background-color: rgba(0,166,62,1);
                 color: black;
             }
             .etat-4 {
-                background-color: rgba(231,0,11,0.4);
-                color: red;
+                background-color: rgba(231,0,11,0.7);
+                color: black;
+                text-decoration: underline;
+                font-weight: bold;
             }
             .commande-card {
                 transition: all 0.3s ease;
@@ -159,7 +161,7 @@
                             <div class="bg-neutral-200 rounded-[13px] overflow-hidden shadow-lg border border-black commande-card ${isTest ? 'commande-test' : ''}">
                                 <div class="p-5 bg-neutral-400 border-b border-black flex justify-between items-center">
                                     <span class="font-bold text-xl">${commande.numeroCommande}</span>
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold etat-${commande.etat}">${getEtatText(commande.etat)}</span>
+                                    <span class="px-3 py-1 rounded-full text-md font-medium etat-${commande.etat}">${getEtatText(commande.etat)}</span>
                                 </div>
 
                                 <div class="p-5">
