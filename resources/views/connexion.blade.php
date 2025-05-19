@@ -40,7 +40,7 @@
                         <label for="email" class="block text-xl text-black font-medium">Email</label>
                         <div class="mt-1">
                             <input type="email" name="email" id="email" autocomplete="email" required 
-                                   class="input-field w-full rounded-[13px] px-3 py-2 border-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2" />
+                                   class="input-field w-full rounded-[13px] px-3 py-2 border-2 text-black placeholder-gray-500 focus:ring-secondaire focus:ring-2" />
                         </div>
                     </div>
 
@@ -56,13 +56,13 @@
                         </div>
                         <div class="mt-1">
                             <input type="password" name="mdp" id="mdp" required 
-                                   class="input-field w-full rounded-[13px] border-2 px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2" />
+                                   class="input-field w-full rounded-[13px] border-2 px-3 py-2 text-black placeholder-gray-500 focus:ring-secondaire focus:ring-2" />
                         </div>
                     </div>
 
                     <div>
                         <button type="submit" 
-                                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-[100px] shadow-sm text-2xl font-medium text-white bg-secondaire focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-[100px] shadow-sm text-2xl font-medium text-black bg-secondaire focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondaire">
                             Connexion
                         </button>
                     </div>
@@ -72,7 +72,7 @@
         </div>
         <div class="mt-1 text-center text-base pb-39 pt-0.5">
             <span class="text-black">Pas de compte ?</span>
-            <a href="/inscription" class="ml-1 font-medium  text-black underline">Inscription</a>
+            <a href="/inscription" class="ml-1 font-medium  hover:text-secondaire text-black underline">Inscription</a>
         </div>
 
         <!-- Dialog Mot de passe oublié -->

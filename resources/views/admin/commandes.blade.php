@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}" />
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
+    <body class="bg-white text-black pt-28 md:pt-60">
         @include("header")
 
         <main class="container mx-auto px-4 py-8">
@@ -14,17 +14,17 @@
 
             <!-- Barre de filtrage -->
             <div class="flex flex-wrap gap-2 mb-6 justify-center">
-                <button onclick="filterCommandes('all')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">Toutes</button>
-                <button onclick="filterCommandes(0)" class="px-4 py-2 bg-red-700 hover:bg-red-600 rounded-lg transition-colors">Non payées</button>
-                <button onclick="filterCommandes(1)" class="px-4 py-2 bg-yellow-700 hover:bg-yellow-600 rounded-lg transition-colors">Payées</button>
-                <button onclick="filterCommandes(2)" class="px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg transition-colors">Prêtes</button>
-                <button onclick="filterCommandes(3)" class="px-4 py-2 bg-green-700 hover:bg-green-600 rounded-lg transition-colors">Servies</button>
-                <button onclick="filterCommandes(4)" class="px-4 py-2 bg-gray-500 hover:bg-gray-400 rounded-lg transition-colors">Annulées</button>
+                <button onclick="filterCommandes('all')" class="px-4 py-2 bg-gray-400 hover:bg-gray-500 rounded-lg transition-colors">Toutes</button>
+                <button onclick="filterCommandes(0)" class="px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg transition-colors">Non payées</button>
+                <button onclick="filterCommandes(1)" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">Payées</button>
+                <button onclick="filterCommandes(2)" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 rounded-lg transition-colors">Prêtes</button>
+                <button onclick="filterCommandes(3)" class="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg transition-colors">Servies</button>
+                <button onclick="filterCommandes(4)" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors">Annulées</button>
             </div>
 
             <div id="commandesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="text-center py-10">
-                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 mx-auto"></div>
                     <p class="mt-4">Chargement des commandes...</p>
                 </div>
             </div>
@@ -34,24 +34,24 @@
 
         <style>
             .etat-0 {
-                background-color: rgba(192, 57, 43, 0.2);
-                color: #e74c3c;
+                background-color: rgba(251,44,54,0.4);
+                color: black;
             }
             .etat-1 {
-                background-color: rgba(243, 156, 18, 0.2);
-                color: #f39c12;
+                background-color: rgba(152,16,250,0.4);
+                color: black;
             }
             .etat-2 {
-                background-color: rgba(41, 128, 185, 0.2);
-                color: #3498db;
+                background-color: rgba(255,105,0,0.4);
+                color: black;
             }
             .etat-3 {
-                background-color: rgba(39, 174, 96, 0.2);
-                color: #2ecc71;
+                background-color: rgba(0,166,62,0.4);
+                color: black;
             }
             .etat-4 {
-                background-color: rgba(127, 140, 141, 0.2);
-                color: #95a5a6;
+                background-color: rgba(231,0,11,0.4);
+                color: red;
             }
             .commande-card {
                 transition: all 0.3s ease;
@@ -156,40 +156,40 @@
                         const isTest = commande.idCommande === 999 || commande.numeroCommande === 'CMD-TEST';
 
                         html += `
-                            <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg border border-gray-700 commande-card ${isTest ? 'commande-test' : ''}">
-                                <div class="p-5 border-b border-gray-700 flex justify-between items-center">
+                            <div class="bg-neutral-200 rounded-[13px] overflow-hidden shadow-lg border border-black commande-card ${isTest ? 'commande-test' : ''}">
+                                <div class="p-5 bg-neutral-400 border-b border-black flex justify-between items-center">
                                     <span class="font-bold text-xl">${commande.numeroCommande}</span>
                                     <span class="px-3 py-1 rounded-full text-xs font-bold etat-${commande.etat}">${getEtatText(commande.etat)}</span>
                                 </div>
 
                                 <div class="p-5">
                                     <div class="mb-3">
-                                        <span class="text-gray-400 font-medium">Client:</span>
+                                        <span class="font-medium">Client:</span>
                                         <span class="ml-2">${commande.prenomClient || ''} ${commande.nomClient || 'Non spécifié'}</span>
                                     </div>
 
                                     <div class="mb-3">
-                                        <span class="text-gray-400 font-medium">Type:</span>
+                                        <span class="font-medium">Type:</span>
                                         <span class="ml-2">${getTypeText(commande.categorieCommande)}</span>
                                     </div>
 
                                     <div class="mb-3">
-                                        <span class="text-gray-400 font-medium">Prix:</span>
+                                        <span class="font-medium">Prix:</span>
                                         <span class="ml-2">${parseFloat(commande.prix).toFixed(2)} €</span>
                                     </div>
 
                                     <div class="mb-3">
-                                        <span class="text-gray-400 font-medium">Heure:</span>
+                                        <span class="font-medium">Heure:</span>
                                         <span class="ml-2">${formatDate(commande.date)}</span>
                                     </div>
 
-                                    <div class="bg-gray-700 p-3 rounded-lg mb-4 ${isTest ? 'text-yellow-400' : 'text-gray-400'}">
+                                    <div class="bg-neutral-400 p-3 rounded-lg mb-4 ${isTest ? 'text-red-300' : 'text-black'}">
                                         <p class="italic">${commande.commentaire || 'Pas de commentaire'}</p>
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-2">
                                         <button onclick="marquerPrete(${commande.idCommande})"
-                                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
+                                            class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
                                             ${isTest ? 'disabled' : ''}>
                                             Prête
                                         </button>
@@ -198,15 +198,20 @@
                                             ${isTest ? 'disabled' : ''}>
                                             Servie
                                         </button>
-                                        <button onclick="modifierCommande(${commande.idCommande})"
-                                            class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
+                                        <button onclick="marquerPayee(${commande.idCommande})"
+                                            class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
                                             ${isTest ? 'disabled' : ''}>
-                                            Modifier
+                                            Payée
                                         </button>
                                         <button onclick="annulerCommande(${commande.idCommande})"
                                             class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
                                             ${isTest ? 'disabled' : ''}>
                                             Annuler
+                                        </button>
+                                        <button onclick="modifierCommande(${commande.idCommande})"
+                                            class="col-span-2 bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-2 rounded-lg transition-colors text-sm ${isTest ? 'disabled-btn' : ''}"
+                                            ${isTest ? 'disabled' : ''}>
+                                            Modifier
                                         </button>
                                     </div>
                                 </div>
@@ -266,6 +271,32 @@
                     }
 
                     fetch(`/admin/commandes/commande-donnee/${id}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            Accept: 'application/json',
+                        },
+                    })
+                        .then((response) => {
+                            if (response.ok) {
+                                loadCommandes();
+                            } else {
+                                throw new Error('Échec de la mise à jour');
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Erreur:', error);
+                            alert('Erreur lors de la mise à jour: ' + error.message);
+                        });
+                };
+
+                window.marquerPayee = function (id) {
+                    if (id === 999999) {
+                        alert('Cette commande est un exemple test - Action impossible');
+                        return;
+                    }
+
+                    fetch(`/admin/commandes/commande-payee/${id}`, {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': csrfToken,
