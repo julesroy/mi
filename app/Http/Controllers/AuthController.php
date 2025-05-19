@@ -114,6 +114,6 @@ class AuthController extends Controller
         Cookie::queue(Cookie::forget('idUtilisateur'));
         Cookie::queue(Cookie::forget('emailUtilisateur'));
 
-        return redirect('/connexion');
+        return redirect('/');
     }
 }

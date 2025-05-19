@@ -15,14 +15,17 @@ use App\Http\Controllers\CarteController;
 use App\Http\Controllers\CommandeUtilisateurController;
 use App\Http\Controllers\TresorerieController;
 use App\Http\Controllers\AffichageCuisineController;
+use App\Http\Controllers\AccueilController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
-// accueil
-Route::get('/', function () {
-    return view('accueil');
-});
+
+
+//accueil
+Route::get('/', [AccueilController::class, 'afficher'])
+->name('accueil');
+
 
 // connexion
 Route::get('/connexion', [AuthController::class, 'afficherFormulaireConnexion'])->middleware('guest')->name('connexion');
@@ -108,8 +111,8 @@ Route::prefix('admin')->group(function () {
     // page de gestion de la carte
     Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
         ->middleware('can:verifier-acces-serveur');
-    Route::post('/carte/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
-    Route::post('/admin/carte/modifier/{id}', [CarteController::class, 'modifier'])->name('carte.modifier');
+    Route::post('/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
+    Route::post('/modifier', [CarteController::class, 'modifier'])->name('carte.modifier');
 
     // page Salle et sécurité
     Route::prefix('/salle-securite')->group(function () {

@@ -1,324 +1,397 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
     <head>
         <meta name="csrf-token" content="{{ csrf_token() }}" />
-        @include('head')
+        @include("head")
         <title>Commander</title>
-        <link rel="stylesheet" href="{{ asset('css/dialog.css') }}" />
+        <link rel="stylesheet" href="{{ asset("css/dialog.css") }}" />
+        <style>
+            .selectable {
+                border: 2px solid black;
+                border-radius: 0.5rem;
+                padding: 0.5rem;
+                cursor: pointer;
+                transition: border-color 0.2s;
+            }
+
+            .selectable:hover {
+                border-color: #539d35;
+                background-color: #539d35;
+                color: white;
+            }
+
+            .selectable.selected {
+                border-color: #539d35;
+                background-color: #539d35;
+                color: white;
+            }
+        </style>
     </head>
+    <body class="pt-28 md:pt-60">
+        @include("header")
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
-        @include('header')
-
-        <div class="flex flex-col items-center gap-6 bg-[#1a1a1a] p-6 rounded-2xl w-[90%] max-w-xl mx-auto">
-            <!-- Écran de base -->
-            <div id="ecran-base" class="flex flex-col items-center gap-10">
-                <h1 class="text-2xl font-semibold">Fais ton choix</h1>
-                <button id="btn-menus" class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Menus</button>
-            </div>
-
-            <!-- Écran des menus -->
-            <div id="ecran-menus" class="hidden flex flex-col items-center gap-10">
-                <h1 class="text-2xl font-semibold">Choisis un menu</h1>
-                @foreach ($menus as $menu)
-                    @php
-                        $elements = json_decode($menu->ingredientsElements)->elements;
-                    @endphp
-
-                    <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $menu->nom }}" data-config='@json($elements)' data-id="{{ $menu->idElement }}" data-prix="{{ $menu->prix }}">
-                        {{ $menu->nom }}
-                    </button>
-                @endforeach
-
-                <button id="btn-retour" class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Retour</button>
-            </div>
-
-            <!-- Écran des plats -->
-            <div id="ecran-plats" class="hidden flex flex-col items-center gap-10">
-                <h1 class="text-2xl font-semibold">Choisis un plat</h1>
-                @foreach ($plats as $plat)
-                    <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $plat->nom }}" data-prix="{{ $plat->prix }}" data-id="{{ $plat->idElement }}" data-ingredients='{!! $plat->ingredientsElements !!}'>{{ $plat->nom }}</button>
-                @endforeach
-
-                <button id="btn-retour-menus" class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Retour</button>
-            </div>
-
-            <!-- Écran des ingrédients -->
-            <div id="ecran-ingredients" class="hidden flex-col items-center gap-10">
-                <h1 class="text-2xl font-semibold">Compose ton plat</h1>
-                <h4>Viandes</h4>
-                <div class="grid grid-cols-4" id="liste-viandes">
-                    @foreach ($viandes as $viande)
-                        <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $viande->nom }}" data-id="{{ $viande->idIngredient }}">
-                            {{ $viande->nom }}
-                        </button>
-                    @endforeach
-                </div>
-
-                <h4>Ingrédients</h4>
-                <div class="grid grid-cols-4" id="liste-ingredients">
-                    @foreach ($ingredients as $ingredient)
-                        <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $ingredient->nom }}" data-id="{{ $ingredient->idIngredient }}">
-                            {{ $ingredient->nom }}
-                        </button>
-                    @endforeach
-                </div>
-                <button id="btn-valider-ingredients" class="bg-green-600 text-white px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Valider</button>
-                <button id="btn-retour-plats" class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Retour</button>
-            </div>
-
-            <!-- Écran des snacks -->
-            <div id="ecran-snacks" class="hidden flex-col items-center gap-10">
-                <h1 class="text-2xl font-semibold">Choisis tes snacks (2 max)</h1>
-                <div class="grid grid-cols-4" id="liste-snacks">
-                    @foreach ($snacks as $snack)
-                        <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $snack->nom }}" data-id="{{ $snack->idElement }}">
-                            {{ $snack->nom }}
-                        </button>
-                    @endforeach
-
-                    @foreach ($boissons as $boisson)
-                        <button class="bg-white text-black px-6 py-3 rounded-2xl shadow hover:scale-105 transition" data-nom="{{ $boisson->nom }}" data-id="{{ $boisson->idElement }}">
-                            {{ $boisson->nom }}
-                        </button>
-                    @endforeach
-                </div>
-                <button id="btn-valider-snacks" class="bg-green-600 text-white px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Valider</button>
-            </div>
-
-            <!-- Écran du panier -->
-            <div id="ecran-panier" class="hidden flex-col items-center gap-6">
-                <h1 class="text-2xl font-semibold">Ton panier</h1>
-                <div id="recap-panier" class="text-white"></div>
-                <button id="btn-nouvelle-commande" class="bg-cyan-600 text-white px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Commander autre chose</button>
-                <button id="btn-valider-commande" class="bg-green-600 text-white px-6 py-3 rounded-2xl shadow hover:scale-105 transition">Valider la commande</button>
-            </div>
+        <div class="flex flex-col items-center gap-6 p-6 rounded-2xl w-[90%] max-w-xl mx-auto border-2 border-black">
+            <div id="step-content"></div>
+            <div id="carte-button-container" class="mt-6 w-full flex justify-center"></div>
         </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        let configActuelle = [];
-        let etapeIndex = 0;
-        let panier = { commandes: [] };
-        let commandeActuelle = {};
+        <script>
+            const menus = @json($menus);
+            const plats = @json($plats);
+            const snacks = @json($snacks);
+            const ingredients = @json($ingredients);
 
-        const ecrans = {
-            base: document.getElementById('ecran-base'),
-            menus: document.getElementById('ecran-menus'),
-            plats: document.getElementById('ecran-plats'),
-            ingredients: document.getElementById('ecran-ingredients'),
-            snacks: document.getElementById('ecran-snacks'),
-            panier: document.getElementById('ecran-panier'),
-        };
+            console.log(plats);
 
-        const boutonsMenu = document.querySelectorAll('#ecran-menus button[data-config]');
-        const boutonsPlat = document.querySelectorAll('#ecran-plats button[data-ingredients]');
-        const boutonsViande = document.querySelectorAll('#liste-viandes button');
-        const boutonsIngredient = document.querySelectorAll('#liste-ingredients button');
-        const boutonsSnack = document.querySelectorAll('#liste-snacks button');
+            let currentMenu = null;
+            let currentStep = 0;
+            let platsIndexes = [];
+            let snacksCount = 0;
+            let selectedPlats = [];
+            let selectedSnacks = [];
+            let commande = [];
+            let selectedPlatId = null;
+            let enModePlatALaCarte = false;
 
-        let selectionPlat = null;
-        let selectionViande = null;
-        let selectionIngredient = null;
-        let snacksSelectionnes = [];
+            function startCommande() {
+                enModePlatALaCarte = false;
+                selectedPlats = [];
+                selectedSnacks = [];
+                currentMenu = null;
+                currentStep = 0;
+                platsIndexes = [];
+                snacksCount = 0;
+                selectedPlatId = null;
 
-        function afficherEcran(cle) {
-            Object.values(ecrans).forEach((e) => e.classList.add('hidden'));
-            ecrans[cle].classList.remove('hidden');
-        }
-
-        function suivant() {
-            etapeIndex++;
-            const etape = configActuelle[etapeIndex];
-            if (!etape) {
-                panier.commandes.push({ ...commandeActuelle });
-                afficherPanier();
-                return;
+                renderMenuSelection();
             }
 
-            if (etape.nomIngredient === 'Plat') {
-                afficherEcran('plats');
-            } else if (etape.nomIngredient === 'Snack') {
-                afficherEcran('snacks');
+            function renderMenuSelection() {
+                const container = document.getElementById('step-content');
+                let html = '<h2 class="text-xl font-bold mb-4">Choisissez votre commande</h2><div class="flex flex-col gap-2">';
+                menus.forEach((menu) => {
+                    html += `<button onclick="selectMenu(${menu.idMenu})" class="bg-primaire text-white rounded-2xl h-12 hover:cursor-pointer hover:bg-secondaire">${menu.nom}</button>`;
+                });
+                html += `<button onclick="startPlatALaCarte()" class="bg-primaire text-white rounded-2xl h-12 hover:cursor-pointer hover:bg-secondaire">Plat à la carte</button>`;
+                html += '</div>';
+                container.innerHTML = html;
             }
-        }
 
-        function afficherPanier() {
-            const recap = panier.commandes.map((cmd, i) => {
-                const plats = cmd.plats.map(p => 
-                    `${p.plat} (${p.viande || 'aucune viande'}, ${p.ingredient || 'aucun ingrédient'})`
-                ).join(' / ');
+            function selectMenu(idMenu) {
+                enModePlatALaCarte = false;
+                currentMenu = menus.find((m) => m.idMenu == idMenu);
+                const elements = currentMenu.elementsMenu.split(',');
+                platsIndexes = elements.map((e, i) => (e === '0' ? i : -1)).filter((i) => i !== -1);
+                snacksCount = elements.filter((e) => e === '4').length;
+                currentStep = 0;
+                selectedPlats = [];
+                selectedSnacks = [];
+                renderPlatSelection();
+            }
 
-                const snacks = cmd.snacks.length > 0
-                    ? 'Snacks: ' + cmd.snacks.map(s => `${s.nom} (id ${s.id})`).join(', ')
-                    : '';
+            function startPlatALaCarte() {
+                enModePlatALaCarte = true;
+                selectedPlatId = null;
+                selectedPlats = [];
+                selectedSnacks = [];
+                currentStep = 0;
+                renderPlatSelectionPlatALaCarte();
+            }
 
-                return `Commande ${i + 1} : ${cmd.menu} - ${plats}${snacks ? ' - ' + snacks : ''} - Prix: ${cmd.prix.toFixed(2)}€`;
-            }).join('<br>');
+            function renderPlatSelectionPlatALaCarte() {
+                const container = document.getElementById('step-content');
+                let html = '<h2 class="text-xl font-bold mb-4">Choisissez un plat à la carte</h2><div class="grid grid-cols-3 gap-2">';
+                plats.forEach((plat) => {
+                    html += `<div class="selectable" onclick="selectPlat(${plat.idElement}, this)">${plat.nom}</div>`;
+                });
+                html += '</div><div class="mt-6 flex justify-between">';
+                html += `<button onclick="cancelPlatALaCarte()" class="bg-red-500 text-white  px-4 py-2 rounded-3xl hover:cursor-pointer">Retour</button>`;
+                html += `<button onclick="continuePlatCompositionPlatALaCarte()" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Suivant</button>`;
+                html += '</div>';
+                container.innerHTML = html;
+            }
 
-            document.getElementById('recap-panier').innerHTML = recap;
-            afficherEcran('panier');
-            console.log(panier);
-        }
+            function cancelPlatALaCarte() {
+                enModePlatALaCarte = false;
+                selectedPlatId = null;
+                startCommande();
+            }
 
-        document.getElementById('btn-menus').addEventListener('click', () => afficherEcran('menus'));
-        document.getElementById('btn-retour').addEventListener('click', () => afficherEcran('base'));
-        document.getElementById('btn-retour-menus').addEventListener('click', () => afficherEcran('menus'));
-        document.getElementById('btn-retour-plats').addEventListener('click', () => afficherEcran('plats'));
+            function continuePlatCompositionPlatALaCarte() {
+                if (selectedPlatId !== null) {
+                    renderPlatCompositionPlatALaCarte(selectedPlatId);
+                } else {
+                    alert('Veuillez choisir un plat.');
+                }
+            }
 
-        document.getElementById('btn-nouvelle-commande').addEventListener('click', () => {
-            commandeActuelle = {};
-            selectionPlat = null;
-            selectionViande = null;
-            selectionIngredient = null;
-            snacksSelectionnes = [];
-            etapeIndex = 0;
-            configActuelle = [];
-            afficherEcran('base');
-        });
+            function selectPlat(id, element) {
+                document.querySelectorAll('.selectable').forEach((el) => el.classList.remove('selected'));
+                element.classList.add('selected');
+                selectedPlatId = id;
+            }
 
-        boutonsMenu.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                let configMenu = JSON.parse(btn.getAttribute('data-config'));
-                configActuelle = [];
-                configMenu.forEach((e) => {
-                    for (let i = 0; i < e.quantite; i++) {
-                        configActuelle.push({ 'nomIngredient': e.nomIngredient });
+            function renderPlatCompositionPlatALaCarte(id) {
+                const container = document.getElementById('step-content');
+                const plat = plats.find((p) => p.idElement == id);
+                const ingredientsPlat = [];
+
+                if (plat.ingredientsElements) {
+                    plat.ingredientsElements.split(';').forEach((item) => {
+                        if (item.trim() === '') return;
+                        const [idIngredient, quantite, choix] = item.split(',');
+                        ingredientsPlat.push({ id: idIngredient, quantite, choix });
+                    });
+                }
+
+                let html = `<h2 class="text-xl font-bold mb-4">Composition : ${plat.nom}</h2><div class="grid grid-cols-3 md:grid-cols-6 gap-2">`;
+
+                ingredientsPlat.forEach((ing) => {
+                    const ingredient = ingredients.find((obj) => obj.idIngredient == ing.id);
+                    if (!ingredient) return;
+
+                    if (ing.choix != 2) {
+                        html += `<div class="selectable" data-id="${ing.id}" onclick="toggleSelection(this, '${ing.id}')">${ingredient.nom}</div>`;
                     }
                 });
-                commandeActuelle = {
-                    menu: btn.getAttribute('data-id'),
-                    prix: parseFloat(btn.getAttribute('data-prix')),
-                    plats: [],
-                    snacks: []
+
+                html += '</div><div class="mt-6 flex justify-between">';
+                html += `<button onclick="renderPlatSelectionPlatALaCarte()" class="bg-red-500 text-white  px-4 py-2 rounded-3xl hover:cursor-pointer">Retour</button>`;
+                html += `<button onclick="savePlatALaCarte(${id})" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Ajouter au panier</button>`;
+                html += '</div>';
+
+                container.innerHTML = html;
+            }
+
+            function toggleSelection(el, id) {
+                el.classList.toggle('selected');
+            }
+
+            function savePlatALaCarte(index) {
+                const selected = Array.from(document.querySelectorAll('.selectable.selected')).map((el) => el.dataset.id);
+
+                if (selected.length === 0) {
+                    alert('Veuillez sélectionner au moins un ingrédient.');
+                    return;
+                }
+
+                const plat = plats.find((p) => p.idElement == index);
+                const platComplet = {
+                    ...plat,
+                    ingredients: selected,
                 };
-                etapeIndex = -1;
-                console.log(configActuelle);
-                suivant();
-            });
-        });
 
-        boutonsPlat.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                selectionPlat = btn.getAttribute('data-id');
-                const data = JSON.parse(btn.getAttribute('data-ingredients'));
-                const ids = data.elements.map((e) => parseInt(e.idIngredient));
-
-                boutonsViande.forEach((b) => {
-                    const id = parseInt(b.getAttribute('data-id'));
-                    b.style.display = ids.includes(id) ? 'block' : 'none';
-                    b.classList.remove('selected', 'ring-2', 'ring-secondaire', 'bg-cyan-600');
+                commande.push({
+                    plats: [platComplet],
+                    snacks: [],
                 });
 
-                boutonsIngredient.forEach((b) => {
-                    const id = parseInt(b.getAttribute('data-id'));
-                    b.style.display = ids.includes(id) ? 'block' : 'none';
-                    b.classList.remove('selected', 'ring-2', 'ring-secondaire', 'bg-cyan-600');
+                renderPanier();
+            }
+
+            function renderPlatSelection() {
+                const container = document.getElementById('step-content');
+                let html = '<h2 class="text-xl font-bold mb-4">Choisissez un plat</h2><div class="grid grid-cols-3 gap-2">';
+                plats.forEach((plat) => {
+                    html += `<div class="selectable" onclick="selectPlat(${plat.idElement}, this)">${plat.nom}</div>`;
                 });
-
-                afficherEcran('ingredients');
-            });
-        });
-
-        boutonsViande.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                if (selectionViande) selectionViande.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600');
-                if (selectionViande === btn) selectionViande = null;
-                else {
-                    selectionViande = btn;
-                    btn.classList.add('ring-2', 'ring-secondaire', 'bg-cyan-600');
+                html += '</div><div class="mt-6 flex justify-between">';
+                if (currentStep > 0) {
+                    html += `<button onclick="goBackStep()" class="bg-red-500 text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Retour</button>`;
                 }
-            });
-        });
+                html += `<button onclick="continuePlatComposition()" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Suivant</button>`;
+                html += '</div>';
+                container.innerHTML = html;
+            }
 
-        boutonsIngredient.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                if (selectionIngredient) selectionIngredient.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600');
-                if (selectionIngredient === btn) selectionIngredient = null;
-                else {
-                    selectionIngredient = btn;
-                    btn.classList.add('ring-2', 'ring-secondaire', 'bg-cyan-600');
+            function continuePlatComposition() {
+                if (selectedPlatId !== null) {
+                    renderPlatComposition(selectedPlatId);
+                } else {
+                    alert('Veuillez choisir un plat.');
                 }
-            });
-        });
+            }
 
-        document.getElementById('btn-valider-ingredients').addEventListener('click', () => {
-            commandeActuelle.plats.push({
-                plat: selectionPlat,
-                viande: selectionViande?.getAttribute('data-id') || '',
-                ingredient: selectionIngredient?.getAttribute('data-id') || ''
-            });
+            function renderPlatComposition(id) {
+                const container = document.getElementById('step-content');
+                const plat = plats.find((p) => p.idElement == id);
+                const ingredientsPlat = [];
 
-            // reset pour l’étape suivante
-            selectionPlat = null;
-            selectionViande = null;
-            selectionIngredient = null;
-
-            // nettoyage visuel
-            boutonsViande.forEach((btn) => btn.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600'));
-            boutonsIngredient.forEach((btn) => btn.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600'));
-
-            suivant();
-        });
-
-
-        boutonsSnack.forEach((btn) => {
-            btn.addEventListener('click', () => {
-                if (snacksSelectionnes.includes(btn)) {
-                    btn.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600');
-                    snacksSelectionnes = snacksSelectionnes.filter((b) => b !== btn);
-                } else if (snacksSelectionnes.length < 2) {
-                    snacksSelectionnes.push(btn);
-                    btn.classList.add('ring-2', 'ring-secondaire', 'bg-cyan-600');
+                if (plat.ingredientsElements) {
+                    plat.ingredientsElements.split(';').forEach((item) => {
+                        if (item.trim() === '') return;
+                        const [idIngredient, quantite, choix] = item.split(',');
+                        ingredientsPlat.push({ id: idIngredient, quantite, choix });
+                    });
                 }
-            });
-        });
 
-        document.getElementById('btn-valider-snacks').addEventListener('click', () => {
-            snacksSelectionnes.forEach((btn) => {
-                commandeActuelle.snacks.push({
-                    id: btn.getAttribute('data-id'),
-                    nom: btn.getAttribute('data-nom')
-                });
-            });
+                let html = `<h2 class="text-xl font-bold mb-4">Composition : ${plat.nom}</h2><div class="grid grid-cols-3 md:grid-cols-6 gap-2">`;
 
-            // Reset
-            snacksSelectionnes = [];
+                ingredientsPlat.forEach((ing) => {
+                    const ingredient = ingredients.find((obj) => obj.idIngredient == ing.id);
+                    if (!ingredient) return;
 
-            // nettoyage visuel
-            boutonsSnack.forEach((btn) => btn.classList.remove('ring-2', 'ring-secondaire', 'bg-cyan-600'));
-
-            // Avancer à l'étape suivante
-            suivant();
-        });
-
-
-        document.getElementById('btn-valider-commande').addEventListener('click', () => {
-            const panierJson = JSON.stringify(panier);
-
-            fetch('/commander/valider', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                },
-                body: panierJson,
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        alert('Commande validée avec succès !');
-                        location.reload();
-                    } else {
-                        alert('Erreur lors de la validation de la commande : ' + data.message);
+                    if (ing.choix != 2) {
+                        html += `<div class="selectable" data-id="${ing.id}" onclick="toggleSelection(this, '${ing.id}')">${ingredient.nom}</div>`;
                     }
-                })
-                .catch((error) => {
-                    console.error("Erreur lors de l'envoi de la commande :", error);
-                    alert('Une erreur est survenue. Veuillez réessayer.');
                 });
-        });
-    });
-</script>
+
+                html += '</div><div class="mt-6 flex justify-between">';
+                html += `<button onclick="renderPlatSelection()" class="bg-red-500 text-white  px-4 py-2 rounded-3xl hover:cursor-pointer">Retour</button>`;
+                html += `<button onclick="savePlat(${id})" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Suivant</button>`;
+                html += '</div>';
+
+                container.innerHTML = html;
+            }
+
+            function savePlat(index) {
+                const selected = Array.from(document.querySelectorAll('.selectable.selected')).map((el) => el.dataset.id);
+
+                if (selected.length === 0) {
+                    alert('Veuillez sélectionner au moins un ingrédient.');
+                    return;
+                }
+
+                const plat = plats.find((p) => p.idElement == index);
+                const platComplet = {
+                    ...plat,
+                    ingredients: selected,
+                };
+
+                console.log(plats[index]);
+
+                selectedPlats.push(platComplet);
+                selectedPlatIndex = null;
+                currentStep++;
+
+                if (currentStep < platsIndexes.length) {
+                    renderPlatSelection();
+                } else if (snacksCount > 0) {
+                    renderSnacks(0);
+                } else {
+                    renderPanier();
+                }
+            }
+
+            function renderSnacks(index) {
+                const container = document.getElementById('step-content');
+                let html = `<h2 class="text-xl font-bold mb-4">Choisissez votre snack/boisson (${index + 1}/${snacksCount})</h2><div class="grid grid-cols-4 md:grid-cols-6 gap-2">`;
+                snacks.forEach((snack, i) => {
+                    html += `<div class="selectable" onclick="selectSnack(${index}, ${i}, this)">${snack.nom}</div>`;
+                });
+                html += '</div>';
+                container.innerHTML = html;
+            }
+
+            function selectSnack(snackIndex, selectionIndex, el) {
+                document.querySelectorAll('.selectable').forEach((e) => e.classList.remove('selected'));
+                el.classList.add('selected');
+                selectedSnacks[snackIndex] = snacks[selectionIndex];
+                setTimeout(() => {
+                    if (snackIndex + 1 < snacksCount) {
+                        renderSnacks(snackIndex + 1);
+                    } else {
+                        renderPanier();
+                    }
+                }, 300);
+            }
+
+            function deleteCommande(index) {
+                commande.splice(index, 1);
+                renderPanier();
+            }
+
+            function renderPanier() {
+                const container = document.getElementById('step-content');
+                let html = `<h2 class="text-xl font-bold mb-4">Panier</h2>`;
+
+                if (selectedPlats.length || selectedSnacks.length) {
+                    commande.push({
+                        idMenu: currentMenu ? currentMenu.idMenu : null,
+                        plats: selectedPlats,
+                        snacks: selectedSnacks,
+                    });
+                    selectedPlats = [];
+                    selectedSnacks = [];
+                }
+
+                if (commande.length === 0) {
+                    html += '<p>Votre panier est vide.</p>';
+                }
+
+                commande.forEach((cmd, cmdIndex) => {
+                    html += `<div class="mb-4 p-4 border-1 border-black rounded-2xl">
+                    <h3 class="text-lg font-semibold flex justify-between items-center">
+                        Element ${cmdIndex + 1}
+                        <button onclick="deleteCommande(${cmdIndex})" class="text-red-400 hover:text-red-600">Supprimer</button>
+                    </h3>`;
+
+                    if (cmd.idMenu) {
+                        const menu = menus.find((m) => m.idMenu === cmd.idMenu);
+                        if (menu) {
+                            html += `<div class="mb-2 text-sm italic text-gray-400">Menu : ${menu.nom}</div>`;
+                        }
+                    }
+
+                    cmd.plats.forEach((plat) => {
+                        html += `<div><strong>${plat.nom}</strong> avec :`;
+                        const nomsIngredients = plat.ingredients.map((id) => {
+                            const ingredient = ingredients.find((ing) => ing.idIngredient == id);
+                            return ingredient ? ingredient.nom : '?';
+                        });
+                        html += `<ul class="list-disc ml-6">` + nomsIngredients.map((n) => `<li>${n}</li>`).join('') + `</ul></div><br>`;
+                    });
+
+                    cmd.snacks.forEach((snack) => {
+                        html += `<div><strong>Snack/Boisson :</strong> ${snack.nom}</div>`;
+                    });
+
+                    html += `</div>`;
+                });
+
+                html += `<div class="mt-6 flex gap-4 justify-center">
+                <button onclick="startCommande()" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Ajouter une commande</button>
+                <button onclick="submitCommande()" class="bg-primaire hover:bg-secondaire text-white px-4 py-2 rounded-3xl hover:cursor-pointer">Valider la commande</button>
+            </div>`;
+
+                container.innerHTML = html;
+
+                console.log(commande);
+            }
+
+            function goBackStep() {
+                if (currentStep > 0) {
+                    currentStep--;
+                    selectedPlats.pop();
+                    renderPlatSelection();
+                } else {
+                    startCommande();
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', startCommande);
+
+            function submitCommande() {
+                if (selectedPlats.length || selectedSnacks.length) {
+                    commande.push({
+                        idMenu: currentMenu ? currentMenu.idMenu : null,
+                        plats: selectedPlats,
+                        snacks: selectedSnacks,
+                    });
+                    selectedPlats = [];
+                    selectedSnacks = [];
+                }
+
+                const input = document.getElementById('panier-input');
+                input.value = JSON.stringify(commande);
+
+                document.getElementById('commande-form').submit();
+            }
+        </script>
+
+        <form id="commande-form" method="POST" action="{{ route("commander.valider") }}" class="hidden">
+            @csrf
+            <input type="hidden" name="panier" id="panier-input" />
+        </form>
     </body>
 </html>
