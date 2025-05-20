@@ -114,11 +114,15 @@ Route::prefix('admin')->group(function () {
     });
 
     // page de gestion de la carte
-    Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
-        ->middleware('can:verifier-acces-serveur');
-    Route::post('/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
-    Route::post('/modifier', [CarteController::class, 'modifier'])->name('carte.modifier');
-
+    Route::prefix('/gestion-carte')->group(function () {
+        Route::get('/', [CarteController::class, 'afficherGestionCarte'])
+            ->middleware('can:verifier-acces-serveur')
+            ->name('admin.gestion-carte');
+        Route::post('/ajouter', [CarteController::class, 'ajouter'])->name('admin.gestion-carte.ajouter');
+        Route::post('/modifier', [CarteController::class, 'modifier'])->name('admin.gestion-carte.modifier');
+        Route::post('/supprimer', [CarteController::class, 'supprimer'])->name('admin.gestion-carte.supprimer');
+    });
+    
     // page Salle et sécurité
     Route::prefix('/salle-securite')->group(function () {
         Route::get('/', [SalleSecuriteController::class, 'index'])

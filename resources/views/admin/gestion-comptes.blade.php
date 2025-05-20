@@ -43,11 +43,10 @@
                 <p class="min-w-full mb-2 text-sm text-black">
                     Trié par
                     <span class="font-semibold text-black" id="type-tri">défaut</span>
-
-                    <!-- Tableau de gestion des comptes -->
                 </p>
 
                 <div class="max-h-128 md:max-h-96 overflow-y-auto hide-scrollbar rounded-2xl border-2 border-primaire">
+                    <!-- Tableau de gestion des comptes -->
                     <table class="min-w-full table-fixed bg-white text-black border-collapse text-center text-xs sm:text-sm md:text-base">
                         <thead class="bg-primaire text-white sticky z-10">
                             <tr>

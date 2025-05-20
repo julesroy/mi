@@ -39,7 +39,10 @@ class CarteController extends Controller
                 'prixServeur' => $validated['prixServeur'],
                 'description' => $validated['description'],
                 'ingredientsElements' => $validated['composition'],
+                'categoriePlat' => $validated['categoriePlat'],
             ]);
+
+            return redirect()->route('admin.gestion-carte');
     }
 
     public function modifier(Request $request)
@@ -64,5 +67,12 @@ class CarteController extends Controller
                     'description' => $validated['description'],
                     'ingredientsElements' => $validated['composition'],
                 ]);
+    }
+
+    public function supprimer(Request $request)
+    {
+        $id = $request->input('id');
+        DB::table('carteElements')->where('idElement', $id)->delete();
+        return response()->json(['success' => true]);
     }
 }
