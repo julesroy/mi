@@ -16,6 +16,7 @@ use App\Http\Controllers\CommandeUtilisateurController;
 use App\Http\Controllers\TresorerieController;
 use App\Http\Controllers\AffichageCuisineController;
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\PasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,11 @@ Route::get('/deconnexion', [AuthController::class, 'deconnecter']);
 // page compte
 Route::get('/compte', [CompteController::class, 'show'])->name('compte')->middleware('auth');
 
+// Page de changement de mot de passe
+Route::get('/reset-mdp/{token}', function (string $token) {
+    return view('reset-mdp', ['token' => $token]);
+});
+Route::post('/reset-mdp', [PasswordController::class, 'resetPassword']);
 
 // page commander
 Route::get('/commander', [CommandeUtilisateurController::class, 'index']);
