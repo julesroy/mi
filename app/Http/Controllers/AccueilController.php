@@ -27,7 +27,7 @@ class AccueilController extends Controller
     private function recupInfo()
     {
         $ouvert = DB::table('parametres')->value('service');
-        $serviceMidi = DB::table('parametres')->value('horairesCommandes');
+        $serviceMidi = DB::table('parametres')->value('horairesDebutCommandes');
        
         // dd($serviceMidi); // Debug the value here
 

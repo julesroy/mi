@@ -104,9 +104,14 @@ Route::prefix('admin')->group(function () {
     Route::post('/planning/ajouter-inscription', [PlanningController::class, 'ajouter']);
 
     //page gestion des comptes
-    Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
-        ->middleware('can:verifier-acces-super-administrateur')
-        ->name('admin.gestion-comptes');
+    Route::prefix('/gestion-comptes')->group(function () {
+        Route::get('/', [GestionComptesController::class, 'afficherComptes'])
+            ->middleware('can:verifier-acces-super-administrateur')
+            ->name('admin.gestion-comptes');
+        Route::post('/update', [GestionComptesController::class, 'update'])
+            ->middleware('can:verifier-acces-super-administrateur')
+            ->name('admin.gestion-comptes.update');
+    });
 
     // page de gestion de la carte
     Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])

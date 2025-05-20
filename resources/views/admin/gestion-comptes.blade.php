@@ -25,115 +25,75 @@
             }
         </style>
     </head>
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
+    <body class="pt-28 md:pt-60">
         @include("header")
 
         <div class="container mx-auto p-4">
             <h1 class="text-2xl font-bold mb-4">Gestion des comptes</h1>
 
             <div class="overflow-x-auto min-w-full">
-                <!-- Barre de recherche et bouton d'ajout -->
-                <div class="flex flex-col md:flex-row md:justify-between md:items-center min-w-full mb-4 bg-gray-800 p-4 rounded gap-3 sticky left-0 top-0 z-10">
-                    <form method="GET" action="{{ url()->current() }}" class="flex flex-col sm:flex-row w-full md:w-auto">
-                        <input type="text" name="search" placeholder="Rechercher" class="px-3 py-2 bg-gray-700 text-white rounded-t sm:rounded-l sm:rounded-t-none border-b sm:border-b-0 sm:border-r-0 border-gray-600 w-full sm:w-auto" value="{{ request("search") }}" />
-                        
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-b sm:rounded-r sm:rounded-b-none hover:bg-blue-700 w-full sm:w-auto mt-2 sm:mt-0">Rechercher</button>
+                <!-- Barre de recherche -->
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center min-w-full mb-4 bg-primaire p-4 rounded gap-3 sticky left-0 top-0 z-10">
+                    <form class="flex flex-col sm:flex-row w-full md:w-auto">
+                        <input type="text" name="search" id="recherche-utilisateur" placeholder="Rechercher" class="bg-white px-3 py-2 rounded-t sm:rounded-l sm:rounded-t-none border-b sm:border-b-0 sm:border-r-0 border-gray-600 w-full sm:w-auto"/>
                     </form>
                 </div>
 
                 <!-- Indication du tri actuel -->
-                <p class="min-w-full mb-2 text-sm text-gray-400">@if (request("sort"))
+                <p class="min-w-full mb-2 text-sm text-black">
                     Trié
                     par
-                    <span class="font-semibold text-white">
-                        {{
-                            request("sort") == "nom"
-                                ? "Nom"
-                                : (request("sort") == "quantite"
-                                    ? "Quantité"
-                                    : (request("sort") == "marque"
-                                        ? "Marque"
-                                        : (request("sort") == "estimationPrix"
-                                            ? "Prix"
-                                            : (request("sort") == "categorieIngredient"
-                                                ? "Catégorie"
-                                                : "Nom"
-                                            )
-                                        )
-                                    )
-                                )
-                        }}
+                    <span class="font-semibold text-black" id="type-tri">
+                        défaut
                     </span>
-                    
-                    ({{ request("direction", "asc") === "asc" ? "croissant" : "décroissant" }})
-                @else
-                    Tri
-                    par
-                    défaut
-                @endif</p>
 
-                <!-- Tableau d'inventaire -->
-                <div class="max-h-[280px] overflow-y-auto hide-scrollbar">
-                    <table class="min-w-full table-fixed bg-white text-black rounded shadow border-collapse"">
-                        <thead class="bg-gray-700 text-white">
+                <!-- Tableau de gestion des comptes -->
+                <div class="max-h-128 md:max-h-96 overflow-y-auto hide-scrollbar rounded-2xl border-2 border-primaire">
+                    <table class="min-w-full table-fixed bg-white text-black border-collapse text-center text-xs sm:text-sm md:text-base">
+                        <thead class="bg-primaire text-white sticky z-10">
                             <tr>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                    <a href="{{
-                                        request()->fullUrlWithQuery([
-                                            "sort" => "nom",
-                                            "direction" => request("sort") === "nom" && request("direction") === "asc" ? "desc" : "asc",
-                                        ])
-                                    }}" class="flex items-center gap-1 text-white">Numéro de compte {!! request("sort") === "nom" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="numeroCompte">
+                                Numéro de compte
                                 </th>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                    <a href="{{
-                                        request()->fullUrlWithQuery([
-                                            "sort" => "nom",
-                                            "direction" => request("sort") === "nom" && request("direction") === "asc" ? "desc" : "asc",
-                                        ])
-                                    }}" class="flex items-center gap-1 text-white">Nom {!! request("sort") === "nom" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="nom">
+                                Nom
                                 </th>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                    <a href="{{
-                                        request()->fullUrlWithQuery([
-                                            "sort" => "quantite",
-                                            "direction" => request("sort") === "quantite" && request("direction") === "asc" ? "desc" : "asc",
-                                        ])
-                                    }}" class="flex items-center gap-1 text-white">Prénom {!! request("sort") === "quantite" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prenom">
+                                Prénom
                                 </th>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                    <a class="flex items-center gap-1 text-white">Email</a>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">
+                                Email
                                 </th>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                    <a href="{{
-                                        request()->fullUrlWithQuery([
-                                            "sort" => "marque",
-                                            "direction" => request("sort") === "marque" && request("direction") === "asc" ? "desc" : "asc",
-                                        ])
-                                    }}" class="flex items-center gap-1 text-white">Solde {!! request("sort") === "marque" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="solde">
+                                Solde
                                 </th>
                                 @if (Auth::user() && Auth::user()->acces == 3)
-                                    <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                        <a href="{{
-                                            request()->fullUrlWithQuery([
-                                                "sort" => "estimationPrix",
-                                                "direction" => request("sort") === "estimationPrix" && request("direction") === "asc" ? "desc" : "asc",
-                                            ])
-                                        }}" class="flex items-center gap-1 text-white">Accès {!! request("sort") === "estimationPrix" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                                    </th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="acces">
+                                    Accès
+                                </th>
                                 @endif
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">Actions</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($utilisateurs as $donneesUtilisateur)
                                 <tr id="row-{{ $donneesUtilisateur->numeroCompte }}" class="hover:bg-gray-100">
-                                    <td class="w-1/6 py-2 px-4 border-b" id="id-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->numeroCompte }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="id-{{ $donneesUtilisateur->numeroCompte }}" data-value="{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->numeroCompte }}</td>
                                     <td class="w-1/6 py-2 px-4 border-b" id="nom-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->nom }}</td>
                                     <td class="w-1/6 py-2 px-4 border-b" id="prenom-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->prenom }}</td>
                                     <td class="w-1/6 py-2 px-4 border-b" id="email-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->email }}</td>
-                                    <td class="w-1/6 py-2 px-4 border-b" id="solde-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->solde }}</td>
-                                    <td class="w-1/6 py-2 px-4 border-b" id="acces-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->acces }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="solde-{{ $donneesUtilisateur->numeroCompte }}" data-value="{{ $donneesUtilisateur->solde }}">{{ $donneesUtilisateur->solde }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="acces-{{ $donneesUtilisateur->numeroCompte }}" data-value="{{ $donneesUtilisateur->acces }}">
+                                        @php
+                                            $accesLabels = [
+                                                0 => 'Client',
+                                                1 => 'Serveur',
+                                                2 => 'Admin',
+                                                3 => 'Super-Admin'
+                                            ];
+                                        @endphp
+                                        {{ $accesLabels[$donneesUtilisateur->acces] ?? $donneesUtilisateur->acces }}
+                                    </td>
 
                                     <td class="w-1/6 py-2 px-4 border-b text-center">
                                         <div class="flex justify-center">
@@ -235,8 +195,16 @@
             document.querySelectorAll('.edit-btn').forEach((btn) => {
                 btn.addEventListener('click', function () {
                     const id = this.getAttribute('data-id');
-                    document.getElementById(`row-${id}`).classList.add('hidden');
-                    document.getElementById(`edit-row-${id}`).classList.remove('hidden');
+                    const ligneAffichage = document.getElementById(`row-${id}`);
+                    const ligneEdition = document.getElementById(`edit-row-${id}`);
+
+                    // Cache la ligne normale (ajoute hidden ET display none)
+                    ligneAffichage.classList.add('hidden');
+                    ligneAffichage.style.display = 'none';
+
+                    // Affiche la ligne d’édition (retire hidden ET force le display block)
+                    ligneEdition.classList.remove('hidden');
+                    ligneEdition.style.display = '';
                 });
             });
 
@@ -244,10 +212,25 @@
             document.querySelectorAll('.cancel-btn').forEach((btn) => {
                 btn.addEventListener('click', function () {
                     const id = this.getAttribute('data-id');
-                    document.getElementById(`row-${id}`).classList.remove('hidden');
-                    document.getElementById(`edit-row-${id}`).classList.add('hidden');
+                    const ligneAffichage = document.getElementById(`row-${id}`);
+                    const ligneEdition = document.getElementById(`edit-row-${id}`);
+
+                    // Affiche la ligne normale
+                    ligneAffichage.classList.remove('hidden');
+                    ligneAffichage.style.display = '';
+
+                    // Cache la ligne d’édition
+                    ligneEdition.classList.add('hidden');
+                    ligneEdition.style.display = 'none';
                 });
             });
+
+            const accesNum = {
+                0: 'Client',
+                1: 'Serveur',
+                2: 'Admin',
+                3: 'Super-Admin',
+            };
 
             // Sauvegarder l'édition
             document.querySelectorAll('.save-btn').forEach((btn) => {
@@ -260,12 +243,6 @@
                     const email = document.getElementById('edit-email-' + id).value;
                     const solde = document.getElementById('edit-solde-' + id).value;
                     const acces = document.getElementById('edit-acces-' + id).value;
-                    const accesNum = {
-                        0: 'Client',
-                        1: 'Serveur',
-                        2: 'Admin',
-                        3: 'Super-Admin',
-                    };
 
                     const formData = new FormData();
                     formData.append('id', id);
@@ -291,10 +268,11 @@
                                 document.getElementById('prenom-' + id).textContent = prenom;
                                 document.getElementById('email-' + id).textContent = email;
                                 document.getElementById('solde-' + id).textContent = solde;
-                                document.getElementById('acces-' + id).textContent = acces;
+                                document.getElementById('acces-' + id).textContent = accesNum[parseInt(acces)] || acces;
 
                                 // Masque la ligne d'édition et affiche la ligne normale
                                 document.getElementById('row-' + id).classList.remove('hidden');
+                                document.getElementById('row-' + id).style.display = '';
                                 document.getElementById('edit-row-' + id).classList.add('hidden');
                             } else {
                                 alert('Erreur lors de la modification');
@@ -304,5 +282,85 @@
             });
         </script>
 
+        <script>
+            document.getElementById("recherche-utilisateur").addEventListener("input", function () {
+                const valeurRecherche = this.value.trim().toLowerCase();
+
+                // Sélectionne uniquement les lignes d'affichage normales (pas celles en édition)
+                const lignes = document.querySelectorAll("tbody tr[id^='row-']");
+
+                lignes.forEach(ligne => {
+                    const id = ligne.id.replace("row-", "");
+                    const nom = document.getElementById(`nom-${id}`).textContent.toLowerCase();
+                    const prenom = document.getElementById(`prenom-${id}`).textContent.toLowerCase();
+
+                    const correspondance = nom.includes(valeurRecherche) || prenom.includes(valeurRecherche);
+
+                    ligne.style.display = correspondance ? "" : "none";
+
+                    const ligneEdition = document.getElementById(`edit-row-${id}`);
+                    if (ligneEdition) {
+                        ligneEdition.style.display = correspondance ? "none" : "none"; // Toujours masquée
+                    }
+                });
+            });
+        </script>
+
+        <script>
+            // Ajoute un curseur pointer sur les th triables
+            document.querySelectorAll('th.sortable').forEach(th => {
+            th.style.cursor = 'pointer';
+            });
+
+            const table = document.querySelector('table');
+            const tbody = table.querySelector('tbody');
+
+            let sortDirection = {};
+
+            document.querySelectorAll('th.sortable').forEach((th, index) => {
+                th.addEventListener('click', () => {
+                    const key = th.dataset.key;
+                    sortDirection[key] = sortDirection[key] === 'asc' ? 'desc' : 'asc';
+                    const dir = sortDirection[key];
+
+                    // Récupère les lignes du tbody (uniquement les lignes normales, pas celles en édition)
+                    const rows = Array.from(tbody.querySelectorAll('tr:not(.hidden)'))
+                    .filter(tr => !tr.id.startsWith('edit-row-'));
+
+                    rows.sort((a, b) => {
+                        const aCell = a.querySelector(`[id^="${key}-"]`);
+                        const bCell = b.querySelector(`[id^="${key}-"]`);
+
+                        if (!aCell || !bCell) return 0;
+
+                        let aValue = aCell.dataset.value ?? aCell.textContent.trim();
+                        let bValue = bCell.dataset.value ?? bCell.textContent.trim();
+
+                        if (['solde', 'acces'].includes(key)) {
+                            aValue = parseFloat(aValue);
+                            bValue = parseFloat(bValue);
+                            return dir === 'asc' ? aValue - bValue : bValue - aValue;
+                        } else {
+                            return dir === 'asc' 
+                                ? aValue.localeCompare(bValue, 'fr', { sensitivity: 'base' }) 
+                                : bValue.localeCompare(aValue, 'fr', { sensitivity: 'base' });
+                        }
+                    });
+
+                    // Replace les lignes triées dans le tbody, mais aussi leurs lignes d'édition associées
+                    rows.forEach(row => {
+                    tbody.appendChild(row);
+                    const editRow = document.getElementById('edit-' + row.id);
+                    if (editRow) tbody.appendChild(editRow);
+                    });
+
+                    // Met à jour l'indication du tri (optionnel)
+                    const typeTriSpan = document.getElementById('type-tri');
+                    if (typeTriSpan) {
+                    typeTriSpan.textContent = `${key} (${dir === 'asc' ? '▲' : '▼'})`;
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
