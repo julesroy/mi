@@ -139,6 +139,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/data', [CommandeCuisineController::class, 'getCommandes'])
             ->name('admin.commandes.data');
 
+        Route::get('/details/{id}', [CommandeCuisineController::class, 'getCommandeDetails']);
+
+        Route::get('/inventaire/items', [CommandeCuisineController::class, 'getInventaireItems']);
+
         Route::post('/commande-payee/{id}', [CommandeCuisineController::class, 'marquerCommandePayee'])
             ->name('admin.commandes.marquer-payee');
 

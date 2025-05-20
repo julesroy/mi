@@ -34,22 +34,83 @@ class CommandeCuisineController extends Controller
             return response()->json([$this->getTestCommande()]);
         }
     }
-    public function marquerCommandePayee(Request $request, $id)
-        {
-            if ($id == 999) {
-                return response()->json(['error' => 'Commande test non payeable'], 400);
-            }
+    
+    public function getInventaireItems()
+    {
+        try {
+            // Récupère TOUTES les colonnes mais on n'utilisera que idingredient, Nom et categorieingredient
+            $items = DB::table('inventaire')
+                ->select('*') // Sélectionne toutes les colonnes
+                ->orderBy('categorieingredient')
+                ->orderBy('idingredient')
+                ->get()
+                ->map(function ($item) {
+                    return [
+                        'idIngredient' => $item->idingredient,
+                        'nom' => $item->Nom,
+                        'categorieIngredient' => $item->categorieingredient,
+                        // On garde toutes les données au cas où, mais on n'utilisera que ces 3 champs
+                        'fullData' => $item 
+                    ];
+                });
 
-            try {
-                DB::table('commandes')
-                    ->where('idCommande', $id)
-                    ->update(['etat' => 1]);
-
-                return response()->json(['success' => true]);
-            } catch (\Exception $e) {
-                return response()->json(['error' => $e->getMessage()], 500);
-            }
+            return response()->json($items);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
         }
+    }
+
+    public function getCommandeDetails($id)
+    {
+        try {
+            $commande = DB::table('commandes')
+                ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
+                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient', 
+                        'utilisateurs.prenom as prenomClient', 'commandes.commentaire', 'commandes.stock')
+                ->where('commandes.idCommande', $id)
+                ->first();
+
+            if (!$commande) {
+                return response()->json(['error' => 'Commande non trouvée'], 404);
+            }
+
+            // On retourne simplement le stock brut, le traitement sera fait côté client
+            return response()->json([
+                'idCommande' => $commande->idCommande,
+                'numeroCommande' => $commande->numeroCommande,
+                'nomClient' => $commande->nomClient,
+                'prenomClient' => $commande->prenomClient,
+                'commentaire' => $commande->commentaire,
+                'stock' => $commande->stock // On envoie la chaîne brute directement
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
+        }
+    }
+
+    public function marquerCommandePayee(Request $request, $id)
+    {
+        if ($id == 999) {
+            return response()->json(['error' => 'Commande test non payeable'], 400);
+        }
+
+        try {
+            DB::table('commandes')
+                ->where('idCommande', $id)
+                ->update(['etat' => 1]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function marquerCommandePrete(Request $request, $id)
     {
         if ($id == 999) {
@@ -66,6 +127,7 @@ class CommandeCuisineController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
     public function marquerCommandeServie(Request $request, $id)
     {
         if ($id == 999) {
@@ -84,28 +146,40 @@ class CommandeCuisineController extends Controller
     }
 
     public function modifierCommande(Request $request, $id)
-    {
-        if ($id == 999) {
-            return response()->json(['error' => 'Commande test non modifiable'], 400);
-        }
+{
+    try {
+        $validated = $request->validate([
+            'commentaire' => 'nullable|string',
+            'items' => 'required|array',
+            'items.*.idIngredient' => 'required|integer',
+            'items.*.quantite' => 'required|integer|min:1',
+            'items.*.obligatoire' => 'required|integer|in:0,1'
+        ]);
 
-        try {
-            $validated = $request->validate([
-                'commentaire' => 'nullable|string',
-                'items' => 'nullable|array',
+        // Construire la chaîne stock
+        $stockItems = [];
+        foreach ($validated['items'] as $item) {
+            $stockItems[] = implode(',', [
+                $item['idIngredient'],
+                $item['quantite'],
+                $item['obligatoire']
+            ]);
+        }
+        $stockValue = implode(';', $stockItems);
+
+        // Mettre à jour la commande
+        DB::table('commandes')
+            ->where('idCommande', $id)
+            ->update([
+                'commentaire' => $validated['commentaire'] ?? null,
+                'stock' => $stockValue
             ]);
 
-            DB::table('commandes')
-                ->where('idCommande', $id)
-                ->update([
-                    'commentaire' => $validated['commentaire'] ?? null,
-                ]);
-
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        return response()->json(['success' => true]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
 
     public function annulerCommande(Request $request, $id)
     {
