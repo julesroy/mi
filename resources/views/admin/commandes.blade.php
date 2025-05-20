@@ -30,8 +30,6 @@
             </div>
         </main>
 
-        @include("footer")
-
         <style>
             .etat-0 {
                 background-color: rgba(251,44,54,1);

@@ -84,7 +84,5 @@
                 <a href="/" class="text-blue-500 hover:underline">Retour à l'accueil</a>
             </section>
         </div>
-
-        @include("footer")
     </body>
 </html>

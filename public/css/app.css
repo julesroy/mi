@@ -2550,6 +2550,10 @@
   font-family: 'lobstertwo';
   src: url('/fonts/LobsterTwo-Regular.ttf');
 }
+@font-face {
+  font-family: 'opensauce';
+  src: url('/fonts/Open-sauce.ttf');
+}
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;

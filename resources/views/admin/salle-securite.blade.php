@@ -130,8 +130,6 @@
             </form>
         </dialog>
 
-        @include("footer")
-
         <script>
             // Gestion des dialogs
             function showDialog(id) {
