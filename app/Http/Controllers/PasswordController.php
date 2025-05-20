@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use PhpParser\Node\Stmt\Return_;
 
 /**
  * Classe de gestion/affichage du planning
@@ -37,7 +38,8 @@ class PasswordController extends Controller
         ], [
             'required' => "Champ requis",
             'min' => 'Le mot de passe doit faire au minimum 8 caractères',
-            'confirmed' => 'Veuillez confirmer le mot de passe'
+            'confirmed' => 'Veuillez confirmer le mot de passe',
+            'email' => 'Veuillez donner une adresse email valide'
         ]);
 
         // Effectue le reset
@@ -54,9 +56,10 @@ class PasswordController extends Controller
             }
         );
 
+
         // En fonction du statut, renvoie une réponse
         return $status === Password::PasswordReset
             ? redirect()->route('connexion')
-            : back()->withErrors(['email' => "Erreur : " . $status]);
+            : back()->withErrors($status === Password::INVALID_TOKEN ? ['token' => "La requête a expiré : veuillez faire une nouvelle demande de changement de mot de passe"] : ['email' => "Email non valide"]);
     }
 }
