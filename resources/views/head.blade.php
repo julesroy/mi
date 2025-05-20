@@ -33,7 +33,7 @@
     use Illuminate\Support\Str;
 @endphp
 
-@if (Str::contains(request()->path(), 'admin'))
+@if (Str::contains(request()->path(), "admin"))
     <style>
         body {
             font-family: 'opensauce', sans-serif;
@@ -50,3 +50,6 @@
         }
     </style>
 @endif
+
+<!-- Thème -->
+<meta name="theme-color" content="#407829" />

@@ -32,23 +32,23 @@
 
         <style>
             .etat-0 {
-                background-color: rgba(251,44,54,1);
+                background-color: rgba(251, 44, 54, 1);
                 color: black;
             }
             .etat-1 {
-                background-color: rgba(152,16,250,1);
+                background-color: rgba(152, 16, 250, 1);
                 color: black;
             }
             .etat-2 {
-                background-color: rgba(255,105,0,1);
+                background-color: rgba(255, 105, 0, 1);
                 color: black;
             }
             .etat-3 {
-                background-color: rgba(0,166,62,1);
+                background-color: rgba(0, 166, 62, 1);
                 color: black;
             }
             .etat-4 {
-                background-color: rgba(231,0,11,0.7);
+                background-color: rgba(231, 0, 11, 0.7);
                 color: black;
                 text-decoration: underline;
                 font-weight: bold;

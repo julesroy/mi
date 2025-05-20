@@ -35,43 +35,31 @@
                 <!-- Barre de recherche -->
                 <div class="flex flex-col md:flex-row md:justify-between md:items-center min-w-full mb-4 bg-primaire p-4 rounded gap-3 sticky left-0 top-0 z-10">
                     <form class="flex flex-col sm:flex-row w-full md:w-auto">
-                        <input type="text" name="search" id="recherche-utilisateur" placeholder="Rechercher" class="bg-white px-3 py-2 rounded-t sm:rounded-l sm:rounded-t-none border-b sm:border-b-0 sm:border-r-0 border-gray-600 w-full sm:w-auto"/>
+                        <input type="text" name="search" id="recherche-utilisateur" placeholder="Rechercher" class="bg-white px-3 py-2 rounded-t sm:rounded-l sm:rounded-t-none border-b sm:border-b-0 sm:border-r-0 border-gray-600 w-full sm:w-auto" />
                     </form>
                 </div>
 
                 <!-- Indication du tri actuel -->
                 <p class="min-w-full mb-2 text-sm text-black">
-                    Trié
-                    par
-                    <span class="font-semibold text-black" id="type-tri">
-                        défaut
-                    </span>
+                    Trié par
+                    <span class="font-semibold text-black" id="type-tri">défaut</span>
 
-                <!-- Tableau de gestion des comptes -->
+                    <!-- Tableau de gestion des comptes -->
+                </p>
+
                 <div class="max-h-128 md:max-h-96 overflow-y-auto hide-scrollbar rounded-2xl border-2 border-primaire">
                     <table class="min-w-full table-fixed bg-white text-black border-collapse text-center text-xs sm:text-sm md:text-base">
                         <thead class="bg-primaire text-white sticky z-10">
                             <tr>
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="numeroCompte">
-                                Numéro de compte
-                                </th>
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="nom">
-                                Nom
-                                </th>
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prenom">
-                                Prénom
-                                </th>
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">
-                                Email
-                                </th>
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="solde">
-                                Solde
-                                </th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="numeroCompte">Numéro de compte</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="nom">Nom</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prenom">Prénom</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Email</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="solde">Solde</th>
                                 @if (Auth::user() && Auth::user()->acces == 3)
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="acces">
-                                    Accès
-                                </th>
+                                    <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="acces">Accès</th>
                                 @endif
+
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Actions</th>
                             </tr>
                         </thead>
@@ -86,23 +74,21 @@
                                     <td class="w-1/6 py-2 px-4 border-b" id="acces-{{ $donneesUtilisateur->numeroCompte }}" data-value="{{ $donneesUtilisateur->acces }}">
                                         @php
                                             $accesLabels = [
-                                                0 => 'Client',
-                                                1 => 'Serveur',
-                                                2 => 'Admin',
-                                                3 => 'Super-Admin'
+                                                0 => "Client",
+                                                1 => "Serveur",
+                                                2 => "Admin",
+                                                3 => "Super-Admin",
                                             ];
                                         @endphp
+
                                         {{ $accesLabels[$donneesUtilisateur->acces] ?? $donneesUtilisateur->acces }}
                                     </td>
 
                                     <td class="w-1/6 py-2 px-4 border-b text-center">
                                         <div class="flex justify-center">
-                                            <img src="{{ asset('images/icons/edit.svg') }}" alt="Modifier"
-                                                class="action-icon edit-btn"
-                                                data-id="{{ $donneesUtilisateur->numeroCompte }}" />
+                                            <img src="{{ asset("images/icons/edit.svg") }}" alt="Modifier" class="action-icon edit-btn" data-id="{{ $donneesUtilisateur->numeroCompte }}" />
                                         </div>
                                     </td>
-                                    
                                 </tr>
                                 <tr id="edit-row-{{ $donneesUtilisateur->numeroCompte }}" class="hidden bg-gray-200">
                                     <td class="w-1/6 py-2 px-4 border-b">
@@ -122,10 +108,10 @@
                                     </td>
                                     <td class="w-1/6 py-2 px-4 border-b">
                                         <select id="edit-acces-{{ $donneesUtilisateur->numeroCompte }}" class="w-full p-1 border">
-                                            <option value="0" {{ $donneesUtilisateur->acces == 0 ? 'selected' : '' }}>Client</option>
-                                            <option value="1" {{ $donneesUtilisateur->acces == 1 ? 'selected' : '' }}>Serveur</option>
-                                            <option value="2" {{ $donneesUtilisateur->acces == 2 ? 'selected' : '' }}>Admin</option>
-                                            <option value="3" {{ $donneesUtilisateur->acces == 3 ? 'selected' : '' }}>Super-Admin</option>
+                                            <option value="0" {{ $donneesUtilisateur->acces == 0 ? "selected" : "" }}>Client</option>
+                                            <option value="1" {{ $donneesUtilisateur->acces == 1 ? "selected" : "" }}>Serveur</option>
+                                            <option value="2" {{ $donneesUtilisateur->acces == 2 ? "selected" : "" }}>Admin</option>
+                                            <option value="3" {{ $donneesUtilisateur->acces == 3 ? "selected" : "" }}>Super-Admin</option>
                                         </select>
                                     </td>
 
@@ -142,35 +128,27 @@
                                     <h3 class="text-xl font-bold mb-4" id="dialogTitle"></h3>
                                     <p class="mb-4 bg-gray-100 p-3 rounded text-black" id="dialogContent"></p>
                                     <div class="flex justify-end">
-                                        <button onclick="commentDialog.close()" 
-                                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
-                                            Fermer
-                                        </button>
+                                        <button onclick="commentDialog.close()" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Fermer</button>
                                     </div>
                                 </div>
                             </dialog>
 
                             <script>
-                            const commentDialog = document.getElementById('commentDialog');
+                                const commentDialog = document.getElementById('commentDialog');
 
-                            function showComment(nom, commentaire) {
-                                document.getElementById('dialogTitle').textContent = nom;
-                                document.getElementById('dialogContent').textContent = commentaire;
-                                commentDialog.showModal();
-                            }
-
-                            // Fermer la modale en cliquant à l'extérieur
-                            commentDialog.addEventListener('click', (e) => {
-                                const dialogDimensions = commentDialog.getBoundingClientRect();
-                                if (
-                                    e.clientX < dialogDimensions.left ||
-                                    e.clientX > dialogDimensions.right ||
-                                    e.clientY < dialogDimensions.top ||
-                                    e.clientY > dialogDimensions.bottom
-                                ) {
-                                    commentDialog.close();
+                                function showComment(nom, commentaire) {
+                                    document.getElementById('dialogTitle').textContent = nom;
+                                    document.getElementById('dialogContent').textContent = commentaire;
+                                    commentDialog.showModal();
                                 }
-                            });
+
+                                // Fermer la modale en cliquant à l'extérieur
+                                commentDialog.addEventListener('click', (e) => {
+                                    const dialogDimensions = commentDialog.getBoundingClientRect();
+                                    if (e.clientX < dialogDimensions.left || e.clientX > dialogDimensions.right || e.clientY < dialogDimensions.top || e.clientY > dialogDimensions.bottom) {
+                                        commentDialog.close();
+                                    }
+                                });
                             </script>
                         </tbody>
                     </table>
@@ -283,24 +261,24 @@
         </script>
 
         <script>
-            document.getElementById("recherche-utilisateur").addEventListener("input", function () {
+            document.getElementById('recherche-utilisateur').addEventListener('input', function () {
                 const valeurRecherche = this.value.trim().toLowerCase();
 
                 // Sélectionne uniquement les lignes d'affichage normales (pas celles en édition)
                 const lignes = document.querySelectorAll("tbody tr[id^='row-']");
 
-                lignes.forEach(ligne => {
-                    const id = ligne.id.replace("row-", "");
+                lignes.forEach((ligne) => {
+                    const id = ligne.id.replace('row-', '');
                     const nom = document.getElementById(`nom-${id}`).textContent.toLowerCase();
                     const prenom = document.getElementById(`prenom-${id}`).textContent.toLowerCase();
 
                     const correspondance = nom.includes(valeurRecherche) || prenom.includes(valeurRecherche);
 
-                    ligne.style.display = correspondance ? "" : "none";
+                    ligne.style.display = correspondance ? '' : 'none';
 
                     const ligneEdition = document.getElementById(`edit-row-${id}`);
                     if (ligneEdition) {
-                        ligneEdition.style.display = correspondance ? "none" : "none"; // Toujours masquée
+                        ligneEdition.style.display = correspondance ? 'none' : 'none'; // Toujours masquée
                     }
                 });
             });
@@ -308,8 +286,8 @@
 
         <script>
             // Ajoute un curseur pointer sur les th triables
-            document.querySelectorAll('th.sortable').forEach(th => {
-            th.style.cursor = 'pointer';
+            document.querySelectorAll('th.sortable').forEach((th) => {
+                th.style.cursor = 'pointer';
             });
 
             const table = document.querySelector('table');
@@ -324,8 +302,7 @@
                     const dir = sortDirection[key];
 
                     // Récupère les lignes du tbody (uniquement les lignes normales, pas celles en édition)
-                    const rows = Array.from(tbody.querySelectorAll('tr:not(.hidden)'))
-                    .filter(tr => !tr.id.startsWith('edit-row-'));
+                    const rows = Array.from(tbody.querySelectorAll('tr:not(.hidden)')).filter((tr) => !tr.id.startsWith('edit-row-'));
 
                     rows.sort((a, b) => {
                         const aCell = a.querySelector(`[id^="${key}-"]`);
@@ -341,23 +318,21 @@
                             bValue = parseFloat(bValue);
                             return dir === 'asc' ? aValue - bValue : bValue - aValue;
                         } else {
-                            return dir === 'asc' 
-                                ? aValue.localeCompare(bValue, 'fr', { sensitivity: 'base' }) 
-                                : bValue.localeCompare(aValue, 'fr', { sensitivity: 'base' });
+                            return dir === 'asc' ? aValue.localeCompare(bValue, 'fr', { sensitivity: 'base' }) : bValue.localeCompare(aValue, 'fr', { sensitivity: 'base' });
                         }
                     });
 
                     // Replace les lignes triées dans le tbody, mais aussi leurs lignes d'édition associées
-                    rows.forEach(row => {
-                    tbody.appendChild(row);
-                    const editRow = document.getElementById('edit-' + row.id);
-                    if (editRow) tbody.appendChild(editRow);
+                    rows.forEach((row) => {
+                        tbody.appendChild(row);
+                        const editRow = document.getElementById('edit-' + row.id);
+                        if (editRow) tbody.appendChild(editRow);
                     });
 
                     // Met à jour l'indication du tri (optionnel)
                     const typeTriSpan = document.getElementById('type-tri');
                     if (typeTriSpan) {
-                    typeTriSpan.textContent = `${key} (${dir === 'asc' ? '▲' : '▼'})`;
+                        typeTriSpan.textContent = `${key} (${dir === 'asc' ? '▲' : '▼'})`;
                     }
                 });
             });

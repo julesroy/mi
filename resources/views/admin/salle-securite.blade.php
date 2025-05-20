@@ -18,7 +18,7 @@
 
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-xl font-semibold">Historique</h2>
-                    <button onclick="showDialog('tempDialog')" class=" bg-blue-400 hover:bg-blue-700 px-4 py-2 rounded-[13px] border-black border-3">+ Nouveau relevé</button>
+                    <button onclick="showDialog('tempDialog')" class="bg-blue-400 hover:bg-blue-700 px-4 py-2 rounded-[13px] border-black border-3">+ Nouveau relevé</button>
                 </div>
 
                 <div class="overflow-x-auto bg-neutral-30 rounded-[13px] border-3 border-black">
@@ -33,7 +33,7 @@
                         </thead>
                         <tbody>
                             @forelse ($temperatureReleves ?? [] as $salleEtSecurite)
-                                <tr class="border-t border-black"> 
+                                <tr class="border-t border-black">
                                     <td class="p-3">{{ $salleEtSecurite->date }}</td>
                                     <td class="p-3">{{ $salleEtSecurite->temperature1 }}°C</td>
                                     <td class="p-3">{{ $salleEtSecurite->temperature2 }}°C</td>
@@ -85,17 +85,17 @@
         </main>
 
         <!-- Dialog Température -->
-        <dialog id="tempDialog" class=" top-100 left-180 bg-white rounded-[13px] shadow-xl p-6 w-full max-w-md">
+        <dialog id="tempDialog" class="top-100 left-180 bg-white rounded-[13px] shadow-xl p-6 w-full max-w-md">
             <div class="flex justify-center items-center mb-4">
                 <h3 class="text-xl font-bold">Nouveau Relevé</h3>
                 <button onclick="hideDialog('tempDialog')" class="text-gray-200 hover:text-white text-2xl">&times;</button>
             </div>
             <form action="{{ route("admin.salle-securite.ajouter-releve-frigo") }}" method="POST">
                 @csrf
-                <div class="space-y-4 flex flex-col justify-center items-center ">
+                <div class="space-y-4 flex flex-col justify-center items-center">
                     <div>
                         <label class="block mb-2">Température Frigo 1 (°C)</label>
-                        <input type="number" step="0.1" name="temperature1" required class=" self-center bg-neutral-300 border-black rounded-[100px] p-2" />
+                        <input type="number" step="0.1" name="temperature1" required class="self-center bg-neutral-300 border-black rounded-[100px] p-2" />
                     </div>
                     <div>
                         <label class="block mb-2">Température Frigo 2 (°C)</label>
