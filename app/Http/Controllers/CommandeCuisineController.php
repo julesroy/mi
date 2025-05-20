@@ -34,7 +34,22 @@ class CommandeCuisineController extends Controller
             return response()->json([$this->getTestCommande()]);
         }
     }
+    public function marquerCommandePayee(Request $request, $id)
+        {
+            if ($id == 999) {
+                return response()->json(['error' => 'Commande test non payeable'], 400);
+            }
 
+            try {
+                DB::table('commandes')
+                    ->where('idCommande', $id)
+                    ->update(['etat' => 1]);
+
+                return response()->json(['success' => true]);
+            } catch (\Exception $e) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
+        }
     public function marquerCommandePrete(Request $request, $id)
     {
         if ($id == 999) {
@@ -51,11 +66,10 @@ class CommandeCuisineController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
     public function marquerCommandeServie(Request $request, $id)
     {
         if ($id == 999) {
-            return response()->json(['error' => 'Commande test non modifiable'], 400);
+            return response()->json(['error' => 'Commande test non serviable'], 400);
         }
 
         try {

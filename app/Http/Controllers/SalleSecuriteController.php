@@ -57,7 +57,7 @@ class SalleSecuriteController extends Controller
             'temperature2' => $validated['temperature2'],
             'nom' => Auth::user()->nom . ' ' . Auth::user()->prenom,
             'numeroCompte' => Auth::user()->numeroCompte,
-            'date' => now(), // S'assurer que la date est bien renseignée
+            'date' => now()->timezone('Europe/Stockholm'), // S'assurer que la date est bien renseignée
         ]);
 
         return back()->with('success', 'Relevé enregistré !');
