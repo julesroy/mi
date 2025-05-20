@@ -38,6 +38,10 @@
         body {
             font-family: 'opensauce', sans-serif;
         }
+
+        header {
+            font-family: 'lobstertwo', sans-serif;
+        }
     </style>
 @else
     <style>
