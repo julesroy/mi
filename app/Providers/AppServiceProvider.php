@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Utilisateur;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -47,6 +49,14 @@ class AppServiceProvider extends ServiceProvider
             $acces = DB::table('utilisateurs')->where('idUtilisateur', Auth::id())->value('acces');
 
             return in_array($acces, [3]);
+        });
+
+        /**
+         * Définit l'URL de mise à jour du mot de passe
+         */
+
+        ResetPassword::createUrlUsing(function (Utilisateur $user, string $token) {
+            return 'https://example.com/reset-mdp/' . $token;
         });
     }
 }
