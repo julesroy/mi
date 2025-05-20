@@ -47,26 +47,38 @@ class CarteController extends Controller
 
     public function modifier(Request $request)
     {
-            $validated = $request->validate([
-                'id' => 'required|integer|exists:carteElements,idElement',
-                'nom' => 'required|string|max:255',
-                'categorieElementCarte' => 'required|integer',
-                'prix' => 'required|numeric',
-                'prixServeur' => 'required|numeric',
-                'description' => 'nullable|string',
-                'composition' => 'required|string',
+        $validated = $request->validate([
+            'id' => 'required|integer|exists:carteElements,idElement',
+            'nom' => 'required|string|max:255',
+            'categorieElementCarte' => 'required|integer',
+            'prix' => 'required|numeric',
+            'prixServeur' => 'required|numeric',
+            'composition' => 'required|string',
+            'categoriePlat' => 'required|integer'
+        ]);
+
+        DB::table('carteElements')
+            ->where('idElement', $validated['id'])
+            ->update([
+                'nom' => $validated['nom'],
+                'typePlat' => $validated['categorieElementCarte'],
+                'prix' => $validated['prix'],
+                'prixServeur' => $validated['prixServeur'],
+                'ingredientsElements' => $validated['composition'],
+                'categoriePlat' => $validated['categoriePlat'],
             ]);
 
-            DB::table('carteElements')
-                ->where('idElement', $validated['id'])
-                ->update([
-                    'nom' => $validated['nom'],
-                    'typePlat' => $validated['categorieElementCarte'],
-                    'prix' => $validated['prix'],
-                    'prixServeur' => $validated['prixServeur'],
-                    'description' => $validated['description'],
-                    'ingredientsElements' => $validated['composition'],
-                ]);
+        
+        return response()->json([
+            'success' => true,
+            'id' => $validated['id'],
+            'nom' => $validated['nom'],
+            'prix' => $validated['prix'],
+            'prixServeur' => $validated['prixServeur'],
+            'composition' => $validated['composition'],
+            'categoriePlat' => $validated['categoriePlat'],
+            'typePlat' => $validated['categorieElementCarte'],
+        ]);
     }
 
     public function supprimer(Request $request)

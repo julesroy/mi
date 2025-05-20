@@ -88,14 +88,14 @@
                 <div>@auth
                     <div
                         x-data="{
-                                                                            activeSlide: 0,
-                                                                            totalSlides: 4,
-                                                                            startAutoSlide() {
-                                                                                setInterval(() => {
-                                                                                    this.activeSlide = (this.activeSlide + 1) % this.totalSlides;
-                                                                                }, 5000); // Change slide every 5 seconds
-                                                                            }
-                                                                        }"
+                                                                                            activeSlide: 0,
+                                                                                            totalSlides: 4,
+                                                                                            startAutoSlide() {
+                                                                                                setInterval(() => {
+                                                                                                    this.activeSlide = (this.activeSlide + 1) % this.totalSlides;
+                                                                                                }, 5000); // Change slide every 5 seconds
+                                                                                            }
+                                                                                        }"
                         x-init="startAutoSlide()"
                         class="bg-white border rounded-lg shadow p-4 relative"
                     >
@@ -260,8 +260,8 @@
                     </div>
                 @endauth @guest
                  <div class="bg-white border rounded-lg shadow p-4">
-                                                                        <div class="font-bold">Statistiques utilisateur</div>
-                                                                        <div class="text-gray-500">Connectez-vous pour voir vos statistiques.</div> @endguest</div>
+                                                                                        <div class="font-bold">Statistiques utilisateur</div>
+                                                                                        <div class="text-gray-500">Connectez-vous pour voir vos statistiques.</div> @endguest</div>
             </section>
 
             <!-- Milieu -->
