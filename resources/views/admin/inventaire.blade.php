@@ -25,7 +25,7 @@
             }
         </style>
     </head>
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
+    <body class="pt-28 md:pt-60">
         @include("header")
 
         @php
@@ -42,104 +42,32 @@
 
             <div class="overflow-x-auto min-w-full">
                 <!-- Barre de recherche et bouton d'ajout -->
-                <div class="flex flex-col md:flex-row md:justify-between md:items-center min-w-full mb-4 bg-gray-800 p-4 rounded gap-3 sticky left-0 top-0 z-10">
-                    <form method="GET" action="{{ url()->current() }}" class="flex flex-col sm:flex-row w-full md:w-auto">
-                        <input type="text" name="search" placeholder="Rechercher" class="px-3 py-2 bg-gray-700 text-white rounded-t sm:rounded-l sm:rounded-t-none border-b sm:border-b-0 sm:border-r-0 border-gray-600 w-full sm:w-auto" value="{{ request("search") }}" />
-                        <select name="categorie" class="px-3 py-2 bg-gray-700 text-white border-t-0 sm:border-t sm:border-l-0 sm:border-r-0 border-gray-600 w-full sm:w-auto">
-                            <option value="">Toutes catégories</option>
-                            @foreach ($categories as $key => $label)
-                                <option value="{{ $key }}" {{ request("categorie") !== null && request("categorie") !== "" && request("categorie") == $key ? "selected" : "" }}>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-b sm:rounded-r sm:rounded-b-none hover:bg-blue-700 w-full sm:w-auto mt-2 sm:mt-0">Rechercher</button>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center min-w-full mb-4 bg-primaire p-4 rounded gap-3 sticky left-0 top-0 z-10">
+                    <form class="flex flex-col sm:flex-row w-full md:w-auto">
+                        <input type="text" name="search" id="recherche-utilisateur" placeholder="Rechercher" class="bg-white px-3 py-2 rounded-t sm:rounded-l sm:rounded-t-none border-b sm:border-b-0 sm:border-r-0 border-gray-600 w-full sm:w-auto" />
                     </form>
                     <button id="openAddDialog" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-full md:w-auto">+ Ajouter un ingrédient</button>
                 </div>
 
                 <!-- Indication du tri actuel -->
-                <p class="min-w-full mb-2 text-sm text-gray-400">@if (request("sort"))
-                    Trié
-                    par
-                    <span class="font-semibold text-white">
-                        {{
-                            request("sort") == "nom"
-                                ? "Nom"
-                                : (request("sort") == "quantite"
-                                    ? "Quantité"
-                                    : (request("sort") == "marque"
-                                        ? "Marque"
-                                        : (request("sort") == "estimationPrix"
-                                            ? "Prix"
-                                            : (request("sort") == "categorieIngredient"
-                                                ? "Catégorie"
-                                                : "Nom"
-                                            )
-                                        )
-                                    )
-                                )
-                        }}
-                    </span>
-                    
-                    ({{ request("direction", "asc") === "asc" ? "croissant" : "décroissant" }})
-                @else
-                    Tri
-                    par
-                    défaut
-                @endif</p>
+                <p class="min-w-full mb-2 text-sm text-black">
+                    Trié par
+                    <span class="font-semibold text-black" id="type-tri">défaut</span>
+                </p>
 
-                <!-- Tableau d'inventaire -->
-                <div class="max-h-[280px] overflow-y-auto hide-scrollbar">
-                    <table class="min-w-full table-fixed bg-white text-black rounded shadow border-collapse"">
-                        <thead class="bg-gray-700 text-white">
+                <div class="max-h-128 md:max-h-96 overflow-y-auto hide-scrollbar rounded-2xl border-2 border-primaire">
+                    <!-- Tableau de gestion d'inventaire -->
+                    <table class="min-w-full table-fixed bg-white text-black border-collapse text-center text-xs sm:text-sm md:text-base">
+                        <thead class="bg-primaire text-white sticky z-10">
                             <tr>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                    <a href="{{
-                                        request()->fullUrlWithQuery([
-                                            "sort" => "nom",
-                                            "direction" => request("sort") === "nom" && request("direction") === "asc" ? "desc" : "asc",
-                                        ])
-                                    }}" class="flex items-center gap-1 text-white">Nom {!! request("sort") === "nom" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                                </th>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                    <a href="{{
-                                        request()->fullUrlWithQuery([
-                                            "sort" => "quantite",
-                                            "direction" => request("sort") === "quantite" && request("direction") === "asc" ? "desc" : "asc",
-                                        ])
-                                    }}" class="flex items-center gap-1 text-white">Quantité {!! request("sort") === "quantite" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                                </th>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                    <a href="{{
-                                        request()->fullUrlWithQuery([
-                                            "sort" => "marque",
-                                            "direction" => request("sort") === "marque" && request("direction") === "asc" ? "desc" : "asc",
-                                        ])
-                                    }}" class="flex items-center gap-1 text-white">Marque {!! request("sort") === "marque" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                                </th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="nom">Nom</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="quantite">Quantité</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="marque">Marque</th>
                                 @if (Auth::user() && Auth::user()->acces == 3)
-                                    <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">
-                                        <a href="{{
-                                            request()->fullUrlWithQuery([
-                                                "sort" => "estimationPrix",
-                                                "direction" => request("sort") === "estimationPrix" && request("direction") === "asc" ? "desc" : "asc",
-                                            ])
-                                        }}" class="flex items-center gap-1 text-white">Prix estimé {!! request("sort") === "estimationPrix" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                                    </th>
+                                    <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Prix estimé</th>
                                 @endif
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b text-left">
-                                    <a href="{{
-                                        request()->fullUrlWithQuery([
-                                            "sort" => "categorieIngredient",
-                                            "direction" => request("sort") === "categorieIngredient" && request("direction") === "asc" ? "desc" : "asc",
-                                        ])
-                                    }}" class="flex items-center gap-1 text-white">
-                                        Catégorie
-                                        {!! request("sort") === "categorieIngredient" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}
-                                    </a>
-                                </th>
-                                <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b">Actions</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="categorie">Catégorie</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -345,8 +273,16 @@
             document.querySelectorAll('.edit-btn').forEach((btn) => {
                 btn.addEventListener('click', function () {
                     const id = this.getAttribute('data-id');
-                    document.getElementById(`row-${id}`).classList.add('hidden');
-                    document.getElementById(`edit-row-${id}`).classList.remove('hidden');
+                    const ligneAffichage = document.getElementById(`row-${id}`);
+                    const ligneEdition = document.getElementById(`edit-row-${id}`);
+
+                    // Cache la ligne normale (ajoute hidden ET display none)
+                    ligneAffichage.classList.add('hidden');
+                    ligneAffichage.style.display = 'none';
+
+                    // Affiche la ligne d’édition (retire hidden ET force le display block)
+                    ligneEdition.classList.remove('hidden');
+                    ligneEdition.style.display = '';
                 });
             });
 
@@ -354,8 +290,16 @@
             document.querySelectorAll('.cancel-btn').forEach((btn) => {
                 btn.addEventListener('click', function () {
                     const id = this.getAttribute('data-id');
-                    document.getElementById(`row-${id}`).classList.remove('hidden');
-                    document.getElementById(`edit-row-${id}`).classList.add('hidden');
+                    const ligneAffichage = document.getElementById(`row-${id}`);
+                    const ligneEdition = document.getElementById(`edit-row-${id}`);
+
+                    // Affiche la ligne normale
+                    ligneAffichage.classList.remove('hidden');
+                    ligneAffichage.style.display = '';
+
+                    // Cache la ligne d’édition
+                    ligneEdition.classList.add('hidden');
+                    ligneEdition.style.display = 'none';
                 });
             });
 
@@ -480,5 +424,8 @@
                     });
             });
         </script>
+
+        <script src="{{ asset("js/recherche.js") }}"></script>
+        <script src="{{ asset("js/tri-tableaux.js") }}"></script>
     </body>
 </html>

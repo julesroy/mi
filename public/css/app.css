@@ -550,9 +550,6 @@
   .max-h-\[90vh\] {
     max-height: 90vh;
   }
-  .max-h-\[280px\] {
-    max-height: 280px;
-  }
   .max-h-\[300px\] {
     max-height: 300px;
   }
@@ -911,10 +908,6 @@
     border-top-right-radius: var(--radius-md);
     border-bottom-right-radius: var(--radius-md);
   }
-  .rounded-b {
-    border-bottom-right-radius: 0.25rem;
-    border-bottom-left-radius: 0.25rem;
-  }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
@@ -942,10 +935,6 @@
   .border-t {
     border-top-style: var(--tw-border-style);
     border-top-width: 1px;
-  }
-  .border-t-0 {
-    border-top-style: var(--tw-border-style);
-    border-top-width: 0px;
   }
   .border-t-2 {
     border-top-style: var(--tw-border-style);
@@ -1986,11 +1975,6 @@
       margin-inline: auto;
     }
   }
-  .sm\:mt-0 {
-    @media (width >= 40rem) {
-      margin-top: calc(var(--spacing) * 0);
-    }
-  }
   .sm\:flex {
     @media (width >= 40rem) {
       display: flex;
@@ -2058,24 +2042,6 @@
       border-bottom-left-radius: 0.25rem;
     }
   }
-  .sm\:rounded-r {
-    @media (width >= 40rem) {
-      border-top-right-radius: 0.25rem;
-      border-bottom-right-radius: 0.25rem;
-    }
-  }
-  .sm\:rounded-b-none {
-    @media (width >= 40rem) {
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-    }
-  }
-  .sm\:border-t {
-    @media (width >= 40rem) {
-      border-top-style: var(--tw-border-style);
-      border-top-width: 1px;
-    }
-  }
   .sm\:border-r-0 {
     @media (width >= 40rem) {
       border-right-style: var(--tw-border-style);
@@ -2086,12 +2052,6 @@
     @media (width >= 40rem) {
       border-bottom-style: var(--tw-border-style);
       border-bottom-width: 0px;
-    }
-  }
-  .sm\:border-l-0 {
-    @media (width >= 40rem) {
-      border-left-style: var(--tw-border-style);
-      border-left-width: 0px;
     }
   }
   .sm\:px-8 {
