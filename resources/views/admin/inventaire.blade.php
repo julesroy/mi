@@ -66,6 +66,7 @@
                                 @if (Auth::user() && Auth::user()->acces == 3)
                                     <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Prix estimé</th>
                                 @endif
+
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="categorie">Catégorie</th>
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Actions</th>
                             </tr>
@@ -85,22 +86,15 @@
                                     </td>
                                     <td class="w-1/6 py-2 px-4 border-b text-center">
                                         <div class="flex justify-center">
-                                            <img src="{{ asset('images/icons/edit.svg') }}" alt="Modifier"
-                                                class="action-icon edit-btn"
-                                                data-id="{{ $ingredient->idIngredient }}" />
-                                    
-                                            <img src="{{ asset('images/icons/delete.svg') }}" alt="Supprimer"
-                                                class="action-icon delete-btn"
-                                                data-id="{{ $ingredient->idIngredient }}" />
-                                    
-                                            @if($ingredient->commentaire)
-                                                <img src="{{ asset('images/icons/commentaire.svg') }}" alt="Commentaire"
-                                                    class="action-icon comment-btn cursor-pointer"
-                                                    onclick="showComment('{{ addslashes($ingredient->nom) }}', `{{ addslashes($ingredient->commentaire) }}`)" />
+                                            <img src="{{ asset("images/icons/edit.svg") }}" alt="Modifier" class="action-icon edit-btn" data-id="{{ $ingredient->idIngredient }}" />
+
+                                            <img src="{{ asset("images/icons/delete.svg") }}" alt="Supprimer" class="action-icon delete-btn" data-id="{{ $ingredient->idIngredient }}" />
+
+                                            @if ($ingredient->commentaire)
+                                                <img src="{{ asset("images/icons/commentaire.svg") }}" alt="Commentaire" class="action-icon comment-btn cursor-pointer" onclick="showComment('{{ addslashes($ingredient->nom) }}', `{{ addslashes($ingredient->commentaire) }}`)" />
                                             @endif
                                         </div>
                                     </td>
-                                    
                                 </tr>
                                 <tr id="edit-row-{{ $ingredient->idIngredient }}" class="hidden bg-gray-200">
                                     <td class="w-1/6 py-2 px-4 border-b">
@@ -139,35 +133,27 @@
                                     <h3 class="text-xl font-bold mb-4" id="dialogTitle"></h3>
                                     <p class="mb-4 bg-gray-100 p-3 rounded text-black" id="dialogContent"></p>
                                     <div class="flex justify-end">
-                                        <button onclick="commentDialog.close()" 
-                                                class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">
-                                            Fermer
-                                        </button>
+                                        <button onclick="commentDialog.close()" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Fermer</button>
                                     </div>
                                 </div>
                             </dialog>
 
                             <script>
-                            const commentDialog = document.getElementById('commentDialog');
+                                const commentDialog = document.getElementById('commentDialog');
 
-                            function showComment(nom, commentaire) {
-                                document.getElementById('dialogTitle').textContent = nom;
-                                document.getElementById('dialogContent').textContent = commentaire;
-                                commentDialog.showModal();
-                            }
-
-                            // Fermer la modale en cliquant à l'extérieur
-                            commentDialog.addEventListener('click', (e) => {
-                                const dialogDimensions = commentDialog.getBoundingClientRect();
-                                if (
-                                    e.clientX < dialogDimensions.left ||
-                                    e.clientX > dialogDimensions.right ||
-                                    e.clientY < dialogDimensions.top ||
-                                    e.clientY > dialogDimensions.bottom
-                                ) {
-                                    commentDialog.close();
+                                function showComment(nom, commentaire) {
+                                    document.getElementById('dialogTitle').textContent = nom;
+                                    document.getElementById('dialogContent').textContent = commentaire;
+                                    commentDialog.showModal();
                                 }
-                            });
+
+                                // Fermer la modale en cliquant à l'extérieur
+                                commentDialog.addEventListener('click', (e) => {
+                                    const dialogDimensions = commentDialog.getBoundingClientRect();
+                                    if (e.clientX < dialogDimensions.left || e.clientX > dialogDimensions.right || e.clientY < dialogDimensions.top || e.clientY > dialogDimensions.bottom) {
+                                        commentDialog.close();
+                                    }
+                                });
                             </script>
                         </tbody>
                     </table>

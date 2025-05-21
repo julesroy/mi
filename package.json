@@ -6,7 +6,7 @@
         "build:cssprod": "npx @tailwindcss/cli -i ./resources/css/app.css -o ./public/css/app.css --minify",
         "start": "npm run build:css && php artisan serve",
         "dev": "nodemon",
-        "format": "prettier --write ./resources/views/**/*.blade.php && prettier --write ./app/**/*.php"
+        "format": "prettier --write ./resources/views/**/*.blade.php && prettier --write ./app/**/*.php && prettier --write ./public/js/**/*.js"
     },
     "devDependencies": {
         "@prettier/plugin-php": "^0.22.4",

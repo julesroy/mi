@@ -1,4 +1,21 @@
-// Ajoute un curseur pointer sur les th triables
+/**
+ * Gestion du tri dynamique des tableaux HTML sur clic des en-têtes de colonnes.
+ *
+ * Fonctionnement :
+ * - Ajoute un curseur pointer sur les <th> ayant la classe 'sortable'.
+ * - Trie les lignes du tableau (hors lignes d'édition) selon la colonne cliquée.
+ * - Pour les colonnes 'solde' et 'acces', le tri se fait numériquement via l'attribut data-value si présent.
+ * - Pour les autres colonnes, le tri se fait alphabétiquement.
+ * - Replace les lignes triées dans le <tbody> ainsi que leur ligne d'édition associée.
+ * - Met à jour l'indication du tri dans l'élément #type-tri si présent.
+ *
+ * Prérequis :
+ * - Les <th> triables doivent avoir la classe 'sortable' et un data-key correspondant à l'id des <td>.
+ * - Les <td> à trier doivent avoir un id de la forme '<key>-<id>'.
+ * - Les valeurs numériques doivent être dans l'attribut data-value.
+ * - Les lignes d'édition doivent avoir un id 'edit-row-<id>'.
+ */
+
 document.querySelectorAll('th.sortable').forEach((th) => {
     th.style.cursor = 'pointer';
 });

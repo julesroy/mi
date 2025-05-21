@@ -1,3 +1,18 @@
+/**
+ * Ajoute un écouteur d'événement sur le champ de recherche utilisateur.
+ * À chaque saisie, filtre dynamiquement les lignes du tableau des utilisateurs
+ * en fonction du nom ou du prénom (si présents).
+ * 
+ * - Les lignes dont le nom ou le prénom contient la valeur recherchée restent visibles.
+ * - Les autres lignes sont masquées.
+ * - Les lignes d'édition associées sont toujours masquées.
+ * 
+ * Prérequis :
+ * - Un champ input avec l'id 'recherche-utilisateur'
+ * - Des lignes de tableau avec des id de la forme 'row-<id>'
+ * - Des cellules avec des id 'nom-<id>' et 'prenom-<id>' (optionnelles)
+ * - Des lignes d'édition avec des id 'edit-row-<id>'
+ */
 document.getElementById('recherche-utilisateur').addEventListener('input', function () {
     const valeurRecherche = this.value.trim().toLowerCase();
 
