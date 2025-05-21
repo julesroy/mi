@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include("head")
         <title>Affichage Cuisine - Commandes</title>
@@ -30,25 +30,58 @@
             </div>
         </main>
 
+        <!-- Dialog de modification de commande -->
+        <div id="modifierCommandeDialog" class="bg-black bg-opacity-50 p-4 z-50 hidden">
+            <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="font-bold text-xl">${commande.numeroCommande}</span>
+                        <button onclick="document.getElementById('modifierCommandeDialog').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div id="categoriesContainer" class="space-y-6">
+                        <div class="text-center py-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+                            <p class="mt-2">Chargement des ingrédients...</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="commandeCommentaire" class="block text-sm font-medium text-gray-700">Commentaire</label>
+                        <textarea id="commandeCommentaire" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button onclick="document.getElementById('modifierCommandeDialog').classList.add('hidden')" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Annuler</button>
+                        <button onclick="sauvegarderModifications()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Enregistrer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <style>
             .etat-0 {
-                background-color: rgba(251,44,54,1);
+                background-color: rgba(251, 44, 54, 1);
                 color: black;
             }
             .etat-1 {
-                background-color: rgba(152,16,250,1);
+                background-color: rgba(152, 16, 250, 1);
                 color: black;
             }
             .etat-2 {
-                background-color: rgba(255,105,0,1);
+                background-color: rgba(255, 105, 0, 1);
                 color: black;
             }
             .etat-3 {
-                background-color: rgba(0,166,62,1);
+                background-color: rgba(0, 166, 62, 1);
                 color: black;
             }
             .etat-4 {
-                background-color: rgba(231,0,11,0.7);
+                background-color: rgba(231, 0, 11, 0.7);
                 color: black;
                 text-decoration: underline;
                 font-weight: bold;
@@ -75,6 +108,9 @@
 
         <script>
             let allCommandes = []; // Stocke toutes les commandes pour le filtrage
+            let currentCommandeId = null;
+            let currentCommandeItems = [];
+            let allInventaireItems = [];
 
             document.addEventListener('DOMContentLoaded', function () {
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -316,16 +352,6 @@
                         });
                 };
 
-                window.modifierCommande = function (id) {
-                    if (id === 999999) {
-                        alert('Cette commande est un exemple test - Action impossible');
-                        return;
-                    }
-
-                    // Implémentez ici la logique de modification
-                    alert('Fonctionnalité de modification à implémenter pour la commande ' + id);
-                };
-
                 window.annulerCommande = function (id) {
                     if (id === 999999) {
                         alert('Cette commande est un exemple test - Action impossible');
@@ -359,6 +385,192 @@
                 // Rafraîchir toutes les 30 secondes
                 setInterval(loadCommandes, 30000);
             });
+
+            // Fonction pour ouvrir le dialog de modification
+            window.modifierCommande = async function(id) {
+    if (id === 999999) {
+        alert('Cette commande est un exemple test - Action impossible');
+        return;
+    }
+
+    currentCommandeId = id;
+    document.getElementById('modifierCommandeDialog').classList.remove('hidden');
+    
+    // Afficher le loader
+    document.getElementById('categoriesContainer').innerHTML = `
+        <div class="text-center py-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+            <p class="mt-2">Chargement des données...</p>
+        </div>
+    `;
+
+    try {
+        const [commandeResponse, inventaireResponse] = await Promise.all([
+            fetch(`/admin/commandes/details/${id}`).then(r => {
+                if (!r.ok) throw new Error(`Erreur commande: ${r.status}`);
+                return r.json();
+            }),
+            fetch('/admin/inventaire/items').then(r => {
+                if (!r.ok) throw new Error(`Erreur inventaire: ${r.status}`);
+                return r.json();
+            })
+        ]);
+        
+        // Debug: afficher les données reçues
+        console.log('Données commande:', commandeResponse);
+        console.log('Données inventaire:', inventaireResponse);
+        
+        if (!commandeResponse || !inventaireResponse) {
+            throw new Error('Données manquantes dans la réponse');
+        }
+        
+        document.getElementById('commandeCommentaire').value = commandeResponse.commentaire || '';
+        
+        // Traitement du stock
+        const stockItems = [];
+        if (commandeResponse.stock) {
+            const items = commandeResponse.stock.split(';');
+            for (const item of items) {
+                if (item) {
+                    const [idIngredient, quantite, obligatoire] = item.split(',');
+                    stockItems.push({
+                        idIngredient,
+                        quantite,
+                        obligatoire
+                    });
+                }
+            }
+        }
+        
+        currentCommandeItems = stockItems;
+        allInventaireItems = inventaireResponse;
+        
+        afficherCategoriesInventaire();
+    } catch (error) {
+        console.error('Erreur détaillée:', error);
+        document.getElementById('categoriesContainer').innerHTML = `
+            <div class="text-center py-4 text-red-500">
+                <p>Erreur lors du chargement des données</p>
+                <p class="text-sm mt-2">${error.message}</p>
+            </div>
+        `;
+    }
+};
+
+// Fonction pour afficher les catégories d'items
+function afficherCategoriesInventaire() {
+    const categoriesContainer = document.getElementById('categoriesContainer');
+    
+    // Grouper par catégorie
+    const itemsParCategorie = {};
+    allInventaireItems.forEach(item => {
+        if (!itemsParCategorie[item.categorieIngredient]) {
+            itemsParCategorie[item.categorieIngredient] = [];
+        }
+        itemsParCategorie[item.categorieIngredient].push(item);
+    });
+    
+    let html = '';
+    
+    // Catégories prédéfinies (ajustez selon vos besoins)
+    const categories = [
+        { id: 1, nom: 'Viandes' },
+        { id: 2, nom: 'Extras' },
+        { id: 3, nom: 'Snacks/Boissons' },
+        { id: 0, nom: 'Ingrédients divers' }
+    ];
+    
+    categories.forEach(categorie => {
+        const items = itemsParCategorie[categorie.id] || [];
+        if (items.length === 0) return;
+        
+        html += `
+            <div class="border border-gray-200 rounded-lg p-4">
+                <h4 class="text-lg font-semibold mb-3">${categorie.nom}</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                    ${items.map(item => {
+                        // Vérifier si l'item est dans la commande
+                        const inCommande = currentCommandeItems.some(ci => ci.idIngredient == item.idIngredient);
+                        
+                        return `
+                            <button 
+                                onclick="toggleItemInCommande('${item.idIngredient}')"
+                                class="px-3 py-2 rounded-lg text-sm font-medium text-white 
+                                ${inCommande ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'}"
+                            >
+                                ${item.nom}
+                                ${inCommande ? '<span class="ml-1">✓</span>' : ''}
+                            </button>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    });
+    
+    categoriesContainer.innerHTML = html || `
+        <div class="text-center py-4 text-gray-500">
+            <p>Aucun ingrédient disponible</p>
+        </div>
+    `;
+}
+
+// Fonction pour ajouter/enlever un item de la commande
+window.toggleItemInCommande = function(idIngredient) {
+    const index = currentCommandeItems.findIndex(item => item.idIngredient == idIngredient);
+    
+    if (index === -1) {
+        // Ajouter l'item
+        currentCommandeItems.push({
+            idIngredient: idIngredient,
+            quantite: 1, // Quantité par défaut
+            obligatoire: 0 // Non obligatoire par défaut
+        });
+    } else {
+        // Retirer l'item
+        currentCommandeItems.splice(index, 1);
+    }
+    
+    afficherCategoriesInventaire();
+};
+
+// Fonction pour sauvegarder les modifications
+async function sauvegarderModifications() {
+    if (!currentCommandeId) return;
+    
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const commentaire = document.getElementById('commandeCommentaire').value;
+        
+        // Préparer le stock au format "id,qte,obligatoire;id2,qte2,obligatoire2"
+        const stockValue = currentCommandeItems
+            .map(item => `${item.idIngredient},${item.quantite},${item.obligatoire}`)
+            .join(';');
+        
+        const response = await fetch(`/admin/commandes/modifier/${currentCommandeId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({
+                commentaire: commentaire,
+                stock: stockValue
+            })
+        });
+        
+        if (response.ok) {
+            alert('Modifications enregistrées avec succès');
+            document.getElementById('modifierCommandeDialog').classList.add('hidden');
+            loadCommandes();
+        } else {
+            throw new Error('Erreur lors de la sauvegarde');
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Une erreur est survenue: ' + error.message);
+    }
+}
         </script>
     </body>
 </html>

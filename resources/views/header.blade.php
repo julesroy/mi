@@ -1,7 +1,8 @@
 <header class="fixed top-0 left-0 w-full bg-primaire text-white text-3xl py-0 z-50 h-24 md:h-32">
     <div class="flex items-center justify-between md:justify-around h-full">
+        <!-- Pour les grands écrans -->
         <span class="hidden md:flex justify-between w-5/12 items-center h-full">
-            <span class="text-3xl md:text-5xl pl-4 md:pl-0 py-6 md:py-0 font-bold">
+            <span class="text-5xl pl-4 md:pl-0 py-6 md:py-0 font-bold">
                 <a href="/">Par'MI'Giano</a>
             </span>
 
@@ -59,6 +60,7 @@
             </div>
         </span>
 
+        <!-- Pour les petits écrans -->
         <span id="cote-gauche" class="flex items-center justify-between md:hidden w-full pl-4">
             <!-- menu déroulant pour petits écrans -->
             <nav id="menu" class="overflow-hidden h-0 transition-all text-2xl duration-500 ease-in-out flex flex-col items-center bg-primaire absolute w-full left-0 top-full md:static md:flex-row md:items-stretch md:justify-start md:h-auto md:overflow-visible">
@@ -106,12 +108,12 @@
             </button>
 
             @auth
-                <span class="text-lg pr-16">Solde : {{ $donneesUtilisateur->solde }}€</span>
+                <span class="text-base pr-2">Solde : {{ $donneesUtilisateur->solde }}€</span>
             @endauth
-        </span>
 
-        <span class="md:hidden text-3xl md:text-5xl pr-4 py-6 md:py-0 font-bold">
-            <a href="/">Par'MI'Giano</a>
+            <span class="md:hidden text-3xl md:text-5xl pr-4 py-6 md:py-0 font-bold">
+                <a href="/">Par'MI'Giano</a>
+            </span>
         </span>
     </div>
 </header>
