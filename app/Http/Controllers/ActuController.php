@@ -29,9 +29,25 @@ class ActuController extends Controller
             'date' => 'required|date',
             'titre' => 'required|string|max:255',
             'contenu' => 'required|string',
+            'image' => 'nullable|image|max:2048', // max 2Mo
         ]);
 
-        Actu::create($validated);
+        // On crée l'actu sans image d'abord pour avoir l'id
+        $actu = Actu::create([
+            'date' => $validated['date'],
+            'titre' => $validated['titre'],
+            'contenu' => $validated['contenu'],
+            'image' => null,
+        ]);
+
+        // Gestion de l'image
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $ext = $request->file('image')->extension();
+            $filename = $actu->idActu . '.' . $ext;
+            $path = $request->file('image')->storeAs('actus', $filename, 'public');
+            $actu->image = $path; // ex: actus/17.jpg
+            $actu->save();
+        }
 
         return redirect()->route('gestion-actus')->with('success', 'Actualité ajoutée avec succès.');
     }
@@ -44,9 +60,37 @@ class ActuController extends Controller
             'date' => 'required|date',
             'titre' => 'required|string|max:255',
             'contenu' => 'required|string',
+            'image' => 'nullable|image|max:2048',
+            'delete_image' => 'nullable|boolean',
         ]);
 
-        $actu->update($validated);
+        $actu->update([
+            'date' => $validated['date'],
+            'titre' => $validated['titre'],
+            'contenu' => $validated['contenu'],
+        ]);
+
+        // Suppression de l'image si demandé
+        if ($request->has('delete_image') && $request->delete_image) {
+            if ($actu->image && \Storage::disk('public')->exists($actu->image)) {
+                \Storage::disk('public')->delete($actu->image);
+            }
+            $actu->image = null;
+            $actu->save();
+        }
+
+        // Upload d'une nouvelle image si présente
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            // Supprime l'ancienne image si elle existe
+            if ($actu->image && \Storage::disk('public')->exists($actu->image)) {
+                \Storage::disk('public')->delete($actu->image);
+            }
+            $ext = $request->file('image')->extension();
+            $filename = $actu->idActu . '.' . $ext;
+            $path = $request->file('image')->storeAs('actus', $filename, 'public');
+            $actu->image = $path;
+            $actu->save();
+        }
 
         return redirect()->route('gestion-actus')->with('success', 'Actualité modifiée avec succès.');
     }
@@ -54,6 +98,11 @@ class ActuController extends Controller
     public function destroy($id)
     {
         $actu = Actu::findOrFail($id);
+
+        if ($actu->image && \Storage::disk('public')->exists($actu->image)) {
+            \Storage::disk('public')->delete($actu->image);
+        }
+
         $actu->delete();
 
         return redirect()->route('gestion-actus')->with('success', 'Actualité supprimée.');

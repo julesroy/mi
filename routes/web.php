@@ -3,6 +3,7 @@
 use App\Http\Controllers\GestionComptesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ActualitesController;
 use App\Http\Controllers\ActuController;
 use App\Http\Controllers\CompteController;
 use App\Http\Controllers\PlanningController;
@@ -51,6 +52,9 @@ Route::post('/reset-mdp', [PasswordController::class, 'resetPassword']);
 // page commander
 Route::get('/commander', [CommandeUtilisateurController::class, 'index']);
 Route::post('/commander/valider', [CommandeUtilisateurController::class, 'validerCommande'])->name('commander.valider');
+
+// page actus
+Route::get('/actus', [App\Http\Controllers\ActualitesController::class, 'index'])->name('actus');
 
 /**-----------------------------------------------
  * ADMIN
@@ -197,11 +201,6 @@ Route::get('/reglement', function () {
 // page carte
 Route::get('/carte', function () {
     return view('carte');
-});
-
-// page actus
-Route::get('/actus', function () {
-    return view('actus');
 });
 
 /**-----------------------------------------------

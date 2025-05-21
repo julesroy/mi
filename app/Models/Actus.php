@@ -1,14 +1,15 @@
 <?php
-// Gestion Actu
+
+//Actus coté utilisateur
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Actu extends Model
+class Actus extends Model
 {
     protected $table = 'actus';
     protected $primaryKey = 'idActu';
     public $timestamps = false;
-    protected $fillable = ['date', 'titre', 'contenu', 'image'];
+    protected $fillable = ['type', 'titre', 'date', 'image'];
 }
