@@ -38,12 +38,12 @@
         body {
             font-family: 'opensauce', sans-serif;
         }
-    @else
-        body {
-            font-family: 'lobstertwo', sans-serif;
-        }
 
         header {
+            font-family: 'lobstertwo', sans-serif;
+        }
+    @else
+        body {
             font-family: 'lobstertwo', sans-serif;
         }
     @endif

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 
 class AccueilController extends Controller
@@ -28,14 +29,8 @@ class AccueilController extends Controller
     private function recupInfo()
     {
         $ouvert = DB::table('parametres')->value('service');
-<<<<<<< HEAD
         $horairesDebutCommandes = DB::table('parametres')->value('horairesDebutCommandes');
         $horairesFinCommandes = DB::table('parametres')->value('horairesFinCommandes');
-=======
-        $serviceMidi = DB::table('parametres')->value('horairesDebutCommandes');
-       
-        // dd($serviceMidi); // Debug the value here
->>>>>>> 2aa0808463fd3572591f3ba50dea4224495a696b
 
         // Formattage des horaires
         $horairesDebutCommandes = Carbon::parse($horairesDebutCommandes)->format('H\h');
@@ -98,7 +93,7 @@ class AccueilController extends Controller
         $info = $this->recupInfo();
 
         // Récupérer le numéro de compte de l'utilisateur connecté
-        $numeroCompte = auth()->user()->numeroCompte ?? null;
+        $numeroCompte = Auth::user()->numeroCompte ?? null;
 
         // Récupérer les informations sur la commande en cours
         $commandeEnCours = $numeroCompte ? $this->recupCommandeEnCours($numeroCompte) : null;
