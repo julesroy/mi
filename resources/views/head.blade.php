@@ -51,5 +51,16 @@
     </style>
 @endif
 
+<!-- Pour cacher la barre de défilement (scrollbar) dans les tableaux -->
+<style>
+    .hide-scrollbar {
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none; /* Chrome/Safari/Webkit */
+    }
+</style>
+
 <!-- Thème -->
 <meta name="theme-color" content="#407829" />

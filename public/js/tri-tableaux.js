@@ -1,0 +1,51 @@
+// Ajoute un curseur pointer sur les th triables
+document.querySelectorAll('th.sortable').forEach((th) => {
+    th.style.cursor = 'pointer';
+});
+
+const table = document.querySelector('table');
+const tbody = table.querySelector('tbody');
+
+let sortDirection = {};
+
+document.querySelectorAll('th.sortable').forEach((th, index) => {
+    th.addEventListener('click', () => {
+        const key = th.dataset.key;
+        sortDirection[key] = sortDirection[key] === 'asc' ? 'desc' : 'asc';
+        const dir = sortDirection[key];
+
+        // Récupère les lignes du tbody (uniquement les lignes normales, pas celles en édition)
+        const rows = Array.from(tbody.querySelectorAll('tr:not(.hidden)')).filter((tr) => !tr.id.startsWith('edit-row-'));
+
+        rows.sort((a, b) => {
+            const aCell = a.querySelector(`[id^="${key}-"]`);
+            const bCell = b.querySelector(`[id^="${key}-"]`);
+
+            if (!aCell || !bCell) return 0;
+
+            let aValue = aCell.dataset.value ?? aCell.textContent.trim();
+            let bValue = bCell.dataset.value ?? bCell.textContent.trim();
+
+            if (['solde', 'acces'].includes(key)) {
+                aValue = parseFloat(aValue);
+                bValue = parseFloat(bValue);
+                return dir === 'asc' ? aValue - bValue : bValue - aValue;
+            } else {
+                return dir === 'asc' ? aValue.localeCompare(bValue, 'fr', { sensitivity: 'base' }) : bValue.localeCompare(aValue, 'fr', { sensitivity: 'base' });
+            }
+        });
+
+        // Replace les lignes triées dans le tbody, mais aussi leurs lignes d'édition associées
+        rows.forEach((row) => {
+            tbody.appendChild(row);
+            const editRow = document.getElementById('edit-' + row.id);
+            if (editRow) tbody.appendChild(editRow);
+        });
+
+        // Met à jour l'indication du tri (optionnel)
+        const typeTriSpan = document.getElementById('type-tri');
+        if (typeTriSpan) {
+            typeTriSpan.textContent = `${key} (${dir === 'asc' ? '▲' : '▼'})`;
+        }
+    });
+});
