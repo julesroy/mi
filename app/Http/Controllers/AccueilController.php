@@ -28,8 +28,14 @@ class AccueilController extends Controller
     private function recupInfo()
     {
         $ouvert = DB::table('parametres')->value('service');
+<<<<<<< HEAD
         $horairesDebutCommandes = DB::table('parametres')->value('horairesDebutCommandes');
         $horairesFinCommandes = DB::table('parametres')->value('horairesFinCommandes');
+=======
+        $serviceMidi = DB::table('parametres')->value('horairesDebutCommandes');
+       
+        // dd($serviceMidi); // Debug the value here
+>>>>>>> 2aa0808463fd3572591f3ba50dea4224495a696b
 
         // Formattage des horaires
         $horairesDebutCommandes = Carbon::parse($horairesDebutCommandes)->format('H\h');

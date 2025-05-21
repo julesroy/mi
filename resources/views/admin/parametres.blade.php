@@ -60,8 +60,6 @@
             </section>
         </section>
 
-        @include("footer")
-
         <!-- Script pour la mémorisation des états des boutons -->
         <script>
             function options() {

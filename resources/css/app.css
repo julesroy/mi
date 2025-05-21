@@ -16,6 +16,11 @@
     src: url('/fonts/LobsterTwo-Regular.ttf');
 }
 
+@font-face {
+    font-family: 'opensauce';
+    src: url('/fonts/Open-sauce.ttf');
+}
+
 @theme {
     --color-primaire: #407829;
     --color-secondaire: #539d35;

@@ -29,8 +29,27 @@
 <!-- CSS -->
 <link href="{{ asset("css/app.css") }}" rel="stylesheet" />
 
-<style>
-    body {
-        font-family: 'lobstertwo', sans-serif;
-    }
-</style>
+@php
+    use Illuminate\Support\Str;
+@endphp
+
+@if (Str::contains(request()->path(), "admin"))
+    <style>
+        body {
+            font-family: 'opensauce', sans-serif;
+        }
+
+        header {
+            font-family: 'lobstertwo', sans-serif;
+        }
+    </style>
+@else
+    <style>
+        body {
+            font-family: 'lobstertwo', sans-serif;
+        }
+    </style>
+@endif
+
+<!-- Thème -->
+<meta name="theme-color" content="#407829" />

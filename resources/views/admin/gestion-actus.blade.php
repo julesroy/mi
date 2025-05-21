@@ -197,6 +197,5 @@
                 form.submit();
             }
         </script>
-        @include("footer")
     </body>
 </html>

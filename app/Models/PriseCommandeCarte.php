@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PriseCommandeCarte extends Model
 {
-    protected $table = 'carte'; // adapte si ta table a un autre nom
+    protected $table = 'carteElements';
     public $timestamps = false;
-    protected $fillable = ['nom', 'prix', 'typePlat']; // adapte selon ta structure
+    protected $fillable = ['nom', 'prix', 'typePlat'];
 }

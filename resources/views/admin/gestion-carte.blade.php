@@ -61,70 +61,39 @@
                 </div>
 
                 <!-- Indication du tri actuel -->
-                <p class="min-w-full mb-2 text-sm text-gray-400">
-                    @if (request("sort"))
-                        Trié par
-                        <span class="font-semibold text-white">
-                            {{
-                                request("sort") == "nom"
-                                    ? "Nom"
-                                    : (request("sort") == "quantite"
-                                        ? "Quantité"
-                                        : (request("sort") == "marque"
-                                            ? "Marque"
-                                            : (request("sort") == "estimationPrix"
-                                                ? "Prix"
-                                                : (request("sort") == "categorieIngredient"
-                                                    ? "Catégorie"
-                                                    : "Nom"))))
-                            }}
-                        </span>
-
-                        ({{ request("direction", "asc") === "asc" ? "croissant" : "décroissant" }})
-                    @else
-                        Tri par défaut
-                    @endif
+                <p class="min-w-full mb-2 text-sm text-black">
+                    Trié par
+                    <span class="font-semibold text-black" id="type-tri">défaut</span>
                 </p>
 
                 <!-- Tableau de gestion de la carte -->
                 <table class="min-w-full bg-white text-black rounded shadow">
-                    <thead>
-                        <tr class="bg-gray-700 text-white">
-                            <th class="py-2 px-4 border-b">
-                                <a href="{{ request()->fullUrlWithQuery(["sort" => "nom", "direction" => request("sort") === "nom" && request("direction") === "asc" ? "desc" : "asc"]) }}" class="flex items-center gap-1 text-white">Nom {!! request("sort") === "nom" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                            </th>
-                            <th class="py-2 px-4 border-b">
-                                <a href="{{ request()->fullUrlWithQuery(["sort" => "quantite", "direction" => request("sort") === "quantite" && request("direction") === "asc" ? "desc" : "asc"]) }}" class="flex items-center gap-1 text-white">Prix {!! request("sort") === "quantite" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                            </th>
-                            <th class="py-2 px-4 border-b">
-                                <a href="{{ request()->fullUrlWithQuery(["sort" => "marque", "direction" => request("sort") === "marque" && request("direction") === "asc" ? "desc" : "asc"]) }}" class="flex items-center gap-1 text-white">Prix serveur {!! request("sort") === "marque" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                            </th>
-                            @if (Auth::user() && Auth::user()->acces == 3)
-                                    <th class="py-2 px-4 border-b">
-                                        <a href="{{ request()->fullUrlWithQuery(["sort" => "estimationPrix", "direction" => request("sort") === "estimationPrix" && request("direction") === "asc" ? "desc" : "asc"]) }}" class="flex items-center gap-1 text-white">Prix estimé {!! request("sort") === "estimationPrix" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}</a>
-                                    </th>
-                            @endif
+                    <thead class="bg-primaire text-white sticky z-10">
+                        <tr>
+                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="nom">Nom</th>
+                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="composition">Composition</th>
+                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prix">Prix</th>
+                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prix-serveur">Prix serveur</th>
+                            @can("verifier-acces-super-administrateur")
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="prix-estime">Prix estime</th>
+                            @endcan
 
-                            <th class="bg-gray-700 sticky top-0 w-1/6 py-2 px-4 border-b text-left">
-                                <a href="{{
-                                    request()->fullUrlWithQuery([
-                                        "sort" => "categorieIngredient",
-                                        "direction" => request("sort") === "categorieIngredient" && request("direction") === "asc" ? "desc" : "asc",
-                                    ])
-                                }}" class="flex items-center gap-1 text-white">
-                                    Catégorie
-                                    {!! request("sort") === "categorieIngredient" ? (request("direction") === "asc" ? "▲" : "▼") : "" !!}
-                                </a>
-                            </th>
-                            <th class="py-2 px-4 border-b">Actions</th>
+                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="categorie">Catégorie</th>
+                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($elementsCarte as $elementCarte)
                             <tr id="row-{{ $elementCarte->idElement }}" class="hover:bg-gray-100">
                                 <td class="py-2 px-4 border-b" id="nom-{{ $elementCarte->idElement }}">{{ $elementCarte->nom }}</td>
-                                <td class="py-2 px-4 border-b" id="nom-{{ $elementCarte->idElement }}">{{ $elementCarte->prix }}</td>
-                                <td class="py-2 px-4 border-b" id="nom-{{ $elementCarte->idElement }}">{{ $elementCarte->prixServeur }}</td>
+                                <td class="py-2 px-4 border-b max-w-32 overflow-hidden" id="composition-{{ $elementCarte->idElement }}">{{ $elementCarte->ingredientsElements }}</td>
+                                <td class="py-2 px-4 border-b" id="prix-{{ $elementCarte->idElement }}">{{ $elementCarte->prix }}</td>
+                                <td class="py-2 px-4 border-b" id="prix-{{ $elementCarte->idElement }}">{{ $elementCarte->prixServeur }}</td>
+                                @can("verifier-acces-super-administrateur")
+                                    <td class="py-2 px-4 border-b" id="prix-estime-{{ $elementCarte->idElement }}">Estimation</td>
+                                @endcan
+
+                                <td class="py-2 px-4 border-b" id="categorie-{{ $elementCarte->idElement }}">{{ $elementCarte->categoriePlat }}</td>
                                 <td class="py-2 px-4 border-b">
                                     <div class="flex">
                                         <img src="{{ asset("images/icons/edit.svg") }}" alt="Modifier" class="action-icon edit-btn" data-id="{{ $elementCarte->idElement }}" />
@@ -136,6 +105,66 @@
                                 <td class="py-2 px-4 border-b">
                                     <input type="text" class="w-full p-1 border" id="edit-nom-{{ $elementCarte->idElement }}" value="{{ $elementCarte->nom }}" />
                                 </td>
+                                @php
+                                    // On récupère la chaîne brute
+                                    $composition = $elementCarte->ingredientsElements;
+                                    $elements = [];
+                                    foreach (explode(";", $composition) as $item) {
+                                        if (trim($item) === "") {
+                                            continue;
+                                        }
+                                        [$idIngredient, $quantite, $choix] = explode(",", $item);
+                                        $elements[] = [
+                                            "idIngredient" => $idIngredient,
+                                            "quantite" => $quantite,
+                                            "choix" => $choix,
+                                        ];
+                                    }
+                                @endphp
+
+                                <td class="py-2 px-4 border-b">
+                                    <form id="modifierElementCarte" action="{{ route("admin.gestion-carte.modifier") }}" method="POST">
+                                        <div id="edit-compositionContainer-{{ $elementCarte->idElement }}">
+                                            @foreach ($elements as $element)
+                                                <div class="composition-group flex items-center mb-2">
+                                                    <select name="elementCompositionCarteEdit[]">
+                                                        @foreach ($elementsInventaire as $ingredient)
+                                                            <option value="{{ $ingredient->idIngredient }}" {{ $element["idIngredient"] == $ingredient->idIngredient ? "selected" : "" }}>
+                                                                {{ $ingredient->nom }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    <select name="quantiteElementCompositionCarteEdit[]">
+                                                        @for ($i = 1; $i <= 8; $i++)
+                                                            <option value="{{ $i }}" {{ $element["quantite"] == $i ? "selected" : "" }}>{{ $i }}</option>
+                                                        @endfor
+                                                    </select>
+                                                    <select name="choixElementCompositionCarteEdit[]">
+                                                        <option value="0" {{ $element["choix"] == 0 ? "selected" : "" }}>Libre</option>
+                                                        <option value="1" {{ $element["choix"] == 1 ? "selected" : "" }}>Défaut</option>
+                                                        <option value="2" {{ $element["choix"] == 2 ? "selected" : "" }}>Obligatoire</option>
+                                                    </select>
+
+                                                    <button type="button" class="remove-group px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2">Supprimer</button>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        <button type="button" class="add-group px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mt-2" data-id="{{ $elementCarte->idElement }}">Ajouter un groupe</button>
+                                        <input type="hidden" id="edit-composition-{{ $elementCarte->idElement }}" name="composition" />
+                                    </form>
+                                </td>
+                                <td class="py-2 px-4 border-b">
+                                    <input type="text" class="w-full p-1 border" id="edit-prix-{{ $elementCarte->idElement }}" value="{{ $elementCarte->prix }}" />
+                                </td>
+                                <td class="py-2 px-4 border-b">
+                                    <input type="text" class="w-full p-1 border" id="edit-prix-serveur-{{ $elementCarte->idElement }}" value="{{ $elementCarte->prixServeur }}" />
+                                </td>
+                                @can("verifier-acces-super-administrateur")
+                                    <td class="py-2 px-4 border-b">
+                                        <input type="text" class="w-full p-1 border" id="edit-prix-estime-{{ $elementCarte->idElement }}" value="Rien" />
+                                    </td>
+                                @endcan
+
                                 <td class="py-2 px-4 border-b">
                                     <select class="w-full p-1 border" id="edit-categorie-{{ $elementCarte->idElement }}">
                                         <option value="0" {{ $elementCarte->typePlat == 0 ? "selected" : "" }}>Plat</option>
@@ -144,52 +173,6 @@
                                         <option value="3" {{ $elementCarte->typePlat == 3 ? "selected" : "" }}>Menu</option>
                                         <option value="4" {{ $elementCarte->typePlat == 4 ? "selected" : "" }}>Event</option>
                                     </select>
-                                </td>
-                                <td class="py-2 px-4 border-b">
-                                    @php
-                                        // On récupère la chaîne brute
-                                        $composition = $elementCarte->ingredientsElements;
-                                        $elements = [];
-                                        foreach (explode(";", $composition) as $item) {
-                                            if (trim($item) === "") {
-                                                continue;
-                                            }
-                                            [$idIngredient, $quantite, $choix] = explode(",", $item);
-                                            $elements[] = [
-                                                "idIngredient" => $idIngredient,
-                                                "quantite" => $quantite,
-                                                "choix" => $choix,
-                                            ];
-                                        }
-                                    @endphp
-
-                                    <form id="modifierElementCarte" action="{{ route("carte.modifier") }}" method="POST">
-                                        <div id="edit-compositionContainer-{{ $elementCarte->idElement }}">
-                                            @foreach ($elements as $element)
-                                                <div class="composition-group flex items-center mb-2">
-                                                    <select name="elementCompositionCarte[]" class="...">
-                                                        @foreach ($elementsInventaire as $ingredient)
-                                                            <option value="{{ $ingredient->idIngredient }}" {{ $element["idIngredient"] == $ingredient->idIngredient ? "selected" : "" }}>
-                                                                {{ $ingredient->nom }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <select name="quantiteElementCompositionCarte[]" class="...">
-                                                        @for ($i = 1; $i <= 8; $i++)
-                                                            <option value="{{ $i }}" {{ $element["quantite"] == $i ? "selected" : "" }}>{{ $i }}</option>
-                                                        @endfor
-                                                    </select>
-                                                    <select name="choixElementCompositionCarte[]" class="...">
-                                                        <option value="0" {{ $element["choix"] == 0 ? "selected" : "" }}>Libre</option>
-                                                        <option value="1" {{ $element["choix"] == 1 ? "selected" : "" }}>Défaut</option>
-                                                        <option value="2" {{ $element["choix"] == 2 ? "selected" : "" }}>Obligatoire</option>
-                                                    </select>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <button type="button" class="add-group px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mt-2" data-id="{{ $elementCarte->idElement }}">Ajouter un groupe</button>
-                                        <input type="hidden" id="edit-composition-{{ $elementCarte->idElement }}" name="composition" />
-                                    </form>
                                 </td>
                                 <td class="py-2 px-4 border-b">
                                     <button class="px-4 py-2 bg-green-600 text-white rounded save-btn w-28" data-id="{{ $elementCarte->idElement }}">Enregistrer</button>
@@ -205,23 +188,17 @@
         <!-- Dialog pour l'ajout d'un élément à la carte -->
         <dialog id="addElementCarteDialog">
             <h2 class="text-xl font-bold mb-4">Ajouter un élément à la carte</h2>
-            <form id="ajouterElementCarte" action="{{ route("carte.ajouter") }}" method="POST">
+            <form id="ajouterElementCarte" action="{{ route("admin.gestion-carte.ajouter") }}" method="POST">
                 @csrf
                 <div class="grid grid-cols-1 gap-4">
                     <div>
                         <label for="nom" class="block mb-1">Nom de l'élément</label>
                         <input type="text" id="nom" name="nom" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required />
                     </div>
-                    <div>
-                        <label for="categorieElementCarte" class="block mb-1">Type</label>
-                        <select id="categorieElementCarte" name="categorieElementCarte" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
-                            <option value="0">Plat</option>
-                            <option value="1">Snack</option>
-                            <option value="2">Boisson</option>
-                        </select>
-                    </div>
+
                     <div id="compositionContainer"></div>
                     <button type="button" id="addGroup" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mt-2">Ajouter un groupe</button>
+
                     <div>
                         <label for="prix" class="block mb-1">Prix</label>
                         <input type="number" id="prix" name="prix" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required />
@@ -230,6 +207,16 @@
                         <label for="prixServeur" class="block mb-1">Prix Serveur</label>
                         <input type="number" id="prixServeur" name="prixServeur" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required />
                     </div>
+
+                    <div>
+                        <label for="categorieElementCarte" class="block mb-1">Type</label>
+                        <select id="categorieElementCarte" name="categorieElementCarte" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                            <option value="0">Plat</option>
+                            <option value="1">Snack</option>
+                            <option value="2">Boisson</option>
+                        </select>
+                    </div>
+
                     <div>
                         <label for="description" class="block mb-1">Description</label>
                         <textarea id="description" name="description" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" rows="3"></textarea>
@@ -241,7 +228,9 @@
                     <option value="2">Chaud</option>
                     <option value="3">Snack/Boisson</option>
                 </select>
+
                 <input type="hidden" id="composition" name="composition" />
+
                 <div class="flex justify-end space-x-2 pt-4">
                     <button type="button" id="closeDialog" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">Annuler</button>
                     <button id="ajouter-element-carte" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Ajouter</button>
@@ -251,7 +240,7 @@
 
         <script>
             document.getElementById('ajouter-element-carte').addEventListener('click', function () {
-                const groups = document.querySelectorAll('.composition-group');
+                const groups = document.querySelectorAll('#compositionContainer .composition-group');
                 let result = [];
 
                 groups.forEach((group) => {
@@ -268,8 +257,6 @@
                         result.push(`${valeurElement},${quantite},${choix}`);
                     }
                 });
-
-                console.log(result.join(';'));
 
                 // On place la valeur dans le champ caché
                 document.getElementById('composition').value = result.join(';');
@@ -342,119 +329,139 @@
 
         <script>
             // ajout elements lors de la modification
-                        document.addEventListener('DOMContentLoaded', () => {
-                            document.querySelectorAll('.add-group').forEach(button => {
-                                button.addEventListener('click', () => {
-                                    const id = button.dataset.id;
-                                    const container = document.getElementById(`edit-compositionContainer-${id}`);
-                                    const group = document.createElement('div');
-                                    group.className = 'composition-group flex items-center mb-2';
-                                    group.innerHTML = `
-                                        <select name="elementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
-                                            <option value=""></option>
-                                            @foreach ($elementsInventaire as $elementInventaire)
-                                                <option value="{{ $elementInventaire->idIngredient }}|{{ $elementInventaire->categorieIngredient }}">{{ $elementInventaire->nom }}</option>
-                                            @endforeach
-                                        </select>
-                                        <select name="quantiteElementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
-                                            @for ($i = 1; $i <= 8; $i++)
-                                                <option value="{{ $i }}">{{ $i }}</option>
-                                            @endfor
-                                        </select>
-                                        <select name="choixElementCompositionCarte[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
-                                            <option value="0">Libre</option>
-                                            <option value="1">Défaut</option>
-                                            <option value="2">Obligatoire</option>
-                                        </select>
-                                        <button type="button" class="remove-group px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2">Supprimer</button>
-                                    `;
-                                    group.querySelector('.remove-group').addEventListener('click', () => group.remove());
-                                    container.appendChild(group);
-                                });
-                            });
+            document.addEventListener('DOMContentLoaded', () => {
+                // Ajout d'un groupe dans la ligne d'édition
+                document.querySelectorAll('.add-group').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const id = button.dataset.id;
+                        const container = document.getElementById(`edit-compositionContainer-${id}`);
+                        const group = document.createElement('div');
+                        group.className = 'composition-group flex items-center mb-2';
+                        group.innerHTML = `
+                            <select name="elementCompositionCarteEdit[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                                <option value=""></option>
+                                @foreach ($elementsInventaire as $elementInventaire)
+                                    <option value="{{ $elementInventaire->idIngredient }}|{{ $elementInventaire->categorieIngredient }}">{{ $elementInventaire->nom }}</option>
+                                @endforeach
+                            </select>
+                            <select name="quantiteElementCompositionCarteEdit[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                                @for ($i = 1; $i <= 8; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                            <select name="choixElementCompositionCarteEdit[]" class="w-full p-2 rounded bg-gray-700 text-white border border-gray-600" required>
+                                <option value="0">Libre</option>
+                                <option value="1">Défaut</option>
+                                <option value="2">Obligatoire</option>
+                            </select>
+                            <button type="button" class="remove-group px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2">Supprimer</button>
+                        `;
+                        group.querySelector('.remove-group').addEventListener('click', () => group.remove());
+                        container.appendChild(group);
+                    });
+                });
 
-                            // Supprimer un groupe
-                            document.querySelectorAll('.remove-group').forEach(button => {
-                                button.addEventListener('click', () => {
-                                    button.parentElement.remove();
-                                });
-                            });
+                // Suppression d'un groupe dans la ligne d'édition
+                document.querySelectorAll('.remove-group').forEach(button => {
+                    button.addEventListener('click', () => {
+                        button.parentElement.remove();
+                    });
+                });
+            });
+
+            // maj element
+            document.querySelectorAll('.save-btn').forEach(btn => {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const id = btn.dataset.id;
+                    // Récupération des valeurs du formulaire d'édition
+                    const nom = document.getElementById(`edit-nom-${id}`).value;
+                    const prix = document.getElementById(`edit-prix-${id}`).value;
+                    const prixServeur = document.getElementById(`edit-prix-serveur-${id}`).value;
+                    const categorieElementCarte = document.getElementById(`edit-categorie-${id}`).value;
+
+                    // Composition
+                    const groupsEdit = document.querySelectorAll(`#edit-compositionContainer-${id} .composition-group`);
+                    let result = [];
+                    groupsEdit.forEach(group => {
+                        const idIng = group.querySelector('select[name="elementCompositionCarteEdit[]"]').value.split('|')[0];
+                        const quantite = group.querySelector('select[name="quantiteElementCompositionCarteEdit[]"]').value;
+                        const choix = group.querySelector('select[name="choixElementCompositionCarteEdit[]"]').value;
+                        result.push(`${idIng},${quantite},${choix}`);
+                    });
+                    const composition = result.join(';');
+
+                    fetch("{{ route('admin.gestion-carte.modifier') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+                        },
+                        body: JSON.stringify({
+                            id,
+                            nom,
+                            prix,
+                            prixServeur,
+                            categorieElementCarte,
+                            composition,
+                            categoriePlat: 0 // adapte si tu as ce champ dans le formulaire
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Met à jour la ligne du tableau sans recharger
+                            document.getElementById(`nom-${id}`).textContent = data.nom;
+                            document.getElementById(`prix-${id}`).textContent = data.prix;
+                            // Mets à jour les autres champs si besoin
+                            document.getElementById(`composition-${id}`).textContent = data.composition;
+                            // Cache la ligne d'édition et affiche la ligne normale
+                            document.getElementById(`row-${id}`).classList.remove('hidden');
+                            document.getElementById(`edit-row-${id}`).classList.add('hidden');
+                        } else {
+                            alert("Erreur lors de la modification.");
+                        }
+                    })
+                    .catch(error => {
+                        error.response?.json?.().then(errData => {
+                            alert("Erreur lors de la modification : " + (errData?.message || error.message));
+                        }).catch(() => {
+                            alert("Erreur lors de la modification : " + error.message);
                         });
-
-                        // maj element
-                        document.querySelectorAll('.save-btn').forEach(btn => {
-                            btn.addEventListener('click', function (e) {
-                                e.preventDefault(); // Empêche l'envoi immédiat si c'est un formulaire
-
-                                const id = btn.dataset.id;
-                                const groupsEdit = document.querySelectorAll(`#edit-compositionContainer-${id} .composition-group`);
-                                let result = [];
-                                groupsEdit.forEach(group => {
-                                    const idIng = group.querySelector('select[name="elementCompositionCarte[]"]').value;
-                                    const quantite = group.querySelector('select[name="quantiteElementCompositionCarte[]"]').value;
-                                    const choix = group.querySelector('select[name="choixElementCompositionCarte[]"]').value;
-                                    result.push(`${idIng},${quantite},${choix}`);
-                                });
-                                document.getElementById(`edit-composition-${id}`).value = result.join(';');
-
-                                // On soumet le formulaire
-                                document.getElementById('modifierElementCarte').submit();
-                            });
+                    });
+                });
             });
         </script>
 
-        <!-- Champ caché pour stocker la composition -->
-        <input type="hidden" name="compositionFinale" id="compositionFinale" />
-
-        <!-- Boutons pour générer et ajouter -->
-        <div class="mt-4 space-x-2">
-            <button type="button" id="generer-composition" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Générer la composition</button>
-            <button type="button" id="ajouter-composition" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Ajouter un ingrédient</button>
-        </div>
-
         <script>
-            document.getElementById('generer-composition').addEventListener('click', function () {
-                const groups = document.querySelectorAll('.composition-group');
-                let result = [];
+            // Suppression d'un élément
+            document.querySelectorAll('.delete-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                    if (!confirm('Voulez-vous vraiment supprimer cet élément ?')) return;
+                    const id = btn.dataset.id;
 
-                groups.forEach((group) => {
-                    const elementSelect = group.querySelector('select[name="elementCompositionCarte[]"]');
-                    const quantiteSelect = group.querySelector('select[name="quantiteElementCompositionCarte[]"]');
-                    const choixSelect = group.querySelector('select[name="choixElementCompositionCarte[]"]');
-
-                    const valeurElement = elementSelect.value.split('|')[0];
-                    const quantite = quantiteSelect.value;
-                    const choix = choixSelect.value;
-
-                    if (valeurElement) {
-                        result.push(`${valeurElement},${quantite},${choix}`);
-                    }
+                    fetch('{{ route("admin.gestion-carte.supprimer") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        },
+                        body: JSON.stringify({ id }),
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            if (data.success) {
+                                // Supprime la ligne du tableau
+                                document.getElementById(`row-${id}`).remove();
+                                const editRow = document.getElementById(`edit-row-${id}`);
+                                if (editRow) editRow.remove();
+                            } else {
+                                alert('Erreur lors de la suppression.');
+                            }
+                        })
+                        .catch(() => alert('Erreur lors de la suppression.'));
                 });
-
-                const finalString = result.join(';');
-                document.getElementById('compositionFinale').value = finalString;
-                console.log('Composition générée :', finalString);
-            });
-
-            document.getElementById('ajouter-composition').addEventListener('click', function () {
-                const container = document.querySelector('.composition-group').parentNode;
-                const firstGroup = document.querySelector('.composition-group');
-                const clone = firstGroup.cloneNode(true);
-
-                clone.querySelector('select[name="elementCompositionCarte[]"]').selectedIndex = 0;
-                clone.querySelector('select[name="quantiteElementCompositionCarte[]"]').selectedIndex = 0;
-                clone.querySelector('select[name="choixElementCompositionCarte[]"]').selectedIndex = 0;
-
-                container.appendChild(clone);
-            });
-
-            document.addEventListener('click', function (e) {
-                if (e.target.classList.contains('remove-group')) {
-                    const group = e.target.closest('.composition-group');
-                    if (document.querySelectorAll('.composition-group').length > 1) {
-                        group.remove();
-                    }
-                }
             });
         </script>
     </body>

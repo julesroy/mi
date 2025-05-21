@@ -229,8 +229,6 @@
             </section>
         </div>
 
-        @include("footer")
-
         <script>
             // Scripte pour les dialogues
             function openDialog(id) {

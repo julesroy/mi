@@ -16,6 +16,7 @@ use App\Http\Controllers\CommandeUtilisateurController;
 use App\Http\Controllers\TresorerieController;
 use App\Http\Controllers\AffichageCuisineController;
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\PasswordController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +42,11 @@ Route::get('/deconnexion', [AuthController::class, 'deconnecter']);
 // page compte
 Route::get('/compte', [CompteController::class, 'show'])->name('compte')->middleware('auth');
 
+// Page de changement de mot de passe
+Route::get('/reset-mdp/{token}', function (string $token) {
+    return view('reset-mdp', ['token' => $token]);
+});
+Route::post('/reset-mdp', [PasswordController::class, 'resetPassword']);
 
 // page commander
 Route::get('/commander', [CommandeUtilisateurController::class, 'index']);
@@ -104,16 +110,25 @@ Route::prefix('admin')->group(function () {
     Route::post('/planning/ajouter-inscription', [PlanningController::class, 'ajouter']);
 
     //page gestion des comptes
-    Route::get('/gestion-comptes', [GestionComptesController::class, 'afficherComptes'])
-        ->middleware('can:verifier-acces-super-administrateur')
-        ->name('admin.gestion-comptes');
+    Route::prefix('/gestion-comptes')->group(function () {
+        Route::get('/', [GestionComptesController::class, 'afficherComptes'])
+            ->middleware('can:verifier-acces-super-administrateur')
+            ->name('admin.gestion-comptes');
+        Route::post('/update', [GestionComptesController::class, 'update'])
+            ->middleware('can:verifier-acces-super-administrateur')
+            ->name('admin.gestion-comptes.update');
+    });
 
     // page de gestion de la carte
-    Route::get('/gestion-carte', [CarteController::class, 'afficherGestionCarte'])
-        ->middleware('can:verifier-acces-serveur');
-    Route::post('/ajouter', [CarteController::class, 'ajouter'])->name('carte.ajouter');
-    Route::post('/modifier', [CarteController::class, 'modifier'])->name('carte.modifier');
-
+    Route::prefix('/gestion-carte')->group(function () {
+        Route::get('/', [CarteController::class, 'afficherGestionCarte'])
+            ->middleware('can:verifier-acces-serveur')
+            ->name('admin.gestion-carte');
+        Route::post('/ajouter', [CarteController::class, 'ajouter'])->name('admin.gestion-carte.ajouter');
+        Route::post('/modifier', [CarteController::class, 'modifier'])->name('admin.gestion-carte.modifier');
+        Route::post('/supprimer', [CarteController::class, 'supprimer'])->name('admin.gestion-carte.supprimer');
+    });
+    
     // page Salle et sécurité
     Route::prefix('/salle-securite')->group(function () {
         Route::get('/', [SalleSecuriteController::class, 'index'])
@@ -133,6 +148,13 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/data', [CommandeCuisineController::class, 'getCommandes'])
             ->name('admin.commandes.data');
+
+        Route::get('/details/{id}', [CommandeCuisineController::class, 'getCommandeDetails']);
+
+        Route::get('/inventaire/items', [CommandeCuisineController::class, 'getInventaireItems']);
+
+        Route::post('/commande-payee/{id}', [CommandeCuisineController::class, 'marquerCommandePayee'])
+            ->name('admin.commandes.marquer-payee');
 
         Route::post('/commande-prete/{id}', [CommandeCuisineController::class, 'marquerCommandePrete'])
             ->name('admin.commandes.marquer-prete');
