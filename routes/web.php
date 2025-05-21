@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Auth;
 
 //accueil
 Route::get('/', [AccueilController::class, 'afficher'])
-->name('accueil');
+    ->name('accueil');
 
 
 // connexion
@@ -39,18 +39,25 @@ Route::post('/inscription', [AuthController::class, 'inscrire'])->middleware('me
 // déconnexion
 Route::get('/deconnexion', [AuthController::class, 'deconnecter']);
 
-// page compte
-Route::get('/compte', [CompteController::class, 'show'])->name('compte')->middleware('auth');
+// Groupe de routes associées au compte
+Route::prefix('/compte')->group(function () {
+    // page compte
+    Route::get('/', [CompteController::class, 'show'])->name('compte')->middleware('auth');
 
-// Page de changement de mot de passe
-Route::get('/reset-mdp/{token}', function (string $token) {
-    return view('reset-mdp', ['token' => $token]);
+    // Page de changement de mot de passe
+    Route::get('/changement-mdp/{token}', function (string $token) {
+        return view('changement-mdp', ['token' => $token]);
+    });
+    Route::post('/changement-mdp', [CompteController::class, 'resetPassword']);
+
+    // Requête de mail pour mdp perdu, nécessite d'être un guest
+    Route::post('/mdp-perdu', [CompteController::class, 'lostPassword'])->middleware('guest');
 });
-Route::post('/reset-mdp', [PasswordController::class, 'resetPassword']);
 
 // page commander
 Route::get('/commander', [CommandeUtilisateurController::class, 'index']);
 Route::post('/commander/valider', [CommandeUtilisateurController::class, 'validerCommande'])->name('commander.valider');
+
 
 /**-----------------------------------------------
  * ADMIN
@@ -62,27 +69,27 @@ Route::prefix('admin')->group(function () {
 
     // page tresorerie
     Route::get('/tresorerie', [TresorerieController::class, 'afficher'])
-    ->middleware('can:verifier-acces-super-administrateur')
-    ->name('admin.tresorerie');
+        ->middleware('can:verifier-acces-super-administrateur')
+        ->name('admin.tresorerie');
 
     // page panneau admin
     Route::get('/panneau-admin', function () {
         return view('admin.panneau-admin');
-    }) ->middleware('can:verifier-acces-serveur');
+    })->middleware('can:verifier-acces-serveur');
 
     // prise de commande
     Route::get('/prise-commande', [PriseCommandeController::class, 'index'])->name('prise-commande');
 
     //page affichage cuisine
     Route::get('/affichage-cuisine', [AffichageCuisineController::class, 'afficher', 'updateEtat'])
-    ->middleware('can:verifier-acces-serveur')
-    ->name('admin.affichage-cuisine');
+        ->middleware('can:verifier-acces-serveur')
+        ->name('admin.affichage-cuisine');
 
     //page parametres
     Route::get('/parametres', function () {
         return view('admin.parametres');
     })->middleware('can:verifier-acces-super-administrateur');
-    
+
 
     // page Gestion stocks
     Route::get('/gestion-stocks', [GestionStocksController::class, 'index']);
