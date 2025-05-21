@@ -1022,23 +1022,14 @@
   .border-transparent {
     border-color: transparent;
   }
-  .border-white {
-    border-color: var(--color-white);
-  }
   .border-t-gray-700 {
     border-top-color: var(--color-gray-700);
   }
   .bg-\[\#0a0a0a\] {
     background-color: #0a0a0a;
   }
-  .bg-\[\#1a1a1a\] {
-    background-color: #1a1a1a;
-  }
   .bg-\[\#18181b\] {
     background-color: #18181b;
-  }
-  .bg-\[\#151515\] {
-    background-color: #151515;
   }
   .bg-\[\#232326\] {
     background-color: #232326;

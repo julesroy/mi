@@ -6,10 +6,10 @@
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
+    <body class="pt-28 md:pt-60">
         @include("header")
 
-        <section class="flex flex-col items-center gap-10 bg-[#1a1a1a] p-6 rounded-2xl w-[90%] max-w-4xl mx-auto">
+        <section class="flex flex-col items-center gap-10 p-6 rounded-2xl w-[90%] max-w-4xl mx-auto">
             <h1 class="text-4xl font-bold text-center">Paramètres</h1>
 
             @if (session("success"))
@@ -19,7 +19,7 @@
             @endif
 
             <!-- Section Options Générales -->
-            <section x-data="options()" class="w-full bg-white rounded-xl shadow p-6">
+            <section x-data="options()" class="w-full bg-white rounded-xl border-2 border-black p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Options générales</h2>
                 <div class="flex flex-col gap-4 mb-6">
                     <!-- Mode événement -->
@@ -37,7 +37,7 @@
             </section>
 
             <!-- Section Changer le logo -->
-            <section class="w-full bg-white rounded-xl shadow p-6">
+            <section class="w-full bg-white rounded-xl border-2 border-black p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Changer le logo</h2>
                 <div class="flex flex-col gap-4">
                     <label class="block">
@@ -49,7 +49,7 @@
             </section>
 
             <!-- Section Modifier le titre -->
-            <section class="w-full bg-white rounded-xl shadow p-6">
+            <section class="w-full bg-white rounded-xl border-2 border-black p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Modifier le titre du site</h2>
                 <div class="flex flex-col gap-4">
                     <label class="block">
