@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Crypt;
 
 /**
+ * génère un numéro de compte unique
+ * @return int
+ */
+function genererNumeroCompte() {
+    do {
+        $numero = rand(1, 999);
+    } while (DB::table('utilisateurs')->where('numeroCompte', $numero)->exists());
+
+    return $numero;
+}
+
+/**
  * classe pour l'authentification
  */
 class AuthController extends Controller
@@ -82,6 +94,7 @@ class AuthController extends Controller
             'nom' => $validatedData['nom'],
             'prenom' => $validatedData['prenom'],
             'email' => $validatedData['email'],
+            'numeroCompte' => genererNumeroCompte(),
             'mdp' => Hash::make($validatedData['mdp']),
         ]);
 
