@@ -35,15 +35,17 @@
             </div>
 
             <!-- Stats MI -->
-            <div x-data="{
-                activeSlide: 0,
-                totalSlides: 3,
-                startAutoSlide() {
-                    setInterval(() => {
-                        this.activeSlide = (this.activeSlide + 1) % this.totalSlides
-                    }, 5000)
-                },
-            }" x-init="startAutoSlide()" class="bg-white border rounded-lg shadow p-4 relative">
+            <div x-data="
+                {
+                    activeSlide: 0,
+                    totalSlides: 3,
+                    startAutoSlide() {
+                        setInterval(() => {
+                            this.activeSlide = (this.activeSlide + 1) % this.totalSlides
+                        }, 5000)
+                    },
+                }
+                " x-init="startAutoSlide()" class="bg-white border rounded-lg shadow p-4 relative">
                 <div id="stats-mi" class="font-bold mb-2 text-center text-lg sm:text-xl md:text-2xl">Statistiques MI</div>
                 <div class="relative overflow-hidden h-20 sm:h-24 text-sm sm:text-lg md:text-xl">
                     <template x-if="activeSlide === 0">

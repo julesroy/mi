@@ -11,8 +11,18 @@ use Illuminate\Support\Str;
 use Illuminate\Auth\Events\PasswordReset;
 use App\Models\Utilisateur;
 
+/**
+ * CompteController
+ *
+ * Ce contrôleur gère les opérations liées au compte utilisateur.
+ */
 class CompteController extends Controller
 {
+    /**
+     * Affiche la page du compte utilisateur.
+     *
+     * @return \Illuminate\View\View
+     */
     public function show()
     {
         $user = Auth::user();
@@ -49,6 +59,11 @@ class CompteController extends Controller
         ]);
     }
 
+    /**
+     * Modifie le mot de passe de l'utilisateur s'il est oublié.
+     *
+     * @return \Illuminate\View\View
+     */
     public function lostPassword(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -62,6 +77,12 @@ class CompteController extends Controller
             : response()->json(["message" => "Veuillez donner un email valide !"], 400);
     }
 
+    /**
+     * Réinitialise le mot de passe de l'utilisateur.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function resetPassword(Request $request)
     {
         // Valide les inputs
@@ -89,7 +110,6 @@ class CompteController extends Controller
                 event(new PasswordReset($user));
             }
         );
-
 
         // En fonction du statut, renvoie une réponse
         return $status === Password::PasswordReset

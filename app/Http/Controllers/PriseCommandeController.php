@@ -5,8 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\PriseCommandeCarte;
 use App\Models\PriseCommandeInventaire;
 
+/**
+ * PriseCommandeController
+ *
+ * Ce contrôleur gère l'affichage de la page de prise de commande.
+ */
 class PriseCommandeController extends Controller
 {
+    /**
+     * Affiche la page de prise de commande.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $carteItems = PriseCommandeCarte::all()

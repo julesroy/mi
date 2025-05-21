@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
+/**
+ * RecupererDonneesUtilisateur
+ *
+ * Ce middleware permet de récupérer les données de l'utilisateur depuis la base de données
+ * et de les partager avec toutes les vues.
+ */
 class RecupererDonneesUtilisateur
 {
     /**

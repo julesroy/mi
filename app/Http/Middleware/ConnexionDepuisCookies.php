@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * ConnexionDepuisCookies
+ *
+ * Ce middleware permet de connecter l'utilisateur depuis les cookies créés lors de l'inscription ou de la connexion.
+ * Rappel : les cookies ont une durée de validité d'une semaine.
+ */
 class ConnexionDepuisCookies
 {
     /**

@@ -8,8 +8,18 @@ use App\Models\Actus;
 use App\Models\Event;
 use Carbon\Carbon;
 
+/**
+ * ActualitesController
+ *
+ * Ce contrôleur gère l'affichage des actualités et événements de l'application.
+ */
 class ActualitesController extends Controller
 {
+    /**
+     * Affiche la page des actualités et événements.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $user = Auth::user();

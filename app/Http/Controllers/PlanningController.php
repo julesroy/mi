@@ -15,6 +15,12 @@ use DateTime;
  */
 class PlanningController extends Controller
 {
+    /**
+     * Affiche la page de gestion du planning
+     *
+     * @param Request $req
+     * @return \Illuminate\View\View
+     */
     public function afficher(Request $req)
     {
         $servers = [];
@@ -29,6 +35,13 @@ class PlanningController extends Controller
         return view('admin.planning', ['userId' => Auth::id(), 'servers' => $servers]);
     }
 
+    /**
+     * Récupère les données du planning pour une date donnée
+     *
+     * @param Request $req
+     * @param string $date
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function donnees(Request $req, $date)
     {
         $planning = [];
@@ -72,6 +85,13 @@ class PlanningController extends Controller
         return response()->json($planning);
     }
 
+    /**
+     * Récupère les données du planning pour une date donnée
+     *
+     * @param Request $req
+     * @param string $date
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function supprimer(Request $req, $idInscription, $date)
     {
         $query = DB::table('planning')->where('idInscription', '=', $idInscription);
@@ -92,6 +112,12 @@ class PlanningController extends Controller
         return $this->donnees($req, $date);
     }
 
+    /**
+     * Ajoute une inscription au planning
+     *
+     * @param Request $req
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function ajouter(Request $req)
     {
         $serverId = $req->input('serveur');

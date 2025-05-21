@@ -6,13 +6,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+/**
+ * CommandeCuisineController
+ *
+ * Ce contrôleur gère les opérations liées aux commandes en cuisine.
+ * Il permet d'afficher, modifier et gérer les commandes.
+ */
 class CommandeCuisineController extends Controller
 {
+    /**
+     * Affiche la page de gestion des commandes.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         return view('admin.commandes');
     }
 
+    /**
+     * Récupère les commandes du jour.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getCommandes(Request $request)
     {
         try {
@@ -35,6 +52,12 @@ class CommandeCuisineController extends Controller
         }
     }
     
+    /**
+     * Récupère les détails d'une commande.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getInventaireItems()
     {
         try {
@@ -63,6 +86,12 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Récupère les détails d'une commande.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getCommandeDetails($id)
     {
         try {
@@ -94,6 +123,13 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Marque une commande comme payée.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function marquerCommandePayee(Request $request, $id)
     {
         if ($id == 999) {
@@ -111,6 +147,13 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Marque une commande comme prête.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function marquerCommandePrete(Request $request, $id)
     {
         if ($id == 999) {
@@ -128,6 +171,13 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Marque une commande comme servie.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function marquerCommandeServie(Request $request, $id)
     {
         if ($id == 999) {
@@ -145,42 +195,56 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Modifie une commande.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function modifierCommande(Request $request, $id)
-{
-    try {
-        $validated = $request->validate([
-            'commentaire' => 'nullable|string',
-            'items' => 'required|array',
-            'items.*.idIngredient' => 'required|integer',
-            'items.*.quantite' => 'required|integer|min:1',
-            'items.*.obligatoire' => 'required|integer|in:0,1'
-        ]);
-
-        // Construire la chaîne stock
-        $stockItems = [];
-        foreach ($validated['items'] as $item) {
-            $stockItems[] = implode(',', [
-                $item['idIngredient'],
-                $item['quantite'],
-                $item['obligatoire']
+    {
+        try {
+            $validated = $request->validate([
+                'commentaire' => 'nullable|string',
+                'items' => 'required|array',
+                'items.*.idIngredient' => 'required|integer',
+                'items.*.quantite' => 'required|integer|min:1',
+                'items.*.obligatoire' => 'required|integer|in:0,1'
             ]);
+
+            // Construire la chaîne stock
+            $stockItems = [];
+            foreach ($validated['items'] as $item) {
+                $stockItems[] = implode(',', [
+                    $item['idIngredient'],
+                    $item['quantite'],
+                    $item['obligatoire']
+                ]);
+            }
+            $stockValue = implode(';', $stockItems);
+
+            // Mettre à jour la commande
+            DB::table('commandes')
+                ->where('idCommande', $id)
+                ->update([
+                    'commentaire' => $validated['commentaire'] ?? null,
+                    'stock' => $stockValue
+                ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-        $stockValue = implode(';', $stockItems);
-
-        // Mettre à jour la commande
-        DB::table('commandes')
-            ->where('idCommande', $id)
-            ->update([
-                'commentaire' => $validated['commentaire'] ?? null,
-                'stock' => $stockValue
-            ]);
-
-        return response()->json(['success' => true]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
     }
-}
 
+    /**
+     * Annule une commande.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function annulerCommande(Request $request, $id)
     {
         if ($id == 999) {
@@ -198,6 +262,12 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Récupère la commande de test.
+     *
+     * @param int $etat
+     * @return string
+     */
     private function getTestCommande()
     {
         return [

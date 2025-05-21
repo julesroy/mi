@@ -3,11 +3,22 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * CommandeUtilisateurController
+ *
+ * Ce contrôleur gère les opérations liées à la commande utilisateur.
+ * Il permet d'afficher le menu, de valider une commande et de gérer les paniers.
+ */
 class CommandeUtilisateurController extends Controller
 {
+    /**
+     * Affiche la page de commande.
+     *
+     * Récupère les plats, menus, viandes et ingrédients disponibles dans la base de données
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $plats = DB::table('carteElements')->where('typePlat', 0)->get();
@@ -21,6 +32,12 @@ class CommandeUtilisateurController extends Controller
         return view('commander', compact('plats', 'menus', 'viandes', 'ingredients', 'snacks'));
     }
 
+    /**
+     * Valide la commande de l'utilisateur, l'ajoute à la base de données.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function validerCommande(Request $request)
     {
         try {

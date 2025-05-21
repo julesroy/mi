@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * AffichageCuisineController
+ *
+ * Ce contrôleur gère l'affichage de la cuisine.
+ * Il récupère les commandes en cours et les affiche sur la page de la cuisine.
+ */
 class AffichageCuisineController extends Controller
 {
     /**
@@ -10,7 +16,6 @@ class AffichageCuisineController extends Controller
      *
      * @return \Illuminate\View\View
      */
-
     public function afficher()
     {
         // On récupère toutes les commandes en cours (etat = 1)

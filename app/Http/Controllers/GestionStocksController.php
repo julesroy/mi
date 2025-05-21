@@ -5,11 +5,22 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Stock;
 
+/**
+ * GestionStocksController
+ *
+ * Ce contrôleur gère la gestion des stocks.
+ */
 class GestionStocksController extends Controller
 {
+    /**
+     * Affiche la page de gestion des stocks.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
-        $query = \App\Models\Stock::query();
+        $query = Stock::query();
 
         // Filtres
         if ($request->filled('nom')) {
@@ -40,6 +51,6 @@ class GestionStocksController extends Controller
 
         $stocks = $query->get();
 
-        return view('admin/gestion-stocks', compact('stocks', 'sort', 'direction'));
+        return view('admin.gestion-stocks', compact('stocks', 'sort', 'direction'));
     }
 }

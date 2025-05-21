@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-
+/**
+ * AccueilController
+ *
+ * Ce contrôleur gère l'affichage de la page d'accueil de l'application.
+ * Il récupère les actualités, les informations sur le service et la commande en cours.
+ */
 class AccueilController extends Controller
 {
     /**
@@ -26,6 +31,11 @@ class AccueilController extends Controller
         return $actus;
     }
 
+    /**
+     * Récupère les informations sur le service.
+     *
+     * @return array
+     */
     private function recupInfo()
     {
         $ouvert = DB::table('parametres')->value('service');
@@ -42,6 +52,12 @@ class AccueilController extends Controller
         ];
     }
 
+    /**
+     * Récupère la commande en cours pour l'utilisateur.
+     *
+     * @param string $numeroCompte
+     * @return array|null
+     */
     private function recupCommandeEnCours($numeroCompte)
     {
         // Récupérer la commande en cours pour l'utilisateur

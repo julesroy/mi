@@ -5,8 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+/**
+ * CarteController
+ *
+ * Ce contrôleur gère les opérations liées à la carte du restaurant.
+ * Il permet d'afficher, ajouter, modifier et supprimer des éléments de la carte.
+ */
 class GestionComptesController extends Controller
 {
+    /**
+     * Affiche la page de gestion des comptes.
+     *
+     * @return \Illuminate\View\View
+     */
     public function afficherComptes(Request $requete)
     {
         // On récupère les données de la table utilisateurs
@@ -16,6 +27,12 @@ class GestionComptesController extends Controller
         return view('admin.gestion-comptes', compact('utilisateurs'));
     }
 
+    /**
+     * Met à jour un utilisateur de la base de données.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request)
     {
         $numeroCompte = $request->input('id');

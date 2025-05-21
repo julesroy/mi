@@ -6,8 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon; // Permet de manipuler les dates
 
+/**
+ * TresorerieController
+ *
+ * Ce contrôleur gère l'affichage de la page de la trésorerie.
+ * Il récupère les informations sur les comptes utilisateurs, le solde total,
+ * le solde de la caisse et les statistiques des comptes.
+ */
 class TresorerieController extends Controller
 {
+    /**
+     * Récupère le solde total de tous les comptes utilisateurs.
+     *
+     * @return float
+     */
     private function obtenirSoldeTotalComptes()
     {
         // On récupère le solde total de tous les utilisateurs
@@ -16,6 +28,11 @@ class TresorerieController extends Controller
         return $resultat->solde_total ?? 0; // Si aucun solde n'est trouvé, on retourne 0
     }
 
+    /**
+     * Récupère le solde de la caisse.
+     *
+     * @return float
+     */
     private function obtenirSoldeCaisse()
     {
         // On récupère le solde de la caisse
@@ -24,7 +41,11 @@ class TresorerieController extends Controller
         return $resultat->solde ?? 0; // Si aucun solde n'est trouvé, on retourne 0
     }
 
-
+    /**
+     * Récupère les statistiques des comptes utilisateurs.
+     *
+     * @return array
+     */
     private function obtenirStatistiquesComptes()
     {
         // On récupère le nombre total de comptes et les comptes crédités, non crédités et à découvert
@@ -42,8 +63,11 @@ class TresorerieController extends Controller
         ];
     }
 
-
-
+    /**
+     * Affiche la page de la trésorerie.
+     *
+     * @return \Illuminate\View\View
+     */
     public function afficher()
     {
 
