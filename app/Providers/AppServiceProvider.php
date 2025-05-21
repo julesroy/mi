@@ -56,7 +56,7 @@ class AppServiceProvider extends ServiceProvider
          */
 
         ResetPassword::createUrlUsing(function (Utilisateur $user, string $token) {
-            return 'https://example.com/reset-mdp/' . $token;
+            return 'https://example.com/changement-mdp/' . $token;
         });
     }
 }
