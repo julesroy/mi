@@ -37,13 +37,14 @@
             <!-- Section Changer le logo -->
             <section class="w-full bg-white rounded-xl border-2 border-black p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Changer le logo</h2>
-                <div class="flex flex-col gap-4">
+                <form class="flex flex-col gap-4" method="POST" action="{{ route('admin.parametres.majLogo') }}" enctype="multipart/form-data">
+                    @csrf
                     <label class="block">
                         <span class="text-gray-700 text-lg">Choisir un fichier</span>
-                        <input type="file" class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-800 hover:file:bg-red-100 mt-2" />
+                        <input type="file" name="logo" accept="image/png" class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-800 hover:file:bg-red-100 mt-2" required />
                     </label>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-blue-700">Enregistrer le logo</button>
-                </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-blue-700">Enregistrer le logo</button>
+                </form>
             </section>
 
             <!-- Section Modifier le titre -->

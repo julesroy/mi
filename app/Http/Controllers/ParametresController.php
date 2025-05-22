@@ -59,4 +59,22 @@ class ParametresController extends Controller
         DB::table('parametres')->where('idParametre', 1)->update(['service' => $modeService_bool]);
         return redirect()->route('admin.parametres')->with('success', 'Le mode service a été mis à jour.');
     }
+
+    /**
+     * Met à jour le logo du header.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function majLogo(Request $request)
+    {
+        $request->validate([
+            'logo' => 'required|image|mimes:png|max:2048',
+        ]);
+
+        $logo = $request->file('logo');
+        $logo->move(public_path('images'), 'logo.png');
+
+        return back()->with('success', 'Logo mis à jour avec succès.');
+    }
 }

@@ -126,6 +126,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/admin/parametres/mode-service', [ParametresController::class, 'majModeService'])
             ->middleware('can:verifier-acces-super-administrateur')
             ->name('admin.parametres.modeService');
+        Route::post('/admin/parametres/majLogo', [ParametresController::class, 'majLogo'])->name('admin.parametres.majLogo');
     });
 
 
