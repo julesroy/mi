@@ -51,12 +51,14 @@
             <!-- Section Modifier le titre -->
             <section class="w-full bg-white rounded-xl border-2 border-black p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Modifier le titre du site</h2>
-                <div class="flex flex-col gap-4">
+                <form class="flex flex-col gap-4" name="modifierTitre" method="POST" action="{{ route('admin.parametres.majTitre') }}">
+                    @csrf
                     <label class="block">
                         <span class="text-gray-700 text-lg">Nouveau titre</span>
-                        <input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-red-800 mt-2" placeholder="Entrez le nouveau titre" />
+                        <input type="text" name="titre" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-red-800 mt-2" placeholder="Entrez le nouveau titre" value="{{ $parametres->titreHeader }}"/>
                     </label>
-                </div>
+                    <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-green-700">Confirmer le titre</button>
+                </form>
             </section>
         </section>
 

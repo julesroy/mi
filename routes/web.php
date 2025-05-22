@@ -17,6 +17,7 @@ use App\Http\Controllers\CommandeUtilisateurController;
 use App\Http\Controllers\TresorerieController;
 use App\Http\Controllers\AffichageCuisineController;
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\ParametresController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -109,15 +110,20 @@ Route::prefix('admin')->group(function () {
     // prise de commande c^té administrateur
     Route::get('/prise-commande', [PriseCommandeController::class, 'index'])->name('prise-commande');
 
-    //page de l'affichage des commandes en cuisine
+    // page de l'affichage des commandes en cuisine
     Route::get('/affichage-cuisine', [AffichageCuisineController::class, 'afficher', 'updateEtat'])
         ->middleware('can:verifier-acces-serveur')
         ->name('admin.affichage-cuisine');
 
-    //page des paramètres du site
-    Route::get('/parametres', function () {
-        return view('admin.parametres');
-    })->middleware('can:verifier-acces-super-administrateur');
+    // page des paramètres du site
+    Route::prefix('/parametres')->group(function () {
+        Route::get('/', [ParametresController::class, 'afficherParametres'])
+            ->middleware('can:verifier-acces-super-administrateur')
+            ->name('admin.parametres');
+        Route::post('/majTitre', [ParametresController::class, 'majTitre'])
+            ->middleware('can:verifier-acces-super-administrateur')
+            ->name('admin.parametres.majTitre');
+    });
 
 
     // page de la gestion des stocks
