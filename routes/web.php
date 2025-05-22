@@ -3,6 +3,7 @@
 use App\Http\Controllers\GestionComptesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ActualitesController;
 use App\Http\Controllers\ActuController;
 use App\Http\Controllers\CompteController;
 use App\Http\Controllers\PlanningController;
@@ -16,7 +17,6 @@ use App\Http\Controllers\CommandeUtilisateurController;
 use App\Http\Controllers\TresorerieController;
 use App\Http\Controllers\AffichageCuisineController;
 use App\Http\Controllers\AccueilController;
-use App\Http\Controllers\ActualitesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -87,7 +87,6 @@ Route::get('/carte', function () {
 
 // page des actus
 Route::get('/actus', [ActualitesController::class, 'index'])->name('actus');
-
 
 /**-----------------------------------------------
  * ADMIN
