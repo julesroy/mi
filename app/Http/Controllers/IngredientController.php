@@ -140,4 +140,28 @@ class IngredientController extends Controller
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Récupère toutes les entrées de l'inventaire (tous les types d'ingrédients)
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function all()
+    {
+        try {
+            // Récupère uniquemnt les colonnes utilisées
+            $items = Ingredient::select('idIngredient', 'nom', 'categorieIngredient')
+                ->orderBy('categorieingredient')
+                ->orderBy('idingredient')
+                ->get();
+
+            return response()->json($items);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
+        }
+    }
 }
