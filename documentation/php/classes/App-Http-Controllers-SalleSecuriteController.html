@@ -100,15 +100,16 @@
                                 <section>
                                         <ul class="phpdocumentor-breadcrumbs">
             <li class="phpdocumentor-breadcrumb"><a href="namespaces/app.html">App</a></li>
-            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-models.html">Models</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-http.html">Http</a></li>
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/app-http-controllers.html">Controllers</a></li>
     </ul>
 
     <article class="phpdocumentor-element -class">
         <h2 class="phpdocumentor-content__title">
-    Utilisateur
+    SalleSecuriteController
 
         <span class="phpdocumentor-element__extends">
-        extends <abbr title="\Illuminate\Foundation\Auth\User">User</abbr>
+        extends <a href="classes/App-Http-Controllers-Controller.html"><abbr title="\App\Http\Controllers\Controller">Controller</abbr></a>
     </span>
     
             <div class="phpdocumentor-element__package">
@@ -119,9 +120,6 @@
         </div>
     
     
-            <span class="phpdocumentor-element__extends">
-            uses
-                            <abbr title="\Illuminate\Notifications\Notifiable">Notifiable</abbr>                    </span>
     </h2>
 
 <div class="phpdocumentor-label-line">
@@ -130,16 +128,17 @@
 </div>
 
         <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Models/Utilisateur.php"><a href="files/app-models-utilisateur.html"><abbr title="app/Models/Utilisateur.php">Utilisateur.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="app/Http/Controllers/SalleSecuriteController.php"><a href="files/app-http-controllers-sallesecuritecontroller.html"><abbr title="app/Http/Controllers/SalleSecuriteController.php">SalleSecuriteController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">13</span>
+    <span class="phpdocumentor-element-found-in__line">16</span>
 
     </aside>
 
-            <p class="phpdocumentor-summary">Utilisateur</p>
+            <p class="phpdocumentor-summary">SalleSecuriteController</p>
 
 
-    <section class="phpdocumentor-description"><p>Ce modèle représente un utilisateur dans la base de données.</p>
+    <section class="phpdocumentor-description"><p>Ce contrôleur gère l'affichage de la page de la salle de sécurité.
+Il récupère les relevés de température et les relevés de nettoyage.</p>
 </section>
 
 
@@ -150,7 +149,7 @@
 
 <h3 id="toc">
     Table of Contents
-    <a href="classes/App-Models-Utilisateur.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Http-Controllers-SalleSecuriteController.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h3>
 
@@ -162,49 +161,33 @@
 
 
 
-<h4 id="toc-properties">
-    Properties
-    <a href="classes/App-Models-Utilisateur.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
-
-</h4>
-<dl class="phpdocumentor-table-of-contents">
-            <dt class="phpdocumentor-table-of-contents__entry -property -public">
-    <a class="" href="classes/App-Models-Utilisateur.html#property_timestamps">$timestamps</a>
-    <span>
-                        &nbsp;: mixed            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a class="" href="classes/App-Models-Utilisateur.html#property_fillable">$fillable</a>
-    <span>
-                        &nbsp;: mixed            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a class="" href="classes/App-Models-Utilisateur.html#property_primaryKey">$primaryKey</a>
-    <span>
-                        &nbsp;: mixed            </span>
-</dt>
-
-            <dt class="phpdocumentor-table-of-contents__entry -property -protected">
-    <a class="" href="classes/App-Models-Utilisateur.html#property_table">$table</a>
-    <span>
-                        &nbsp;: mixed            </span>
-</dt>
-
-    </dl>
 
 <h4 id="toc-methods">
     Methods
-    <a href="classes/App-Models-Utilisateur.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+    <a href="classes/App-Http-Controllers-SalleSecuriteController.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
 
 </h4>
 <dl class="phpdocumentor-table-of-contents">
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
-    <a class="" href="classes/App-Models-Utilisateur.html#method_getAuthPassword">getAuthPassword()</a>
+    <a class="" href="classes/App-Http-Controllers-SalleSecuriteController.html#method_ajouterNettoyage">ajouterNettoyage()</a>
     <span>
-                                &nbsp;: mixed    </span>
+                                &nbsp;: <abbr title="\Illuminate\Http\RedirectResponse">RedirectResponse</abbr>    </span>
 </dt>
+<dd>Enregistre un relevé de nettoyage dans la base de données.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/App-Http-Controllers-SalleSecuriteController.html#method_ajouterReleveFrigo">ajouterReleveFrigo()</a>
+    <span>
+                                &nbsp;: <abbr title="\Illuminate\Http\RedirectResponse">RedirectResponse</abbr>    </span>
+</dt>
+<dd>Enregistre un relevé de température dans la base de données.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/App-Http-Controllers-SalleSecuriteController.html#method_index">index()</a>
+    <span>
+                                &nbsp;: <abbr title="\Illuminate\View\View">View</abbr>    </span>
+</dt>
+<dd>Affiche la page de la salle de sécurité.</dd>
 
     </dl>
 
@@ -213,162 +196,11 @@
         
 
         
-    <section class="phpdocumentor-properties">
-        <h3 class="phpdocumentor-elements__header" id="properties">
-            Properties
-            <a href="classes/App-Models-Utilisateur.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
-
-        </h3>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -public
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_timestamps">
-        $timestamps
-        <a href="classes/App-Models-Utilisateur.html#property_timestamps" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Models/Utilisateur.php"><a href="files/app-models-utilisateur.html"><abbr title="app/Models/Utilisateur.php">Utilisateur.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">19</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">public</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$timestamps</span>
-     = <span class="phpdocumentor-signature__default-value">false</span></code>
-
-    
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_fillable">
-        $fillable
-        <a href="classes/App-Models-Utilisateur.html#property_fillable" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Models/Utilisateur.php"><a href="files/app-models-utilisateur.html"><abbr title="app/Models/Utilisateur.php">Utilisateur.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">21</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$fillable</span>
-     = <span class="phpdocumentor-signature__default-value">[&#039;email&#039;, &#039;nom&#039;, &#039;prenom&#039;, &#039;numeroCompte&#039;, &#039;solde&#039;, &#039;acces&#039;, &#039;mdp&#039;]</span></code>
-
-    
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_primaryKey">
-        $primaryKey
-        <a href="classes/App-Models-Utilisateur.html#property_primaryKey" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Models/Utilisateur.php"><a href="files/app-models-utilisateur.html"><abbr title="app/Models/Utilisateur.php">Utilisateur.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">18</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$primaryKey</span>
-     = <span class="phpdocumentor-signature__default-value">&#039;idUtilisateur&#039;</span></code>
-
-    
-    
-    
-
-    
-
-</article>
-                    <article
-        class="
-            phpdocumentor-element
-            -property
-            -protected
-                                                        "
->
-    <h4 class="phpdocumentor-element__name" id="property_table">
-        $table
-        <a href="classes/App-Models-Utilisateur.html#property_table" class="headerlink"><i class="fas fa-link"></i></a>
-
-        <span class="phpdocumentor-element__modifiers">
-                                </span>
-    </h4>
-    <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Models/Utilisateur.php"><a href="files/app-models-utilisateur.html"><abbr title="app/Models/Utilisateur.php">Utilisateur.php</abbr></a></abbr>
-    :
-    <span class="phpdocumentor-element-found-in__line">17</span>
-
-    </aside>
-
-    
-    
-    <code class="phpdocumentor-code phpdocumentor-signature ">
-    <span class="phpdocumentor-signature__visibility">protected</span>
-        <span class="phpdocumentor-signature__type">mixed</span>
-    <span class="phpdocumentor-signature__name">$table</span>
-     = <span class="phpdocumentor-signature__default-value">&#039;utilisateurs&#039;</span></code>
-
-    
-    
-    
-
-    
-
-</article>
-            </section>
 
             <section class="phpdocumentor-methods">
         <h3 class="phpdocumentor-elements__header" id="methods">
             Methods
-            <a href="classes/App-Models-Utilisateur.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+            <a href="classes/App-Http-Controllers-SalleSecuriteController.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
 
         </h3>
                     <article
@@ -377,22 +209,121 @@
             -public
                                                         "
 >
-    <h4 class="phpdocumentor-element__name" id="method_getAuthPassword">
-        getAuthPassword()
-        <a href="classes/App-Models-Utilisateur.html#method_getAuthPassword" class="headerlink"><i class="fas fa-link"></i></a>
+    <h4 class="phpdocumentor-element__name" id="method_ajouterNettoyage">
+        ajouterNettoyage()
+        <a href="classes/App-Http-Controllers-SalleSecuriteController.html#method_ajouterNettoyage" class="headerlink"><i class="fas fa-link"></i></a>
 
     </h4>
     <aside class="phpdocumentor-element-found-in">
-    <abbr class="phpdocumentor-element-found-in__file" title="app/Models/Utilisateur.php"><a href="files/app-models-utilisateur.html"><abbr title="app/Models/Utilisateur.php">Utilisateur.php</abbr></a></abbr>
+    <abbr class="phpdocumentor-element-found-in__file" title="app/Http/Controllers/SalleSecuriteController.php"><a href="files/app-http-controllers-sallesecuritecontroller.html"><abbr title="app/Http/Controllers/SalleSecuriteController.php">SalleSecuriteController.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">31</span>
+    <span class="phpdocumentor-element-found-in__line">89</span>
 
     </aside>
 
-    
+        <p class="phpdocumentor-summary">Enregistre un relevé de nettoyage dans la base de données.</p>
+
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>
-                    <span class="phpdocumentor-signature__name">getAuthPassword</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">mixed</span></code>
+                    <span class="phpdocumentor-signature__name">ajouterNettoyage</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Illuminate\Http\Request">Request</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$request</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Illuminate\Http\RedirectResponse">RedirectResponse</abbr></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$request</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Illuminate\Http\Request">Request</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Illuminate\Http\RedirectResponse">RedirectResponse</abbr></span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_ajouterReleveFrigo">
+        ajouterReleveFrigo()
+        <a href="classes/App-Http-Controllers-SalleSecuriteController.html#method_ajouterReleveFrigo" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/Http/Controllers/SalleSecuriteController.php"><a href="files/app-http-controllers-sallesecuritecontroller.html"><abbr title="app/Http/Controllers/SalleSecuriteController.php">SalleSecuriteController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">64</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Enregistre un relevé de température dans la base de données.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">ajouterReleveFrigo</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__return-type"><abbr title="\Illuminate\Http\Request">Request</abbr>&nbsp;</span><span class="phpdocumentor-signature__argument__name">$request</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Illuminate\Http\RedirectResponse">RedirectResponse</abbr></span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-signature__argument__name">$request</span>
+                : <span class="phpdocumentor-signature__argument__return-type"><abbr title="\Illuminate\Http\Request">Request</abbr></span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                
+            </dd>
+            </dl>
+
+    
+
+    
+
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Illuminate\Http\RedirectResponse">RedirectResponse</abbr></span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="method_index">
+        index()
+        <a href="classes/App-Http-Controllers-SalleSecuriteController.html#method_index" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="app/Http/Controllers/SalleSecuriteController.php"><a href="files/app-http-controllers-sallesecuritecontroller.html"><abbr title="app/Http/Controllers/SalleSecuriteController.php">SalleSecuriteController.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">23</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Affiche la page de la salle de sécurité.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+                    <span class="phpdocumentor-signature__name">index</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type"><abbr title="\Illuminate\View\View">View</abbr></span></code>
 
     <div class="phpdocumentor-label-line">
         </div>
@@ -403,7 +334,11 @@
 
     
 
-    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type"><abbr title="\Illuminate\View\View">View</abbr></span>
+            </section>
+
 </article>
             </section>
 
@@ -411,7 +346,7 @@
     <div class="phpdocumentor-modal-bg" data-exit-button></div>
     <div class="phpdocumentor-modal-container">
         <div class="phpdocumentor-modal-content">
-            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/app/Models/Utilisateur.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
+            <pre style="max-height: 500px; overflow-y: scroll" data-src="files/app/Http/Controllers/SalleSecuriteController.php.txt" class="language-php line-numbers linkable-line-numbers"></pre>
         </div>
         <button data-exit-button class="phpdocumentor-modal__close">&times;</button>
     </div>
@@ -510,25 +445,17 @@
             <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                                            <li><a href="classes/App-Models-Utilisateur.html#toc-properties">Properties</a></li>
-                                                            <li><a href="classes/App-Models-Utilisateur.html#toc-methods">Methods</a></li>
+                                                                                <li><a href="classes/App-Http-Controllers-SalleSecuriteController.html#toc-methods">Methods</a></li>
                                     </ul>
             </li>
             
-                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
-                <li>
-                    <ul class="phpdocumentor-list -clean">
-                                                    <li class=""><a href="classes/App-Models-Utilisateur.html#property_timestamps">$timestamps</a></li>
-                                                    <li class=""><a href="classes/App-Models-Utilisateur.html#property_fillable">$fillable</a></li>
-                                                    <li class=""><a href="classes/App-Models-Utilisateur.html#property_primaryKey">$primaryKey</a></li>
-                                                    <li class=""><a href="classes/App-Models-Utilisateur.html#property_table">$table</a></li>
-                                            </ul>
-                </li>
             
                         <li class="phpdocumentor-on-this-page-section__title">Methods</li>
             <li>
                 <ul class="phpdocumentor-list -clean">
-                                            <li class=""><a href="classes/App-Models-Utilisateur.html#method_getAuthPassword">getAuthPassword()</a></li>
+                                            <li class=""><a href="classes/App-Http-Controllers-SalleSecuriteController.html#method_ajouterNettoyage">ajouterNettoyage()</a></li>
+                                            <li class=""><a href="classes/App-Http-Controllers-SalleSecuriteController.html#method_ajouterReleveFrigo">ajouterReleveFrigo()</a></li>
+                                            <li class=""><a href="classes/App-Http-Controllers-SalleSecuriteController.html#method_index">index()</a></li>
                                     </ul>
             </li>
                     </ul>
@@ -548,7 +475,7 @@
     </section>
 </section>
         </div>
-        <a href="classes/App-Models-Utilisateur.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+        <a href="classes/App-Http-Controllers-SalleSecuriteController.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
 
     </main>
 
