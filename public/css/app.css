@@ -287,9 +287,6 @@
   .top-6 {
     top: calc(var(--spacing) * 6);
   }
-  .top-100 {
-    top: calc(var(--spacing) * 100);
-  }
   .top-\[50\%\] {
     top: 50%;
   }
@@ -310,9 +307,6 @@
   }
   .left-1 {
     left: calc(var(--spacing) * 1);
-  }
-  .left-180 {
-    left: calc(var(--spacing) * 180);
   }
   .left-\[50\%\] {
     left: 50%;
@@ -1924,13 +1918,6 @@
     &:hover {
       @media (hover: hover) {
         color: var(--color-secondaire);
-      }
-    }
-  }
-  .hover\:text-white {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-white);
       }
     }
   }
