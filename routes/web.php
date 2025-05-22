@@ -16,6 +16,7 @@ use App\Http\Controllers\CommandeUtilisateurController;
 use App\Http\Controllers\TresorerieController;
 use App\Http\Controllers\AffichageCuisineController;
 use App\Http\Controllers\AccueilController;
+use App\Http\Controllers\ActualitesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -85,9 +86,7 @@ Route::get('/carte', function () {
 });
 
 // page des actus
-Route::get('/actus', function () {
-    return view('actus');
-});
+Route::get('/actus', [ActualitesController::class, 'index'])->name('actus');
 
 
 /**-----------------------------------------------
