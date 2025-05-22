@@ -35,56 +35,18 @@ class CommandeCuisineController extends Controller
         try {
             $query = DB::table('commandes')
                 ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
-                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient','utilisateurs.prenom as prenomClient', 'commandes.categorieCommande', 'commandes.prix', 'commandes.date', 'commandes.commentaire', 'commandes.etat')
+                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient', 'utilisateurs.prenom as prenomClient', 'commandes.categorieCommande', 'commandes.prix', 'commandes.date', 'commandes.commentaire', 'commandes.etat')
                 ->whereDate('commandes.date', Carbon::today())
                 ->whereIn('commandes.etat', [0, 1, 2, 3, 4])
                 ->orderBy('commandes.date', 'asc');
 
             $commandes = $query->get();
 
-            if ($commandes->isEmpty()) {
-                return response()->json([$this->getTestCommande()]);
-            }
-
             return response()->json($commandes);
         } catch (\Exception $e) {
             return response()->json([$this->getTestCommande()]);
         }
     }
-    
-    /**
-     * Récupère les détails d'une commande.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function getInventaireItems()
-    {
-        try {
-            // Récupère TOUTES les colonnes mais on n'utilisera que idingredient, Nom et categorieingredient
-            $items = DB::table('inventaire')
-                ->select('*') // Sélectionne toutes les colonnes
-                ->orderBy('categorieingredient')
-                ->orderBy('idingredient')
-                ->get()
-                ->map(function ($item) {
-                    return [
-                        'idIngredient' => $item->idingredient,
-                        'nom' => $item->Nom,
-                        'categorieIngredient' => $item->categorieingredient,
-                        // On garde toutes les données au cas où, mais on n'utilisera que ces 3 champs
-                        'fullData' => $item 
-                    ];
-                });
-
-            return response()->json($items);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ], 500);
-        }
-    }
 
     /**
      * Récupère les détails d'une commande.
@@ -92,13 +54,19 @@ class CommandeCuisineController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getCommandeDetails($id)
+    public function getCommandeDetails(int $id)
     {
         try {
             $commande = DB::table('commandes')
                 ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
-                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient', 
-                        'utilisateurs.prenom as prenomClient', 'commandes.commentaire', 'commandes.stock')
+                ->select(
+                    'commandes.idCommande',
+                    'commandes.numeroCommande',
+                    'utilisateurs.nom as nomClient',
+                    'utilisateurs.prenom as prenomClient',
+                    'commandes.commentaire',
+                    'commandes.stock'
+                )
                 ->where('commandes.idCommande', $id)
                 ->first();
 
@@ -107,14 +75,7 @@ class CommandeCuisineController extends Controller
             }
 
             // On retourne simplement le stock brut, le traitement sera fait côté client
-            return response()->json([
-                'idCommande' => $commande->idCommande,
-                'numeroCommande' => $commande->numeroCommande,
-                'nomClient' => $commande->nomClient,
-                'prenomClient' => $commande->prenomClient,
-                'commentaire' => $commande->commentaire,
-                'stock' => $commande->stock // On envoie la chaîne brute directement
-            ]);
+            return response()->json($commande);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),

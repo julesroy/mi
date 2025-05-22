@@ -128,6 +128,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/ingredients/store', [IngredientController::class, 'store'])->name('ingredients.store');
     Route::post('/ingredients/update', [IngredientController::class, 'update'])->name('ingredients.update');
     Route::post('/ingredients/delete', [IngredientController::class, 'delete'])->name('ingredients.delete');
+    Route::get('/ingredients/all', [IngredientController::class, 'all'])->name('ingredients.all');
 
     // gestion des actus
     Route::get('/gestion-actus', [ActuController::class, 'index'])->name('gestion-actus');
@@ -164,7 +165,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/modifier', [CarteController::class, 'modifier'])->name('admin.gestion-carte.modifier');
         Route::post('/supprimer', [CarteController::class, 'supprimer'])->name('admin.gestion-carte.supprimer');
     });
-    
+
     // page de la gestion "salle et sécurité"
     Route::prefix('/salle-securite')->group(function () {
         Route::get('/', [SalleSecuriteController::class, 'index'])
@@ -198,7 +199,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/commande-donnee/{id}', [CommandeCuisineController::class, 'marquerCommandeServie'])
             ->name('admin.commandes.marquer-servie');
 
-        Route::post('/modifier-commande/{id}', [CommandeCuisineController::class, 'modifierCommande'])
+        Route::post('/modifier/{id}', [CommandeCuisineController::class, 'modifierCommande'])
             ->name('admin.commandes.modifier');
 
         Route::post('/annuler-commande/{id}', [CommandeCuisineController::class, 'annulerCommande'])
