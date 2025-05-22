@@ -43,4 +43,20 @@ class ParametresController extends Controller
 
         return redirect()->route('admin.parametres')->with('success', 'Le titre du site a été mis à jour avec succès.');
     }
+
+    /**
+     * Met à jour les états du site.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function majModeService(Request $request) {
+        $request->validate([
+            'modeService' => 'required',
+        ]);
+        $modeService_bool = filter_var($request->input('modeService'), FILTER_VALIDATE_BOOLEAN);
+        $modeService_bool = !$modeService_bool;
+        DB::table('parametres')->where('idParametre', 1)->update(['service' => $modeService_bool]);
+        return redirect()->route('admin.parametres')->with('success', 'Le mode service a été mis à jour.');
+    }
 }

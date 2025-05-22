@@ -22,18 +22,16 @@
             <section x-data="options()" class="w-full bg-white rounded-xl border-2 border-black p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Options générales</h2>
                 <div class="flex flex-col gap-4 mb-6">
-                    <!-- Mode événement -->
-                    <button @click="basculer('modeEvenement')" :class="modeEvenement ? 'bg-red-800 text-white' : 'bg-gray-200 text-gray-900'" class="w-full py-3 rounded-lg font-semibold text-lg transition">Mode événement</button>
-
-                    <!-- Commandes en ligne -->
-                    <button @click="basculer('commandesEnLigne')" :class="commandesEnLigne ? 'bg-red-800 text-white' : 'bg-gray-200 text-gray-900'" class="w-full py-3 rounded-lg font-semibold text-lg transition">Activer les commandes en ligne</button>
-
-                    <!-- Limitation des heures -->
-                    <button @click="basculer('limitationHeures')" :class="limitationHeures ? 'bg-red-800 text-white' : 'bg-gray-200 text-gray-900'" class="w-full py-3 rounded-lg font-semibold text-lg transition">Limiter les heures d'ouverture</button>
+                    <!-- Mode service -->
+                    <button @click="basculer('modeService')" :class="modeService ? 'bg-red-800 text-white' : 'bg-green-600 text-white'" class="w-full py-3 rounded-lg font-semibold text-lg transition">Service</button>
                 </div>
 
-                <!-- Bouton de confirmation -->
-                <button @click="confirmer()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-green-700">Confirmer les modifications</button>
+                <!-- Formulaire caché pour envoyer modeService -->
+                <form x-ref="formService" method="POST" action="{{ route('admin.parametres.modeService') }}">
+                    @csrf
+                    <input type="hidden" name="modeService" x-model="modeService">
+                    <button type="button" @click="confirmer()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-green-700">Confirmer les modifications</button>
+                </form>
             </section>
 
             <!-- Section Changer le logo -->
@@ -66,13 +64,9 @@
         <script>
             function options() {
                 return {
-                    modeEvenement: false,
-                    commandesEnLigne: false,
-                    limitationHeures: false,
+                    modeService: {{ $parametres->service ? 'false' : 'true' }},
                     modificationsConfirmees: {
-                        modeEvenement: false,
-                        commandesEnLigne: false,
-                        limitationHeures: false,
+                        modeService: false,
                     },
 
                     basculer(option) {
@@ -80,12 +74,8 @@
                     },
 
                     confirmer() {
-                        // Enregistrer les états actuels comme confirmés
-                        this.modificationsConfirmees.modeEvenement = this.modeEvenement;
-                        this.modificationsConfirmees.commandesEnLigne = this.commandesEnLigne;
-                        this.modificationsConfirmees.limitationHeures = this.limitationHeures;
-
-                        alert('Modifications confirmées !');
+                        this.modificationsConfirmees.modeService = this.modeService;
+                        this.$refs.formService.submit();
                     },
 
                     estActif(option) {
