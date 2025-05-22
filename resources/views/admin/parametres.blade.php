@@ -24,12 +24,15 @@
                 <div class="flex flex-col gap-4 mb-6">
                     <!-- Mode service -->
                     <button @click="basculer('modeService')" :class="modeService ? 'bg-red-800 text-white' : 'bg-green-600 text-white'" class="w-full py-3 rounded-lg font-semibold text-lg transition">Service</button>
+                    <!-- Mode événement -->
+                    <button @click="basculer('modeEvent')" :class="modeEvent ? 'bg-red-800 text-white' : 'bg-green-600 text-white'" class="w-full py-3 rounded-lg font-semibold text-lg transition">Événement</button>
                 </div>
 
                 <!-- Formulaire caché pour envoyer modeService -->
-                <form x-ref="formService" method="POST" action="{{ route('admin.parametres.modeService') }}">
+                <form x-ref="formService" method="POST" action="{{ route('admin.parametres.modes-site') }}">
                     @csrf
                     <input type="hidden" name="modeService" x-model="modeService">
+                    <input type="hidden" name="modeEvent" x-model="modeEvent">
                     <button type="button" @click="confirmer()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-green-700">Confirmer les modifications</button>
                 </form>
             </section>
@@ -66,8 +69,10 @@
             function options() {
                 return {
                     modeService: {{ $parametres->service ? 'false' : 'true' }},
+                    modeEvent: {{ $parametres->modeEvent ? 'false' : 'true' }},
                     modificationsConfirmees: {
                         modeService: false,
+                        modeEvent: false,
                     },
 
                     basculer(option) {
@@ -76,6 +81,7 @@
 
                     confirmer() {
                         this.modificationsConfirmees.modeService = this.modeService;
+                        this.modificationsConfirmees.modeEvent = this.modeEvent;
                         this.$refs.formService.submit();
                     },
 

@@ -50,13 +50,16 @@ class ParametresController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function majModeService(Request $request) {
+    public function majModeSite(Request $request) {
         $request->validate([
             'modeService' => 'required',
+            'modeEvent' => 'required',
         ]);
         $modeService_bool = filter_var($request->input('modeService'), FILTER_VALIDATE_BOOLEAN);
         $modeService_bool = !$modeService_bool;
-        DB::table('parametres')->where('idParametre', 1)->update(['service' => $modeService_bool]);
+        $modeEvent_bool = filter_var($request->input('modeEvent'), FILTER_VALIDATE_BOOLEAN);
+        $modeEvent_bool = !$modeEvent_bool;
+        DB::table('parametres')->where('idParametre', 1)->update(['service' => $modeService_bool, 'modeEvent' => $modeEvent_bool]);
         return redirect()->route('admin.parametres')->with('success', 'Le mode service a été mis à jour.');
     }
 

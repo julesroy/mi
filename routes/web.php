@@ -123,10 +123,12 @@ Route::prefix('admin')->group(function () {
         Route::post('/majTitre', [ParametresController::class, 'majTitre'])
             ->middleware('can:verifier-acces-super-administrateur')
             ->name('admin.parametres.majTitre');
-        Route::post('/admin/parametres/mode-service', [ParametresController::class, 'majModeService'])
+        Route::post('/admin/parametres/mode-site', [ParametresController::class, 'majModeSite'])
             ->middleware('can:verifier-acces-super-administrateur')
-            ->name('admin.parametres.modeService');
-        Route::post('/admin/parametres/majLogo', [ParametresController::class, 'majLogo'])->name('admin.parametres.majLogo');
+            ->name('admin.parametres.modes-site');
+        Route::post('/admin/parametres/majLogo', [ParametresController::class, 'majLogo'])
+            ->middleware('can:verifier-acces-super-administrateur')
+            ->name('admin.parametres.majLogo');
     });
 
 
