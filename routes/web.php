@@ -104,31 +104,26 @@ Route::prefix('admin')->group(function () {
     // page du panneau d'administration
     Route::get('/panneau-admin', function () {
         return view('admin.panneau-admin');
-    })->middleware('can:verifier-acces-serveur');
+    });
 
     // prise de commande c^té administrateur
     Route::get('/prise-commande', [PriseCommandeController::class, 'index'])->name('prise-commande');
 
     // page de l'affichage des commandes en cuisine
-    Route::get('/affichage-cuisine', [AffichageCuisineController::class, 'afficher', 'updateEtat'])
-        ->middleware('can:verifier-acces-serveur')
-        ->name('admin.affichage-cuisine');
+    Route::get('/affichage-cuisine', [CommandeCuisineController::class, 'vueCuisine'])->name('admin.affichage-cuisine');
+    Route::get('/affichage-cuisine/data', [CommandeCuisineController::class, 'aCuisiner']);
 
     // page des paramètres du site
     Route::prefix('/parametres')->group(function () {
         Route::get('/', [ParametresController::class, 'afficherParametres'])
-            ->middleware('can:verifier-acces-super-administrateur')
             ->name('admin.parametres');
         Route::post('/majTitre', [ParametresController::class, 'majTitre'])
-            ->middleware('can:verifier-acces-super-administrateur')
             ->name('admin.parametres.majTitre');
         Route::post('/admin/parametres/mode-site', [ParametresController::class, 'majModeSite'])
-            ->middleware('can:verifier-acces-super-administrateur')
             ->name('admin.parametres.modes-site');
         Route::post('/admin/parametres/majLogo', [ParametresController::class, 'majLogo'])
-            ->middleware('can:verifier-acces-super-administrateur')
             ->name('admin.parametres.majLogo');
-    });
+    })->middleware('can:verifier-acces-super-administrateur');
 
 
     // page de la gestion des stocks
@@ -160,18 +155,14 @@ Route::prefix('admin')->group(function () {
     // page gestion des comptes
     Route::prefix('/gestion-comptes')->group(function () {
         Route::get('/', [GestionComptesController::class, 'afficherComptes'])
-            ->middleware('can:verifier-acces-super-administrateur')
             ->name('admin.gestion-comptes');
         Route::post('/update', [GestionComptesController::class, 'update'])
-            ->middleware('can:verifier-acces-super-administrateur')
             ->name('admin.gestion-comptes.update');
-    });
+    })->middleware('can:verifier-acces-super-administrateur');
 
     // page de gestion de la carte
     Route::prefix('/gestion-carte')->group(function () {
-        Route::get('/', [CarteController::class, 'afficherGestionCarte'])
-            ->middleware('can:verifier-acces-serveur')
-            ->name('admin.gestion-carte');
+        Route::get('/', [CarteController::class, 'afficherGestionCarte'])->name('admin.gestion-carte');
         Route::post('/ajouter', [CarteController::class, 'ajouter'])->name('admin.gestion-carte.ajouter');
         Route::post('/modifier', [CarteController::class, 'modifier'])->name('admin.gestion-carte.modifier');
         Route::post('/supprimer', [CarteController::class, 'supprimer'])->name('admin.gestion-carte.supprimer');

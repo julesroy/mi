@@ -168,12 +168,12 @@
                                                                                         $articlesMap[$idArticle] ??
                                                                                         'Article #' . $idArticle;
                                                                                     $articles[] =
-                                                                                        $quantite . ' x ' . $nomArticle;
+                                                                                        $quantite . ' &times; ' . $nomArticle;
                                                                                 }
                                                                             }
                                                                         @endphp
 
-                                                                        {{ implode(', ', $articles) }}
+                                                                        {!! implode(', ', $articles) !!}
                                                                     </span>
                                                                 </div>
                                                                 @if ($commande->commentaire)

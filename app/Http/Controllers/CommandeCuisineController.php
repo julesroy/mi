@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Commande;
+use App\Models\Ingredient;
+use App\Models\Menu;
 
 /**
  * CommandeCuisineController
@@ -23,6 +25,19 @@ class CommandeCuisineController extends Controller
     public function index()
     {
         return view('admin.commandes');
+    }
+
+    /**
+     * Affiche la vue de la cuisine pour les commandes.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function vueCuisine()
+    {
+        // Récupère uniquement les noms des menus, dans l'ordre
+        $menus = Menu::select('nom', 'idMenu')->orderBy('idMenu')->get()->keyBy('idMenu')->map(fn($menu) => $menu->nom);
+
+        return view('admin.affichage-cuisine', compact('menus'));
     }
 
     /**
@@ -46,6 +61,33 @@ class CommandeCuisineController extends Controller
         } catch (\Exception $e) {
             return response()->json([$this->getTestCommande()]);
         }
+    }
+
+    /**
+     * Récupère les données des plats à préparer en cuisine actuellement
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function aCuisiner()
+    {
+        // Récupère tous les ingrédients de la BDD avant (réduit l'impact sur la performance)
+        $ingredients = Ingredient::select('idIngredient', 'nom')->get();
+
+        $commandes = Commande::whereIn('categorieCommande', [0, 1, 2])->get()->map(function ($commande) use ($ingredients) {
+            // Va chercher tous les ingrédients de la commande
+            $commande->items = array_map(function ($item) use ($ingredients) {
+                [$itemId, $quantity, $optional] = explode(',', $item);
+
+                // Récupère l'ingrédient, et ajoute ses informations additionnelles
+                $ingredient = $ingredients->where('idIngredient', $itemId)->first();
+                $ingredient->optionnel = intval($optional);
+                $ingredient->quantite = $quantity;
+
+                return $ingredient;
+            }, explode(';', $commande->stock));
+            return $commande;
+        });
+
+        return response()->json($commandes);
     }
 
     /**
