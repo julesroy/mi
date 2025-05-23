@@ -6,17 +6,17 @@
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     </head>
 
-    <body class="bg-white pt-28 md:pt-58">
+    <body class="bg-white pt-28 md:pt-57">
         @include("header")
         @auth
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 sm:px-6 md:px-20 pb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 sm:px-6 md:px-20 pb-4">
         @else
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 sm:px-6 md:px-20 pb-24">
-
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 sm:px-6 md:px-20 pb-22">
+        @endauth
             <!-- Coté gauche-->
-            <section class="space-y-6">
+            <div class="space-y-2">
                 <!-- Maison/Service status -->
-                <div id="status-box" class="bg-white border rounded-lg shadow p-4 sm:p-6 md:p-8 text-lg sm:text-xl md:text-2xl">
+                <div id="status-box" class="bg-white border rounded-lg shadow sm:p-6 md:p-4 text-lg sm:text-xl md:text-2xl">
                     <div class="font-bold">
                         Par'MI'Giano :
                         <span class="{{ $ouvert ? 'text-[var(--color-secondaire)]' : 'text-red-600' }}">
@@ -156,42 +156,41 @@
                     </div>
                     @endguest
                 </div>
-            </section>
+            </div>
 
-            <!-- Milieu -->
-            <section id="actus" class="space-y-6">
+            <!-- Middle Column -->
+            <div class="space-y-4">
                 <!-- Actu du moment -->
-                <div class="bg-yellow-50 border rounded-lg shadow p-6 sm:p-8 flex flex-col items-center text-center">
-                    <div class="text-lg font-bold mb-2 underline">Actu du moment</div>
+                <div id="actus" class="bg-yellow-50 border rounded-lg shadow p-6 flex flex-col items-center text-center sm:p-8">
+                    <div class="text-lg font-bold mb-4 underline">Actu du moment</div>
                     @if (isset($actus) && $actus->isNotEmpty())
                         @foreach ($actus as $actu)
-                            <div class="mb-1 font-semibold">{{ $actu->titre }}</div>
-                            <div class="mb-1 text-sm">{{ \Carbon\Carbon::parse($actu->date)->format('d/m/Y') }}</div>
-                            <div class="bg-white border rounded px-4 py-2 shadow mb-2">{{ $actu->contenu }}</div>
+                            <div class="mb-2 font-semibold text-lg">{{ $actu->titre }}</div>
+                            <div class="mb-2 text-sm">{{ \Carbon\Carbon::parse($actu->date)->format('d/m/Y') }}</div>
+                            <div class="bg-white border rounded px-4 py-2 shadow mb-4 text-base">{{ $actu->contenu }}</div>
                         @endforeach
                     @else
-                        <div class="text-gray-500">Aucune actu disponible pour le moment.</div>
+                        <div class="text-gray-500 text-base">Aucune actu disponible pour le moment.</div>
                     @endif
                 </div>
 
                 <!-- Festi'vendredi -->
-                <div class="bg-blue-50 border rounded-lg shadow p-6 sm:p-8 flex flex-col items-center text-center">
-                    <div class="text-lg font-bold mb-2 underline">Festi'vendredi</div>
+                <div class="bg-blue-50 border rounded-lg shadow p-6 flex flex-col items-center text-center sm:p-8 ">
+                    <div class="text-lg font-bold mb-4 underline">Festi'vendredi</div>
                     @if ($festiVendredi)
-                        <div class="mb-1 text-sm">{{ \Carbon\Carbon::parse($festiVendredi->date)->format('d/m/Y') }}</div>
-                        <div class="bg-white border rounded px-4 py-2 shadow mb-2">{{ $festiVendredi->composition }}</div>
-                        <div class="bg-yellow-400 rounded-full px-3 py-1 font-bold">{{ $festiVendredi->prix }}€</div>
+                        <div class="mb-2 text-sm">{{ \Carbon\Carbon::parse($festiVendredi->date)->format('d/m/Y') }}</div>
+                        <div class="bg-white border rounded px-4 py-2 shadow mb-4 text-base">{{ $festiVendredi->composition }}</div>
+                        <div class="bg-yellow-400 rounded-full px-4 py-2 font-bold text-lg">{{ $festiVendredi->prix }}€</div>
                         @if ($festiVendredi->info)
-                            <div class="mt-2 text-sm text-gray-500">{{ $festiVendredi->info }}</div>
+                            <div class="mt-4 text-sm text-gray-500">{{ $festiVendredi->info }}</div>
                         @endif
                     @else
-                        <div class="text-gray-500">Aucun Festi'vendredi à venir.</div>
+                        <div class="text-gray-500 text-base">Aucun Festi'vendredi à venir.</div>
                     @endif
                 </div>
-            </section>
-
+            </div>
             <!-- Coté droit -->
-            <section class="space-y-6 text-xl gap-2">
+            <div class="space-y-2 text-xl gap-2">
                 <!-- Commande info -->
                 <div id="commande-info">
                     @auth
@@ -255,8 +254,10 @@
                         </button>
                     </a>
                 </div>
-            </section>
+            </div>
         </div>
         @include("footer")
+        <div class="bg-[var(--color-primaire)] h-4">
+        </div>
     </body>
 </html>
