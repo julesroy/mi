@@ -28,14 +28,8 @@ class AccueilController extends Controller
     private function recupInfo()
     {
         $ouvert = DB::table('parametres')->value('service');
-<<<<<<< HEAD
         $horairesDebutCommandes = DB::table('parametres')->value('horairesDebutCommandes');
         $horairesFinCommandes = DB::table('parametres')->value('horairesFinCommandes');
-=======
-        $serviceMidi = DB::table('parametres')->value('horairesDebutCommandes');
-       
-        // dd($serviceMidi); // Debug the value here
->>>>>>> 2aa0808463fd3572591f3ba50dea4224495a696b
 
         // Formattage des horaires
         $horairesDebutCommandes = Carbon::parse($horairesDebutCommandes)->format('H\h');
@@ -45,6 +39,21 @@ class AccueilController extends Controller
             'horairesDebutCommandes' => $horairesDebutCommandes,
             'horairesFinCommandes' => $horairesFinCommandes
         ];
+    }
+
+    private function recupFestiVendredi()
+    {
+        // Récupérer la date actuelle
+        $dateActuelle = Carbon::now()->format('d-m-Y');
+
+        // Récupérer le prochain événement Festi'vendredi
+        $festiVendredi = DB::table('events')
+            ->where('typeEvent', 1) // 1: Festi'vendredi
+            ->where('date', '>=', $dateActuelle)
+            ->orderBy('date', 'asc')
+            ->first();
+
+        return $festiVendredi;
     }
 
     private function recupCommandeEnCours($numeroCompte)
@@ -103,12 +112,16 @@ class AccueilController extends Controller
         // Récupérer les informations sur la commande en cours
         $commandeEnCours = $numeroCompte ? $this->recupCommandeEnCours($numeroCompte) : null;
 
+        // Récupérer les informations sur Festi'vendredi
+        $festiVendredi = $this->recupFestiVendredi();
+
         return view('accueil', [
             'actus' => $actus,
             'ouvert' => $info['ouvert'],
             'horairesDebutCommandes' => $info['horairesDebutCommandes'],
             'horairesFinCommandes' => $info['horairesFinCommandes'],
             'commandeEnCours' => $commandeEnCours,
+            'festiVendredi' => $festiVendredi,
         ]);
     }
 }
