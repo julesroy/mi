@@ -5,8 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
-
+/**
+ * AccueilController
+ *
+ * Ce contrôleur gère l'affichage de la page d'accueil de l'application.
+ * Il récupère les actualités, les informations sur le service et la commande en cours.
+ */
 class AccueilController extends Controller
 {
     /**
@@ -25,6 +31,11 @@ class AccueilController extends Controller
         return $actus;
     }
 
+    /**
+     * Récupère les informations sur le service.
+     *
+     * @return array
+     */
     private function recupInfo()
     {
         $ouvert = DB::table('parametres')->value('service');
@@ -107,7 +118,7 @@ class AccueilController extends Controller
         $info = $this->recupInfo();
 
         // Récupérer le numéro de compte de l'utilisateur connecté
-        $numeroCompte = auth()->user()->numeroCompte ?? null;
+        $numeroCompte = Auth::user()->numeroCompte ?? null;
 
         // Récupérer les informations sur la commande en cours
         $commandeEnCours = $numeroCompte ? $this->recupCommandeEnCours($numeroCompte) : null;

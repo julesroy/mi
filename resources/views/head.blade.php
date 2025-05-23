@@ -33,8 +33,8 @@
     use Illuminate\Support\Str;
 @endphp
 
-@if (Str::contains(request()->path(), "admin"))
-    <style>
+<style>
+    @if (Str::contains(request()->path(), 'admin'))
         body {
             font-family: 'opensauce', sans-serif;
         }
@@ -42,14 +42,15 @@
         header {
             font-family: 'lobstertwo', sans-serif;
         }
-    </style>
-@else
-    <style>
+    @else
         body {
             font-family: 'lobstertwo', sans-serif;
         }
-    </style>
-@endif
+    @endif    input {
+        font-family: 'opensauce', sans-serif;
+    }
 
-<!-- Thème -->
-<meta name="theme-color" content="#407829" />
+    button {
+        cursor: pointer;
+    }
+</style>

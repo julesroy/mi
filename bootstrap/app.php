@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\MessageThrottleMiddleware;
 use App\Http\Middleware\ConnexionDepuisCookies;
 use App\Http\Middleware\RecupererDonneesUtilisateur;
+use App\Http\Middleware\RecupererDonneesParametres;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -38,6 +39,11 @@ return Application::configure(basePath: dirname(__DIR__))
          * récupération des données de l'utilisateur depuis la base de données
          */
         $middleware->appendToGroup('web', RecupererDonneesUtilisateur::class);
+
+        /**
+         * récupération des données des paramètres depuis la base de données
+         */
+        $middleware->appendToGroup('web', RecupererDonneesParametres::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

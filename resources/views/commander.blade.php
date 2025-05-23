@@ -31,10 +31,17 @@
         @include("header")
 
         <div class="flex flex-col items-center gap-6 p-6 rounded-2xl w-[90%] max-w-xl mx-auto border-2 border-black">
+            @if ($donneesParametres->service == 0)
+                <p class="text-2xl">Pas de service aujourd'hui</p>
+                <p class="text-xl">La Maison ISEN s'excuse pour la gêne occasionnée.</p>
+                <img src="{{ asset("images/animated/pas-de-service.gif") }}" alt="Gif pas de service" class="w-1/2 h-auto"/>
+            @else
             <div id="step-content"></div>
             <div id="carte-button-container" class="mt-6 w-full flex justify-center"></div>
+            @endif
         </div>
 
+        @if ($donneesParametres->service == 1)
         <script>
             const menus = @json($menus);
             const plats = @json($plats);
@@ -393,5 +400,6 @@
             @csrf
             <input type="hidden" name="panier" id="panier-input" />
         </form>
+        @endif
     </body>
 </html>

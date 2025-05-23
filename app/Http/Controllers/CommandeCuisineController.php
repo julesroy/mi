@@ -6,70 +6,67 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+/**
+ * CommandeCuisineController
+ *
+ * Ce contrôleur gère les opérations liées aux commandes en cuisine.
+ * Il permet d'afficher, modifier et gérer les commandes.
+ */
 class CommandeCuisineController extends Controller
 {
+    /**
+     * Affiche la page de gestion des commandes.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         return view('admin.commandes');
     }
 
+    /**
+     * Récupère les commandes du jour.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getCommandes(Request $request)
     {
         try {
             $query = DB::table('commandes')
                 ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
-                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient','utilisateurs.prenom as prenomClient', 'commandes.categorieCommande', 'commandes.prix', 'commandes.date', 'commandes.commentaire', 'commandes.etat')
+                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient', 'utilisateurs.prenom as prenomClient', 'commandes.categorieCommande', 'commandes.prix', 'commandes.date', 'commandes.commentaire', 'commandes.etat')
                 ->whereDate('commandes.date', Carbon::today())
                 ->whereIn('commandes.etat', [0, 1, 2, 3, 4])
                 ->orderBy('commandes.date', 'asc');
 
             $commandes = $query->get();
 
-            if ($commandes->isEmpty()) {
-                return response()->json([$this->getTestCommande()]);
-            }
-
             return response()->json($commandes);
         } catch (\Exception $e) {
             return response()->json([$this->getTestCommande()]);
         }
     }
-    
-    public function getInventaireItems()
-    {
-        try {
-            // Récupère TOUTES les colonnes mais on n'utilisera que idingredient, Nom et categorieingredient
-            $items = DB::table('inventaire')
-                ->select('*') // Sélectionne toutes les colonnes
-                ->orderBy('categorieingredient')
-                ->orderBy('idingredient')
-                ->get()
-                ->map(function ($item) {
-                    return [
-                        'idIngredient' => $item->idingredient,
-                        'nom' => $item->Nom,
-                        'categorieIngredient' => $item->categorieingredient,
-                        // On garde toutes les données au cas où, mais on n'utilisera que ces 3 champs
-                        'fullData' => $item 
-                    ];
-                });
 
-            return response()->json($items);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ], 500);
-        }
-    }
-
-    public function getCommandeDetails($id)
+    /**
+     * Récupère les détails d'une commande.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getCommandeDetails(int $id)
     {
         try {
             $commande = DB::table('commandes')
                 ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
-                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient', 
-                        'utilisateurs.prenom as prenomClient', 'commandes.commentaire', 'commandes.stock')
+                ->select(
+                    'commandes.idCommande',
+                    'commandes.numeroCommande',
+                    'utilisateurs.nom as nomClient',
+                    'utilisateurs.prenom as prenomClient',
+                    'commandes.commentaire',
+                    'commandes.stock'
+                )
                 ->where('commandes.idCommande', $id)
                 ->first();
 
@@ -78,14 +75,7 @@ class CommandeCuisineController extends Controller
             }
 
             // On retourne simplement le stock brut, le traitement sera fait côté client
-            return response()->json([
-                'idCommande' => $commande->idCommande,
-                'numeroCommande' => $commande->numeroCommande,
-                'nomClient' => $commande->nomClient,
-                'prenomClient' => $commande->prenomClient,
-                'commentaire' => $commande->commentaire,
-                'stock' => $commande->stock // On envoie la chaîne brute directement
-            ]);
+            return response()->json($commande);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
@@ -94,6 +84,13 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Marque une commande comme payée.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function marquerCommandePayee(Request $request, $id)
     {
         if ($id == 999) {
@@ -111,6 +108,13 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Marque une commande comme prête.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function marquerCommandePrete(Request $request, $id)
     {
         if ($id == 999) {
@@ -128,6 +132,13 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Marque une commande comme servie.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function marquerCommandeServie(Request $request, $id)
     {
         if ($id == 999) {
@@ -145,42 +156,56 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Modifie une commande.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function modifierCommande(Request $request, $id)
-{
-    try {
-        $validated = $request->validate([
-            'commentaire' => 'nullable|string',
-            'items' => 'required|array',
-            'items.*.idIngredient' => 'required|integer',
-            'items.*.quantite' => 'required|integer|min:1',
-            'items.*.obligatoire' => 'required|integer|in:0,1'
-        ]);
-
-        // Construire la chaîne stock
-        $stockItems = [];
-        foreach ($validated['items'] as $item) {
-            $stockItems[] = implode(',', [
-                $item['idIngredient'],
-                $item['quantite'],
-                $item['obligatoire']
+    {
+        try {
+            $validated = $request->validate([
+                'commentaire' => 'nullable|string',
+                'items' => 'required|array',
+                'items.*.idIngredient' => 'required|integer',
+                'items.*.quantite' => 'required|integer|min:1',
+                'items.*.obligatoire' => 'required|integer|in:0,1'
             ]);
+
+            // Construire la chaîne stock
+            $stockItems = [];
+            foreach ($validated['items'] as $item) {
+                $stockItems[] = implode(',', [
+                    $item['idIngredient'],
+                    $item['quantite'],
+                    $item['obligatoire']
+                ]);
+            }
+            $stockValue = implode(';', $stockItems);
+
+            // Mettre à jour la commande
+            DB::table('commandes')
+                ->where('idCommande', $id)
+                ->update([
+                    'commentaire' => $validated['commentaire'] ?? null,
+                    'stock' => $stockValue
+                ]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-        $stockValue = implode(';', $stockItems);
-
-        // Mettre à jour la commande
-        DB::table('commandes')
-            ->where('idCommande', $id)
-            ->update([
-                'commentaire' => $validated['commentaire'] ?? null,
-                'stock' => $stockValue
-            ]);
-
-        return response()->json(['success' => true]);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
     }
-}
 
+    /**
+     * Annule une commande.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function annulerCommande(Request $request, $id)
     {
         if ($id == 999) {
@@ -198,6 +223,12 @@ class CommandeCuisineController extends Controller
         }
     }
 
+    /**
+     * Récupère la commande de test.
+     *
+     * @param int $etat
+     * @return string
+     */
     private function getTestCommande()
     {
         return [

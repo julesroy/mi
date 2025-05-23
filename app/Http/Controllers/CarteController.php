@@ -4,8 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Models\Carte;
 
+/**
+ * CarteController
+ *
+ * Ce contrôleur gère les opérations liées à la carte du restaurant.
+ * Il permet d'afficher, ajouter, modifier et supprimer des éléments de la carte.
+ */
 class CarteController extends Controller
 {
     /**
@@ -18,6 +23,11 @@ class CarteController extends Controller
         return view('admin.gestion-carte', compact('elementsCarte', 'elementsInventaire'));
     }
 
+    /**
+     * Ajoute un nouvel élément à la carte
+     *
+     * @return \Illuminate\View\View
+     */
     public function ajouter(Request $request)
     {
             // Valider les données
@@ -45,6 +55,11 @@ class CarteController extends Controller
             return redirect()->route('admin.gestion-carte');
     }
 
+    /**
+     * Met à jour un élément de la carte
+     *
+     * @return \Illuminate\View\View
+     */
     public function modifier(Request $request)
     {
         $validated = $request->validate([
@@ -81,6 +96,11 @@ class CarteController extends Controller
         ]);
     }
 
+    /**
+     * Supprime un élément de la carte
+     *
+     * @return \Illuminate\View\View
+     */
     public function supprimer(Request $request)
     {
         $id = $request->input('id');

@@ -3,7 +3,7 @@
         <!-- Pour les grands écrans -->
         <span class="hidden md:flex justify-between w-5/12 items-center h-full">
             <span class="text-5xl pl-4 md:pl-0 py-6 md:py-0 font-bold">
-                <a href="/">Par'MI'Giano</a>
+                <a href="/">{{ $donneesParametres->titreHeader }}</a>
             </span>
 
             <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
@@ -13,7 +13,7 @@
                 <a href="/actus" class="w-full text-center px-8 h-full flex items-center">Actus</a>
             </div>
         </span>
-        <img src="{{ asset("images/logo.png") }}" alt="Logo Par'MI'Giano" class="hidden md:block w-48 h-auto relative -mb-20" />
+        <img src="{{ asset("images/logo.png") }}" alt="Logo {{ $donneesParametres->titreHeader }}" class="hidden md:block w-48 h-auto relative -mb-20" />
         <span class="hidden md:flex justify-between w-5/12 items-center h-full">
             <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
                 <a href="/commander" class="w-full text-center px-8 h-full flex items-center">Commander</a>
@@ -112,7 +112,7 @@
             @endauth
 
             <span class="md:hidden text-3xl md:text-5xl pr-4 py-6 md:py-0 font-bold">
-                <a href="/">Par'MI'Giano</a>
+                <a href="/">{{ $donneesParametres->titreHeader }}</a>
             </span>
         </span>
     </div>

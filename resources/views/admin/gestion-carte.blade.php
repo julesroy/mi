@@ -27,7 +27,7 @@
         </style>
     </head>
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
+    <body class="pt-28 md:pt-60">
         @include("header")
 
         @php
@@ -44,18 +44,9 @@
 
             <div class="overflow-x-auto min-w-full">
                 <!-- Barre de recherche et bouton d'ajout -->
-                <div class="flex flex-col md:flex-row md:justify-between items-center min-w-full mb-4 bg-gray-800 p-4 rounded gap-3 sticky top-0 z-10">
-                    <form method="GET" action="{{ url()->current() }}" class="flex flex-col sm:flex-row w-full md:w-auto">
-                        <input type="text" name="search" placeholder="Rechercher" class="px-3 py-2 bg-gray-700 text-white rounded-t sm:rounded-l border-gray-600 w-full sm:w-auto" value="{{ request("search") }}" />
-                        <select name="categorie" class="px-3 py-2 bg-gray-700 text-white border-gray-600 w-full sm:w-auto">
-                            <option value="">Toutes catégories</option>
-                            @foreach ($categories as $key => $label)
-                                <option value="{{ $key }}" {{ request("categorie") == $key ? "selected" : "" }}>
-                                    {{ $label }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 w-full sm:w-auto mt-2 sm:mt-0">Rechercher</button>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center min-w-full mb-4 bg-primaire p-4 rounded gap-3 sticky left-0 top-0 z-10">
+                    <form class="flex flex-col sm:flex-row w-full md:w-auto">
+                        <input type="text" name="search" id="recherche-utilisateur" placeholder="Rechercher" class="bg-white px-3 py-2 rounded-t sm:rounded-l sm:rounded-t-none border-b sm:border-b-0 sm:border-r-0 border-gray-600 w-full sm:w-auto" />
                     </form>
                     <button id="openAddDialog" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 w-full md:w-auto">+ Ajouter un élément</button>
                 </div>
@@ -66,122 +57,124 @@
                     <span class="font-semibold text-black" id="type-tri">défaut</span>
                 </p>
 
-                <!-- Tableau de gestion de la carte -->
-                <table class="min-w-full bg-white text-black rounded shadow">
-                    <thead class="bg-primaire text-white sticky z-10">
-                        <tr>
-                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="nom">Nom</th>
-                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="composition">Composition</th>
-                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prix">Prix</th>
-                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prix-serveur">Prix serveur</th>
-                            @can("verifier-acces-super-administrateur")
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="prix-estime">Prix estime</th>
-                            @endcan
-
-                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="categorie">Catégorie</th>
-                            <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($elementsCarte as $elementCarte)
-                            <tr id="row-{{ $elementCarte->idElement }}" class="hover:bg-gray-100">
-                                <td class="py-2 px-4 border-b" id="nom-{{ $elementCarte->idElement }}">{{ $elementCarte->nom }}</td>
-                                <td class="py-2 px-4 border-b max-w-32 overflow-hidden" id="composition-{{ $elementCarte->idElement }}">{{ $elementCarte->ingredientsElements }}</td>
-                                <td class="py-2 px-4 border-b" id="prix-{{ $elementCarte->idElement }}">{{ $elementCarte->prix }}</td>
-                                <td class="py-2 px-4 border-b" id="prix-{{ $elementCarte->idElement }}">{{ $elementCarte->prixServeur }}</td>
+                <div class="max-h-128 md:max-h-96 overflow-y-auto hide-scrollbar rounded-2xl border-2 border-primaire">
+                    <!-- Tableau de gestion de la carte -->
+                    <table class="min-w-full table-fixed bg-white text-black border-collapse text-center text-xs sm:text-sm md:text-base">
+                        <thead class="bg-primaire text-white sticky z-10">
+                            <tr>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="nom">Nom</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="composition">Composition</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="prix">Prix</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="prix-serveur">Prix serveur</th>
                                 @can("verifier-acces-super-administrateur")
-                                    <td class="py-2 px-4 border-b" id="prix-estime-{{ $elementCarte->idElement }}">Estimation</td>
+                                    <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="prix-estime">Prix estime</th>
                                 @endcan
 
-                                <td class="py-2 px-4 border-b" id="categorie-{{ $elementCarte->idElement }}">{{ $elementCarte->categoriePlat }}</td>
-                                <td class="py-2 px-4 border-b">
-                                    <div class="flex">
-                                        <img src="{{ asset("images/icons/edit.svg") }}" alt="Modifier" class="action-icon edit-btn" data-id="{{ $elementCarte->idElement }}" />
-                                        <img src="{{ asset("images/icons/delete.svg") }}" alt="Supprimer" class="action-icon delete-btn" data-id="{{ $elementCarte->idElement }}" />
-                                    </div>
-                                </td>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="categorie">Catégorie</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Actions</th>
                             </tr>
-                            <tr id="edit-row-{{ $elementCarte->idElement }}" class="hidden bg-gray-200">
-                                <td class="py-2 px-4 border-b">
-                                    <input type="text" class="w-full p-1 border" id="edit-nom-{{ $elementCarte->idElement }}" value="{{ $elementCarte->nom }}" />
-                                </td>
-                                @php
-                                    // On récupère la chaîne brute
-                                    $composition = $elementCarte->ingredientsElements;
-                                    $elements = [];
-                                    foreach (explode(";", $composition) as $item) {
-                                        if (trim($item) === "") {
-                                            continue;
-                                        }
-                                        [$idIngredient, $quantite, $choix] = explode(",", $item);
-                                        $elements[] = [
-                                            "idIngredient" => $idIngredient,
-                                            "quantite" => $quantite,
-                                            "choix" => $choix,
-                                        ];
-                                    }
-                                @endphp
+                        </thead>
+                        <tbody>
+                            @foreach ($elementsCarte as $elementCarte)
+                                <tr id="row-{{ $elementCarte->idElement }}" class="hover:bg-gray-100">
+                                    <td class="py-2 px-4 border-b" id="nom-{{ $elementCarte->idElement }}">{{ $elementCarte->nom }}</td>
+                                    <td class="py-2 px-4 border-b max-w-32 overflow-hidden" id="composition-{{ $elementCarte->idElement }}">{{ $elementCarte->ingredientsElements }}</td>
+                                    <td class="py-2 px-4 border-b" id="prix-{{ $elementCarte->idElement }}">{{ $elementCarte->prix }}</td>
+                                    <td class="py-2 px-4 border-b" id="prix-{{ $elementCarte->idElement }}">{{ $elementCarte->prixServeur }}</td>
+                                    @can("verifier-acces-super-administrateur")
+                                        <td class="py-2 px-4 border-b" id="prix-estime-{{ $elementCarte->idElement }}">Estimation</td>
+                                    @endcan
 
-                                <td class="py-2 px-4 border-b">
-                                    <form id="modifierElementCarte" action="{{ route("admin.gestion-carte.modifier") }}" method="POST">
-                                        <div id="edit-compositionContainer-{{ $elementCarte->idElement }}">
-                                            @foreach ($elements as $element)
-                                                <div class="composition-group flex items-center mb-2">
-                                                    <select name="elementCompositionCarteEdit[]">
-                                                        @foreach ($elementsInventaire as $ingredient)
-                                                            <option value="{{ $ingredient->idIngredient }}" {{ $element["idIngredient"] == $ingredient->idIngredient ? "selected" : "" }}>
-                                                                {{ $ingredient->nom }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    <select name="quantiteElementCompositionCarteEdit[]">
-                                                        @for ($i = 1; $i <= 8; $i++)
-                                                            <option value="{{ $i }}" {{ $element["quantite"] == $i ? "selected" : "" }}>{{ $i }}</option>
-                                                        @endfor
-                                                    </select>
-                                                    <select name="choixElementCompositionCarteEdit[]">
-                                                        <option value="0" {{ $element["choix"] == 0 ? "selected" : "" }}>Libre</option>
-                                                        <option value="1" {{ $element["choix"] == 1 ? "selected" : "" }}>Défaut</option>
-                                                        <option value="2" {{ $element["choix"] == 2 ? "selected" : "" }}>Obligatoire</option>
-                                                    </select>
-
-                                                    <button type="button" class="remove-group px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2">Supprimer</button>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <button type="button" class="add-group px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mt-2" data-id="{{ $elementCarte->idElement }}">Ajouter un groupe</button>
-                                        <input type="hidden" id="edit-composition-{{ $elementCarte->idElement }}" name="composition" />
-                                    </form>
-                                </td>
-                                <td class="py-2 px-4 border-b">
-                                    <input type="text" class="w-full p-1 border" id="edit-prix-{{ $elementCarte->idElement }}" value="{{ $elementCarte->prix }}" />
-                                </td>
-                                <td class="py-2 px-4 border-b">
-                                    <input type="text" class="w-full p-1 border" id="edit-prix-serveur-{{ $elementCarte->idElement }}" value="{{ $elementCarte->prixServeur }}" />
-                                </td>
-                                @can("verifier-acces-super-administrateur")
+                                    <td class="py-2 px-4 border-b" id="categorie-{{ $elementCarte->idElement }}">{{ $elementCarte->categoriePlat }}</td>
                                     <td class="py-2 px-4 border-b">
-                                        <input type="text" class="w-full p-1 border" id="edit-prix-estime-{{ $elementCarte->idElement }}" value="Rien" />
+                                        <div class="flex">
+                                            <img src="{{ asset("images/icons/edit.svg") }}" alt="Modifier" class="action-icon edit-btn" data-id="{{ $elementCarte->idElement }}" />
+                                            <img src="{{ asset("images/icons/delete.svg") }}" alt="Supprimer" class="action-icon delete-btn" data-id="{{ $elementCarte->idElement }}" />
+                                        </div>
                                     </td>
-                                @endcan
+                                </tr>
+                                <tr id="edit-row-{{ $elementCarte->idElement }}" class="hidden bg-gray-200">
+                                    <td class="py-2 px-4 border-b">
+                                        <input type="text" class="w-full p-1 border" id="edit-nom-{{ $elementCarte->idElement }}" value="{{ $elementCarte->nom }}" />
+                                    </td>
+                                    @php
+                                        // On récupère la chaîne brute
+                                        $composition = $elementCarte->ingredientsElements;
+                                        $elements = [];
+                                        foreach (explode(";", $composition) as $item) {
+                                            if (trim($item) === "") {
+                                                continue;
+                                            }
+                                            [$idIngredient, $quantite, $choix] = explode(",", $item);
+                                            $elements[] = [
+                                                "idIngredient" => $idIngredient,
+                                                "quantite" => $quantite,
+                                                "choix" => $choix,
+                                            ];
+                                        }
+                                    @endphp
 
-                                <td class="py-2 px-4 border-b">
-                                    <select class="w-full p-1 border" id="edit-categorie-{{ $elementCarte->idElement }}">
-                                        <option value="0" {{ $elementCarte->typePlat == 0 ? "selected" : "" }}>Plat</option>
-                                        <option value="1" {{ $elementCarte->typePlat == 1 ? "selected" : "" }}>Snack</option>
-                                        <option value="2" {{ $elementCarte->typePlat == 2 ? "selected" : "" }}>Boisson</option>
-                                        <option value="3" {{ $elementCarte->typePlat == 3 ? "selected" : "" }}>Menu</option>
-                                        <option value="4" {{ $elementCarte->typePlat == 4 ? "selected" : "" }}>Event</option>
-                                    </select>
-                                </td>
-                                <td class="py-2 px-4 border-b">
-                                    <button class="px-4 py-2 bg-green-600 text-white rounded save-btn w-28" data-id="{{ $elementCarte->idElement }}">Enregistrer</button>
-                                    <button class="px-4 py-2 bg-gray-400 text-white rounded cancel-btn w-28 mt-1" data-id="{{ $elementCarte->idElement }}">Annuler</button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                                    <td class="py-2 px-4 border-b">
+                                        <form id="modifierElementCarte" action="{{ route("admin.gestion-carte.modifier") }}" method="POST">
+                                            <div id="edit-compositionContainer-{{ $elementCarte->idElement }}">
+                                                @foreach ($elements as $element)
+                                                    <div class="composition-group flex items-center mb-2">
+                                                        <select name="elementCompositionCarteEdit[]">
+                                                            @foreach ($elementsInventaire as $ingredient)
+                                                                <option value="{{ $ingredient->idIngredient }}" {{ $element["idIngredient"] == $ingredient->idIngredient ? "selected" : "" }}>
+                                                                    {{ $ingredient->nom }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                        <select name="quantiteElementCompositionCarteEdit[]">
+                                                            @for ($i = 1; $i <= 8; $i++)
+                                                                <option value="{{ $i }}" {{ $element["quantite"] == $i ? "selected" : "" }}>{{ $i }}</option>
+                                                            @endfor
+                                                        </select>
+                                                        <select name="choixElementCompositionCarteEdit[]">
+                                                            <option value="0" {{ $element["choix"] == 0 ? "selected" : "" }}>Libre</option>
+                                                            <option value="1" {{ $element["choix"] == 1 ? "selected" : "" }}>Défaut</option>
+                                                            <option value="2" {{ $element["choix"] == 2 ? "selected" : "" }}>Obligatoire</option>
+                                                        </select>
+
+                                                        <button type="button" class="remove-group px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 ml-2">Supprimer</button>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <button type="button" class="add-group px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 mt-2" data-id="{{ $elementCarte->idElement }}">Ajouter un groupe</button>
+                                            <input type="hidden" id="edit-composition-{{ $elementCarte->idElement }}" name="composition" />
+                                        </form>
+                                    </td>
+                                    <td class="py-2 px-4 border-b">
+                                        <input type="text" class="w-full p-1 border" id="edit-prix-{{ $elementCarte->idElement }}" value="{{ $elementCarte->prix }}" />
+                                    </td>
+                                    <td class="py-2 px-4 border-b">
+                                        <input type="text" class="w-full p-1 border" id="edit-prix-serveur-{{ $elementCarte->idElement }}" value="{{ $elementCarte->prixServeur }}" />
+                                    </td>
+                                    @can("verifier-acces-super-administrateur")
+                                        <td class="py-2 px-4 border-b">
+                                            <input type="text" class="w-full p-1 border" id="edit-prix-estime-{{ $elementCarte->idElement }}" value="Rien" />
+                                        </td>
+                                    @endcan
+
+                                    <td class="py-2 px-4 border-b">
+                                        <select class="w-full p-1 border" id="edit-categorie-{{ $elementCarte->idElement }}">
+                                            <option value="0" {{ $elementCarte->typePlat == 0 ? "selected" : "" }}>Plat</option>
+                                            <option value="1" {{ $elementCarte->typePlat == 1 ? "selected" : "" }}>Snack</option>
+                                            <option value="2" {{ $elementCarte->typePlat == 2 ? "selected" : "" }}>Boisson</option>
+                                            <option value="3" {{ $elementCarte->typePlat == 3 ? "selected" : "" }}>Menu</option>
+                                            <option value="4" {{ $elementCarte->typePlat == 4 ? "selected" : "" }}>Event</option>
+                                        </select>
+                                    </td>
+                                    <td class="py-2 px-4 border-b">
+                                        <button class="px-4 py-2 bg-green-600 text-white rounded save-btn w-28" data-id="{{ $elementCarte->idElement }}">Enregistrer</button>
+                                        <button class="px-4 py-2 bg-gray-400 text-white rounded cancel-btn w-28 mt-1" data-id="{{ $elementCarte->idElement }}">Annuler</button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -270,22 +263,39 @@
             document.getElementById('openAddDialog').addEventListener('click', () => addElementCarteDialog.showModal());
             document.getElementById('closeDialog').addEventListener('click', () => addElementCarteDialog.close());
 
-            // Event listeners for editing rows
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.id;
-                    document.getElementById(`row-${id}`).classList.add('hidden');
-                    document.getElementById(`edit-row-${id}`).classList.remove('hidden');
+            // Gestion de l'édition des lignes
+            document.querySelectorAll('.edit-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const ligneAffichage = document.getElementById(`row-${id}`);
+                    const ligneEdition = document.getElementById(`edit-row-${id}`);
+
+                    // Cache la ligne normale (ajoute hidden ET display none)
+                    ligneAffichage.classList.add('hidden');
+                    ligneAffichage.style.display = 'none';
+
+                    // Affiche la ligne d’édition (retire hidden ET force le display block)
+                    ligneEdition.classList.remove('hidden');
+                    ligneEdition.style.display = '';
                 });
             });
 
-            document.querySelectorAll('.cancel-btn').forEach(btn =>
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.id;
-                    document.getElementById(`row-${id}`).classList.remove('hidden');
-                    document.getElementById(`edit-row-${id}`).classList.add('hidden');
-                })
-            );
+            // Annuler l'édition
+            document.querySelectorAll('.cancel-btn').forEach((btn) => {
+                btn.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const ligneAffichage = document.getElementById(`row-${id}`);
+                    const ligneEdition = document.getElementById(`edit-row-${id}`);
+
+                    // Affiche la ligne normale
+                    ligneAffichage.classList.remove('hidden');
+                    ligneAffichage.style.display = '';
+
+                    // Cache la ligne d’édition
+                    ligneEdition.classList.add('hidden');
+                    ligneEdition.style.display = 'none';
+                });
+            });
 
             // Add ingredient composition groups
             document.addEventListener('DOMContentLoaded', () => {
@@ -405,7 +415,7 @@
                             prixServeur,
                             categorieElementCarte,
                             composition,
-                            categoriePlat: 0 // adapte si tu as ce champ dans le formulaire
+                            categoriePlat: 0
                         })
                     })
                     .then(response => response.json())
@@ -464,5 +474,8 @@
                 });
             });
         </script>
+
+        <script src="{{ asset("js/recherche.js") }}"></script>
+        <script src="{{ asset("js/tri-tableaux.js") }}"></script>
     </body>
 </html>

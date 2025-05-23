@@ -61,11 +61,11 @@
         $weekDays = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
     @endphp
 
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-54 h-screen">
+    <body class="pt-28 md:pt-54 h-screen">
         @include("header")
 
         {{-- Dialogue de suppression d'inscription --}}
-        <dialog id="deleteDialog" class="backdrop-brightness-50 backdrop-blur-xs flex items-center justify-center w-full bg-transparent h-full absolute top-0 d not-open:hidden z-10 [&_button]:hover:cursor-pointer">
+        <dialog id="deleteDialog" class="backdrop-brightness-50 backdrop-blur-xs flex items-center justify-center w-full bg-transparent h-full absolute top-0 d not-open:hidden z-10 [&_button]:hover:cursor-pointer text-white">
             <div class="rounded-lg bg-gray-800 p-6 shadow-lg m-8">
                 <input type="hidden" value="0" id="deleteDialog__id" />
                 <div class="flex items-start justify-between">
@@ -99,7 +99,7 @@
         </dialog>
 
         {{-- Dialoge d'inscription pour le planning --}}
-        <dialog id="inscriptionDialog" class="backdrop-brightness-50 backdrop-blur-xs flex items-center justify-center w-full bg-transparent h-full absolute top-0 d not-open:hidden z-10 [&_button]:hover:cursor-pointer">
+        <dialog id="inscriptionDialog" class="backdrop-brightness-50 backdrop-blur-xs flex items-center justify-center w-full bg-transparent h-full absolute top-0 d not-open:hidden z-10 [&_button]:hover:cursor-pointer text-white">
             <form id="inscriptionDialog__form" class="rounded-lg bg-gray-800 p-6 shadow-lg m-8" method="dialog">
                 <input type="hidden" value="0" id="deleteDialog__id" />
                 <div class="flex items-start justify-between">
@@ -151,7 +151,7 @@
         </dialog>
 
         <!-- Wrapper global -->
-        <div id="planningWrapper" class="flex flex-col md:flex-row justify-center items-center gap-8 min-h-[90%] [&>*]:bg-gray-800 [&>*]:border-gray-700 [&>*]:border [&>*]:rounded-2xl day">
+        <div id="planningWrapper" class="flex flex-col md:flex-row justify-center items-center gap-8 min-h-[90%] [&>*]:bg-gray-800 [&>*]:border-gray-700 [&>*]:border [&>*]:rounded-2xl day text-white">
             <div id="calendar" class="flex flex-col items-center">
                 <span class="flex flex-row gap-2 m-2.5 [&>button]:cursor-pointer [&>button]:hover:bg-gray-700 [&>button]:transition-all [&>button]:px-1.5 [&>button]:rounded-md [&>button]:text-[#5d52f2] [&>button]:disabled:pointer-events-none [&>button]:disabled:brightness-50">
                     <button id="prev-month">&lt;</button>

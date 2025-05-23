@@ -6,8 +6,19 @@ use Illuminate\Http\Request;
 use App\Models\Ingredient;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * IngredientController
+ *
+ * Ce contrôleur gère les opérations CRUD pour les ingrédients.
+ */
 class IngredientController extends Controller
 {
+    /**
+     * Affiche la page de gestion des ingrédients.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $query = Ingredient::query();
@@ -40,9 +51,14 @@ class IngredientController extends Controller
 
         $ingredients = $query->get();
 
-        return view('admin/inventaire', compact('ingredients'));
+        return view('admin.inventaire', compact('ingredients'));
     }
 
+    /**
+     * Ajout un nouvel ingrédient à la base de données.
+     *
+     * @return \Illuminate\View\View
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -75,6 +91,12 @@ class IngredientController extends Controller
         }
     }
 
+    /**
+     * Modifie un ingrédient existant.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function update(Request $request)
     {
         $validated = $request->validate([
@@ -101,6 +123,12 @@ class IngredientController extends Controller
         return response()->json(['success' => true]);
     }
 
+    /**
+     * Supprime un ingrédient de la base de données.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
+     */
     public function delete(Request $request)
     {
         try {
@@ -110,6 +138,30 @@ class IngredientController extends Controller
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Récupère toutes les entrées de l'inventaire (tous les types d'ingrédients)
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function all()
+    {
+        try {
+            // Récupère uniquemnt les colonnes utilisées
+            $items = Ingredient::select('idIngredient', 'nom', 'categorieIngredient')
+                ->orderBy('categorieingredient')
+                ->orderBy('idingredient')
+                ->get();
+
+            return response()->json($items);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
         }
     }
 }

@@ -101,12 +101,14 @@
                 </div>
             </div>
 
-            <!-- Bouton Commander -->
-            <div class="flex justify-center mt-8">
-                <button href="/commander" onclick="window.location.href='/commander';" class="bg-primaire hover:bg-secondaire text-white py-2 px-8 rounded-full transition duration-200">
-                    <a href="/commander">Commander</a>
-                </button>
-            </div>
+            @if ($donneesParametres->service == 1)
+                <!-- Bouton Commander -->
+                <div class="flex justify-center mt-8">
+                    <button href="/commander" onclick="window.location.href='/commander';" class="bg-primaire hover:bg-secondaire text-white py-2 px-8 rounded-full transition duration-200">
+                        <a href="/commander">Commander</a>
+                    </button>
+                </div>
+            @endif
         </div>
 
      @include('footer')

@@ -4,7 +4,7 @@
         @include("head")
         <title>Panneau Admin</title>
     </head>
-    <body class="bg-[#0a0a0a] text-white pt-28 md:pt-60">
+    <body class="pt-28 md:pt-60">
         @include("header")
 
         <!-- Main Container -->
@@ -19,8 +19,8 @@
                 <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
                     <!-- Admin -->
                     @can("verifier-acces-super-administrateur")
-                        <section class="flex flex-col justify-between p-4 bg-[#151515] rounded-lg shadow">
-                            <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-white">Admin</h2>
+                        <section class="flex flex-col p-4 rounded-lg border-2 border-black">
+                            <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-black">Admin</h2>
                             <div class="flex flex-col items-center gap-4">
                                 <a href="/admin/tresorerie" class="text-center text-base md:text-lg font-bold hover:underline">
                                     <p>Trésorerie</p>
@@ -37,8 +37,8 @@
 
                     <!-- Resp -->
                     @can("verifier-acces-administrateur")
-                        <section class="flex flex-col justify-between p-4 bg-[#151515] rounded-lg shadow">
-                            <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-white">Respo</h2>
+                        <section class="flex flex-col p-4 rounded-lg border-2 border-black">
+                            <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-black">Respo</h2>
                             <div class="flex flex-col items-center gap-4">
                                 <a href="/admin/inventaire" class="text-center text-base md:text-lg font-bold hover:underline">
                                     <p>Inventaire</p>
@@ -61,8 +61,8 @@
 
                     <!-- Serveurs -->
                     @can("verifier-acces-serveur")
-                        <section class="flex flex-col justify-between p-4 bg-[#151515] rounded-lg shadow">
-                            <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-white">Serveurs</h2>
+                        <section class="flex flex-col p-4 rounded-lg border-2 border-black">
+                            <h2 class="text-center text-xl md:text-2xl font-bold mb-4 border-b-2 border-black">Serveurs</h2>
                             <div class="flex flex-col items-center gap-4">
                                 <a href="/admin/affichage-cuisine" class="text-center text-base md:text-lg font-bold hover:underline">
                                     <p>Affichage pour la cuisine</p>

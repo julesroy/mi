@@ -7,8 +7,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
+/**
+ * SalleSecuriteController
+ *
+ * Ce contrôleur gère l'affichage de la page de la salle de sécurité.
+ * Il récupère les relevés de température et les relevés de nettoyage.
+ */
 class SalleSecuriteController extends Controller
 {
+    /**
+     * Affiche la page de la salle de sécurité.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         $temperatureReleves = DB::table('salleEtSecurite')
@@ -44,6 +55,12 @@ class SalleSecuriteController extends Controller
         ));
     }
 
+    /**
+     * Enregistre un relevé de température dans la base de données.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function ajouterReleveFrigo(Request $request)
     {
         $validated = $request->validate([
@@ -63,6 +80,12 @@ class SalleSecuriteController extends Controller
         return back()->with('success', 'Relevé enregistré !');
     }
 
+    /**
+     * Enregistre un relevé de nettoyage dans la base de données.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function ajouterNettoyage(Request $request)
     {
         $validated = $request->validate([

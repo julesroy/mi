@@ -3,9 +3,13 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Routing\Middleware\ThrottleRequests;
-use Illuminate\Http\Request;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+/**
+ * MessageThrottleMiddleware
+ *
+ * Ce middleware gère le throttling des requêtes.
+ */
 class MessageThrottleMiddleware extends ThrottleRequests
 {
     /**
