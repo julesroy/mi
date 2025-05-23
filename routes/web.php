@@ -3,7 +3,6 @@
 use App\Http\Controllers\GestionComptesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ActualitesController;
 use App\Http\Controllers\ActuController;
 use App\Http\Controllers\CompteController;
 use App\Http\Controllers\PlanningController;
@@ -86,8 +85,8 @@ Route::get('/carte', function () {
     return view('carte');
 });
 
-// page des actus
-Route::get('/actus', [ActualitesController::class, 'index'])->name('actus');
+// Page d'affichage des actus
+Route::get('/actus', [ActuController::class, 'view'])->name('actus');
 
 /**-----------------------------------------------
  * ADMIN

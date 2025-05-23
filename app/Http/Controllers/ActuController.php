@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Actu;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
+
+use App\Models\Event;
 
 /**
  * ActuController
@@ -34,6 +38,40 @@ class ActuController extends Controller
         $actus = $query->orderByDesc('date')->get();
 
         return view('admin.gestion-actus', compact('actus'));
+    }
+
+    /**
+     * Affiche la page des actualités et événements.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function view()
+    {
+        $user = Auth::user();
+
+        $now = Carbon::today();
+
+        // Actus à venir ou aujourd'hui
+        $actusAvenir = Actu::whereDate('date', '>=', $now)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        // Actus passées
+        $actusPassees = Actu::whereDate('date', '<', $now)
+            ->orderBy('date', 'desc')
+            ->get();
+
+        // Events à venir ou aujourd'hui
+        $eventsAvenir = Event::whereDate('date', '>=', $now)
+            ->orderBy('date', 'asc')
+            ->get();
+
+        return view('actus', [
+            'user'          => $user,
+            'actusAvenir'   => $actusAvenir,
+            'actusPassees'  => $actusPassees,
+            'eventsAvenir'  => $eventsAvenir,
+        ]);
     }
 
     /**

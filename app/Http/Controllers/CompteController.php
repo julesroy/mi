@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Carte;
+use App\Models\Commande;
+use App\Models\Paiement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -27,25 +30,14 @@ class CompteController extends Controller
     {
         $user = Auth::user();
 
-        // Paiements du compte
-        $paiements = DB::table('paiements')
-            ->where('numeroCompte', $user->numeroCompte)
+        // Paiements du compte, avec les commandes associées
+        $paiements = Paiement::with('commandes')
+            ->where('idUtilisateur', $user->idUtilisateur)
             ->orderByDesc('date')
             ->get();
 
-        // Commandes du compte (on suppose que tu as ajouté une colonne idPaiement dans commandes)
-        $commandes = DB::table('commandes')
-            ->where('numeroCompte', $user->numeroCompte)
-            ->get();
-
-        // Regroupe les commandes par idPaiement
-        $commandesParPaiement = [];
-        foreach ($paiements as $paiement) {
-            $commandesParPaiement[$paiement->idPaiement] = $commandes->where('idPaiement', $paiement->idPaiement)->all();
-        }
-
         // Correspondance articles (idElement => nom) depuis carteElements
-        $carteElements = DB::table('carteElements')->get();
+        $carteElements = Carte::all();
         $articlesMap = [];
         foreach ($carteElements as $item) {
             $articlesMap[$item->idElement] = $item->nom;
@@ -54,7 +46,6 @@ class CompteController extends Controller
         return view('compte', [
             'user' => $user,
             'paiements' => $paiements,
-            'commandesParPaiement' => $commandesParPaiement,
             'articlesMap' => $articlesMap,
         ]);
     }

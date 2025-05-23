@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Actu;
+use App\Models\Commande;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -16,18 +18,17 @@ use Illuminate\Support\Facades\Auth;
 class AccueilController extends Controller
 {
     /**
-    * Récupère les actualités.
-    *
-    * @return \Illuminate\Support\Collection
-    */
+     * Récupère les actualités.
+     *
+     * @return \Illuminate\Support\Collection
+     */
     private function recupActus()
     {
         // On récupère la dernière actualité
-        $actus = DB::table('actus')
-            ->orderBy('date', 'desc')
+        $actus = Actu::orderBy('date', 'desc')
             ->limit(1)
             ->get();
-    
+
         return $actus;
     }
 
@@ -55,14 +56,13 @@ class AccueilController extends Controller
     /**
      * Récupère la commande en cours pour l'utilisateur.
      *
-     * @param string $numeroCompte
+     * @param string $idUtilisateur
      * @return array|null
      */
-    private function recupCommandeEnCours($numeroCompte)
+    private function recupCommandeEnCours($idUtilisateur)
     {
         // Récupérer la commande en cours pour l'utilisateur
-        $commande = DB::table('commandes')
-            ->where('numeroCompte', $numeroCompte)
+        $commande = Commande::where('idUtilisateur', $idUtilisateur)
             ->where('etat', 1) // 1 : Commande en cours
             ->orderBy('date', 'asc')
             ->first();
@@ -77,15 +77,14 @@ class AccueilController extends Controller
 
         // Vérifier la catégorie de la commande et calculer la position uniquement pour cette catégorie
         if ($commande->categorieCommande == 2 || $commande->categorieCommande == 1) { //Chaud ou hotdog
-            $positionChaud = DB::table('commandes')
-                ->where('etat', 1) // Commandes en cours
+            $positionChaud = Commande::where('etat', 1) // Commandes en cours
                 ->where('categorieCommande', 2) // 2 : Chaud
                 ->where('categorieCommande', 1) // 1: Hotdog
                 ->where('date', '<', $commande->date)
                 ->count() + 1;
+                
         } elseif ($commande->categorieCommande == 0) { // 0 : Froid
-            $positionFroid = DB::table('commandes')
-                ->where('etat', 1) // Commandes en cours
+            $positionFroid = Commande::where('etat', 1) // Commandes en cours
                 ->where('categorieCommande', 0) // 0 : Froid
                 ->where('date', '<', $commande->date)
                 ->count() + 1;
@@ -108,11 +107,11 @@ class AccueilController extends Controller
         $actus = $this->recupActus();
         $info = $this->recupInfo();
 
-        // Récupérer le numéro de compte de l'utilisateur connecté
-        $numeroCompte = Auth::user()->numeroCompte ?? null;
+        // Récupérer l'ID de l'utilisateur connecté
+        $idUtilisateur = Auth::id() ?? null;
 
         // Récupérer les informations sur la commande en cours
-        $commandeEnCours = $numeroCompte ? $this->recupCommandeEnCours($numeroCompte) : null;
+        $commandeEnCours = $idUtilisateur ? $this->recupCommandeEnCours($idUtilisateur) : null;
 
         return view('accueil', [
             'actus' => $actus,

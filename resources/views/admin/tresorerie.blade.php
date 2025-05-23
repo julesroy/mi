@@ -28,23 +28,6 @@
                 </div>
             </section>
 
-            <!-- Dialog pour modifier le solde de la caisse -->
-            <div id="modifyCaisseDialog" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <div class="bg-white text-black p-6 rounded-lg shadow-lg max-w-md w-full mx-auto">
-                    <h2 class="text-xl font-semibold mb-4">Modifier le solde de la caisse</h2>
-                    <form>
-                        <label class="block mb-4">
-                            <span class="text-gray-700 text-lg">Nouveau solde (€)</span>
-                            <input type="number" step="0.01" placeholder="Entrez un montant" required class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2" />
-                        </label>
-                        <div class="flex justify-end gap-4">
-                            <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600" onclick="closeDialog('modifyCaisseDialog')">Annuler</button>
-                            <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Enregistrer</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
             <!-- Section Statistiques des Comptes -->
             <section class="mb-10 text-center">
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -114,7 +97,7 @@
                                 @if ($comptesCredites && $comptesCredites->count() > 0)
                                     @foreach ($comptesCredites as $compte)
                                         <tr>
-                                            <td class="py-2 px-4 border">{{ $compte->numeroCompte }}</td>
+                                            <td class="py-2 px-4 border">{{ $compte->idUtilisateur }}</td>
                                             <td class="py-2 px-4 border">{{ $compte->nom }}</td>
                                             <td class="py-2 px-4 border">{{ $compte->prenom }}</td>
                                         </tr>
@@ -153,7 +136,7 @@
                                 @if ($comptesNonCredites && $comptesNonCredites->count() > 0)
                                     @foreach ($comptesNonCredites as $compte)
                                         <tr>
-                                            <td class="py-2 px-4 border">{{ $compte->numeroCompte }}</td>
+                                            <td class="py-2 px-4 border">{{ $compte->idUtilisateur }}</td>
                                             <td class="py-2 px-4 border">{{ $compte->nom }}</td>
                                             <td class="py-2 px-4 border">{{ $compte->prenom }}</td>
                                         </tr>
@@ -193,7 +176,7 @@
                                 @if ($comptesDecouverts && $comptesDecouverts->count() > 0)
                                     @foreach ($comptesDecouverts as $compte)
                                         <tr>
-                                            <td class="py-2 px-4 border">{{ $compte->numeroCompte }}</td>
+                                            <td class="py-2 px-4 border">{{ $compte->idUtilisateur }}</td>
                                             <td class="py-2 px-4 border">{{ $compte->nom }}</td>
                                             <td class="py-2 px-4 border">{{ $compte->prenom }}</td>
                                             <td class="py-2 px-4 border text-red-500">{{ $compte->solde }}€</td>
@@ -229,12 +212,14 @@
             </section>
         </div>
 
+        {{ $commandesAnnee->count() }}
+
         <script>
             // Scripte pour les dialogues
             function openDialog(id) {
                 const dialog = document.getElementById(id);
                 if (dialog) {
-                    dialog.showModal();
+                    dialog.show();
                 }
             }
 

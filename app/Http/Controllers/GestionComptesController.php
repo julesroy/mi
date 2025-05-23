@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Utilisateur;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class GestionComptesController extends Controller
     public function afficherComptes(Request $requete)
     {
         // On récupère les données de la table utilisateurs
-        $utilisateurs = DB::table('utilisateurs')->orderBy('numeroCompte', 'asc')->get();
+        $utilisateurs = Utilisateur::orderBy('idUtilisateur', 'asc')->get();
 
         // On renvoie la vue avec les utilisateurs
         return view('admin.gestion-comptes', compact('utilisateurs'));
@@ -35,7 +36,7 @@ class GestionComptesController extends Controller
      */
     public function update(Request $request)
     {
-        $numeroCompte = $request->input('id');
+        $idUtilisateur = $request->input('id');
         $nom = $request->input('nom');
         $prenom = $request->input('prenom');
         $email = $request->input('email');
@@ -43,8 +44,7 @@ class GestionComptesController extends Controller
         $acces = $request->input('acces');
 
         // Mise à jour des données dans la base de données
-        DB::table('utilisateurs')
-            ->where('numeroCompte', $numeroCompte)
+        Utilisateur::where('idUtilisateur', $idUtilisateur)
             ->update([
                 'nom' => $nom,
                 'prenom' => $prenom,

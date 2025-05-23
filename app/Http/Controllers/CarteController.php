@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Carte;
+use App\Models\Inventaire;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -18,8 +20,8 @@ class CarteController extends Controller
      */
     public function afficherGestionCarte()
     {
-        $elementsCarte = DB::table('carteElements')->get();
-        $elementsInventaire = DB::table('inventaire')->get();
+        $elementsCarte = Carte::all();
+        $elementsInventaire = Inventaire::all();
         return view('admin.gestion-carte', compact('elementsCarte', 'elementsInventaire'));
     }
 
@@ -30,29 +32,29 @@ class CarteController extends Controller
      */
     public function ajouter(Request $request)
     {
-            // Valider les données
-            $validated = $request->validate([
-                'nom' => 'required|string|max:255',
-                'categorieElementCarte' => 'required|integer',
-                'prix' => 'required|numeric',
-                'prixServeur' => 'required|numeric',
-                'description' => 'nullable|string',
-                'composition' => 'required|string',
-                'categoriePlat' => 'required|integer'
-            ]);
+        // Valider les données
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255',
+            'categorieElementCarte' => 'required|integer',
+            'prix' => 'required|numeric',
+            'prixServeur' => 'required|numeric',
+            'description' => 'nullable|string',
+            'composition' => 'required|string',
+            'categoriePlat' => 'required|integer'
+        ]);
 
-            // Insérer les données dans la table principale (par exemple, "carte")
-            $idElement = DB::table('carteElements')->insertGetId([
-                'nom' => $validated['nom'],
-                'typePlat' => $validated['categorieElementCarte'],
-                'prix' => $validated['prix'],
-                'prixServeur' => $validated['prixServeur'],
-                'description' => $validated['description'],
-                'ingredientsElements' => $validated['composition'],
-                'categoriePlat' => $validated['categoriePlat'],
-            ]);
+        // Insérer les données dans la table principale (par exemple, "carte")
+        $idElement = Carte::insertGetId([
+            'nom' => $validated['nom'],
+            'typePlat' => $validated['categorieElementCarte'],
+            'prix' => $validated['prix'],
+            'prixServeur' => $validated['prixServeur'],
+            'description' => $validated['description'],
+            'ingredientsElements' => $validated['composition'],
+            'categoriePlat' => $validated['categoriePlat'],
+        ]);
 
-            return redirect()->route('admin.gestion-carte');
+        return redirect()->route('admin.gestion-carte');
     }
 
     /**
@@ -72,8 +74,7 @@ class CarteController extends Controller
             'categoriePlat' => 'required|integer'
         ]);
 
-        DB::table('carteElements')
-            ->where('idElement', $validated['id'])
+        Carte::where('idElement', $validated['id'])
             ->update([
                 'nom' => $validated['nom'],
                 'typePlat' => $validated['categorieElementCarte'],
@@ -83,7 +84,7 @@ class CarteController extends Controller
                 'categoriePlat' => $validated['categoriePlat'],
             ]);
 
-        
+
         return response()->json([
             'success' => true,
             'id' => $validated['id'],
@@ -104,7 +105,7 @@ class CarteController extends Controller
     public function supprimer(Request $request)
     {
         $id = $request->input('id');
-        DB::table('carteElements')->where('idElement', $id)->delete();
+        Carte::where('idElement', $id)->delete();
         return response()->json(['success' => true]);
     }
 }

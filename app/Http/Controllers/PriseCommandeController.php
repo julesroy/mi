@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PriseCommandeCarte;
-use App\Models\PriseCommandeInventaire;
+use App\Models\Carte;
+use App\Models\Inventaire;
 
 /**
  * PriseCommandeController
@@ -19,7 +19,7 @@ class PriseCommandeController extends Controller
      */
     public function index()
     {
-        $carteItems = PriseCommandeCarte::all()
+        $carteItems = Carte::select('nom', 'prix', 'typePlat')->get()
             ->map(function ($item) {
                 if (in_array($item->typePlat, [5, 6])) {
                     $item->typePlat = 4;
@@ -28,7 +28,7 @@ class PriseCommandeController extends Controller
             })
             ->groupBy('typePlat');
 
-        $inventaire = PriseCommandeInventaire::all()->keyBy('nom');
+        $inventaire = Inventaire::all()->keyBy('nom');
 
         $typeLabels = [
             0 => 'Plats',

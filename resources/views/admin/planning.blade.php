@@ -315,7 +315,7 @@
                     let html = '';
                     for (let index in planning[day][job]) {
                         html += `<span class="p-0.5 text-lg flex flex-row gap-2">${planning[day][job][index].nom}`;
-                        if (planning[day][job][index].numeroCompte == {{ Auth::id() }} || {{ Auth::user()->acces }} == 3)
+                        if (planning[day][job][index].idUtilisateur == {{ Auth::id() }} || {{ Auth::user()->acces }} == 3)
                             html += `<img class="w-7 cursor-pointer hover:bg-gray-700 rounded-lg px-1 py-1"
                             onclick="showDeleteDialog('${day}', ${job}, ${index})"
                                 src="{{ asset("images/icons/delete.svg") }}" />`;

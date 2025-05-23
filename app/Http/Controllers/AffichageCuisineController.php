@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\DB;
+
+use App\Models\Commande;
 
 /**
  * AffichageCuisineController
@@ -20,8 +21,7 @@ class AffichageCuisineController extends Controller
     {
         // On récupère toutes les commandes en cours (etat = 1)
         // et on les trie par date décroissante (plus récentes en premier)
-        $commandes = DB::table('commandes')
-            ->where('etat', 1)
+        $commandes = Commande::where('etat', 1)
             ->orderBy('date', 'desc')
             ->get();
 

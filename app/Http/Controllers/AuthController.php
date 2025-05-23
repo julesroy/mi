@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -13,10 +14,11 @@ use Illuminate\Support\Facades\Crypt;
  * génère un numéro de compte unique
  * @return int
  */
-function genererNumeroCompte() {
+function genererNumeroCompte()
+{
     do {
         $numero = rand(1, 999);
-    } while (DB::table('utilisateurs')->where('numeroCompte', $numero)->exists());
+    } while (Utilisateur::where('numeroCompte', $numero)->exists());
 
     return $numero;
 }
@@ -44,7 +46,7 @@ class AuthController extends Controller
         $motDePasse = $requete->input('mdp');
 
         // vérification de l'existence de l'utilisateur
-        $utilisateur = DB::table('utilisateurs')->where('email', $email)->first();
+        $utilisateur = Utilisateur::where('email', $email)->first();
 
         if (!$utilisateur) {
             return back()->withErrors(['email' => 'Adresse e-mail non trouvée.']);
@@ -65,7 +67,7 @@ class AuthController extends Controller
 
         // connexion de l'utilisateur
         Auth::loginUsingId($utilisateur->idUtilisateur);
-    
+
         // redirection vers la page d'accueil
         return redirect('/');
     }
@@ -90,7 +92,7 @@ class AuthController extends Controller
             'mdp' => 'required|string|min:8|confirmed',
         ]);
 
-        $idUtilisateur = DB::table('utilisateurs')->insertGetId([
+        $idUtilisateur = Utilisateur::insertGetId([
             'nom' => $validatedData['nom'],
             'prenom' => $validatedData['prenom'],
             'email' => $validatedData['email'],

@@ -1,6 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Commande;
+use App\Models\Carte;
+use App\Models\Inventaire;
+use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -21,13 +26,11 @@ class CommandeUtilisateurController extends Controller
      */
     public function index()
     {
-        $plats = DB::table('carteElements')->where('typePlat', 0)->get();
-        $menus = DB::table('carteMenus')->get();
-        $viandes = DB::table('inventaire')->where('categorieIngredient', 1)->get();
-        $ingredients = DB::table('inventaire')->get();
-        $snacks = DB::table('carteElements')
-            ->whereIn('typePlat', [1, 2])
-            ->get();
+        $plats = Carte::where('typePlat', 0)->get();
+        $menus = Menu::get();
+        $viandes = Inventaire::where('categorieIngredient', 1)->get();
+        $ingredients = Inventaire::all();
+        $snacks = Carte::whereIn('typePlat', [1, 2])->get();
 
         return view('commander', compact('plats', 'menus', 'viandes', 'ingredients', 'snacks'));
     }
@@ -84,14 +87,14 @@ class CommandeUtilisateurController extends Controller
 
                         $ingredientString = implode(';', $finalIngredients);
 
-                        DB::table('commandes')->insert([
+                        Commande::insert([
                             'numeroCommande'    => $numeroCommande,
                             'prix'              => $plat['prix'],
                             'etat'              => 0,
                             'stock'             => $ingredientString,
                             'menu'              => $idMenu ?? 0, // 0 si plat à la carte
                             'commentaire'       => '',
-                            'numeroCompte'      => Auth::user()->numeroCompte,
+                            'idUtilisateur'      => Auth::id(),
                             'categorieCommande' => $plat['categoriePlat'] ?? 99,
                         ]);
                     }
@@ -102,14 +105,14 @@ class CommandeUtilisateurController extends Controller
                     foreach ($commande['snacks'] as $snack) {
                         $ingredientStringSnacks = $snack['ingredientsElements'] ?? '';
 
-                        DB::table('commandes')->insert([
+                        Commande::insert([
                             'numeroCommande'    => $numeroCommande,
                             'prix'              => $snack['prix'] ?? 0,
                             'etat'              => 3,
                             'stock'             => $ingredientStringSnacks,
                             'menu'              => $idMenu ?? 0,
                             'commentaire'       => '',
-                            'numeroCompte'      => Auth::user()->numeroCompte,
+                            'idUtilisateur'      => Auth::id(),
                             'categorieCommande' => $snack['categoriePlat'] ?? 3,
                         ]);
                     }

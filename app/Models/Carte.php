@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Carte extends Model
 {
-    protected $table = 'carte';
+    protected $table = 'carteElements';
     protected $primaryKey = 'idElement';
     public $timestamps = false;
 

@@ -183,6 +183,7 @@
                     })
                     .then((response) => response.json())
                     .then((commandes) => {
+                        console.log(commandes);
                         allCommandes = commandes; // Stocke toutes les commandes
                         displayCommandes(commandes);
                     })
@@ -226,7 +227,7 @@
                                 <div class="p-5">
                                     <div class="mb-3">
                                         <span class="font-medium">Client:</span>
-                                        <span class="ml-2">${commande.prenomClient || ''} ${commande.nomClient || 'Non spécifié'}</span>
+                                        <span class="ml-2">${commande.utilisateur?.prenom || ''} ${commande.utilisateur?.nom || 'Non spécifié'}</span>
                                     </div>
 
                                     <div class="mb-3">

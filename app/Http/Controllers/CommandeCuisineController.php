@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Commande;
 
 /**
  * CommandeCuisineController
@@ -33,9 +34,8 @@ class CommandeCuisineController extends Controller
     public function getCommandes(Request $request)
     {
         try {
-            $query = DB::table('commandes')
-                ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
-                ->select('commandes.idCommande', 'commandes.numeroCommande', 'utilisateurs.nom as nomClient', 'utilisateurs.prenom as prenomClient', 'commandes.categorieCommande', 'commandes.prix', 'commandes.date', 'commandes.commentaire', 'commandes.etat')
+            // Cherche toutes les commandes de la journée par date, ainsi que les infos nécessaires de l'utilisateur
+            $query = Commande::with(['utilisateur' => fn($query) => $query->select('idUtilisateur', 'nom', 'prenom')])
                 ->whereDate('commandes.date', Carbon::today())
                 ->whereIn('commandes.etat', [0, 1, 2, 3, 4])
                 ->orderBy('commandes.date', 'asc');
@@ -57,13 +57,10 @@ class CommandeCuisineController extends Controller
     public function getCommandeDetails(int $id)
     {
         try {
-            $commande = DB::table('commandes')
-                ->leftJoin('utilisateurs', 'commandes.numeroCompte', '=', 'utilisateurs.numeroCompte')
+            $commande = Commande::with(['utilisateur' => fn($query) => $query->select('idUtilisateur', 'nom', 'prenom')])
                 ->select(
                     'commandes.idCommande',
                     'commandes.numeroCommande',
-                    'utilisateurs.nom as nomClient',
-                    'utilisateurs.prenom as prenomClient',
                     'commandes.commentaire',
                     'commandes.stock'
                 )
@@ -98,8 +95,7 @@ class CommandeCuisineController extends Controller
         }
 
         try {
-            DB::table('commandes')
-                ->where('idCommande', $id)
+            Commande::where('idCommande', $id)
                 ->update(['etat' => 1]);
 
             return response()->json(['success' => true]);
@@ -122,8 +118,7 @@ class CommandeCuisineController extends Controller
         }
 
         try {
-            DB::table('commandes')
-                ->where('idCommande', $id)
+            Commande::where('idCommande', $id)
                 ->update(['etat' => 2]);
 
             return response()->json(['success' => true]);
@@ -146,8 +141,7 @@ class CommandeCuisineController extends Controller
         }
 
         try {
-            DB::table('commandes')
-                ->where('idCommande', $id)
+            Commande::where('idCommande', $id)
                 ->update(['etat' => 3]);
 
             return response()->json(['success' => true]);
@@ -186,8 +180,7 @@ class CommandeCuisineController extends Controller
             $stockValue = implode(';', $stockItems);
 
             // Mettre à jour la commande
-            DB::table('commandes')
-                ->where('idCommande', $id)
+            Commande::where('idCommande', $id)
                 ->update([
                     'commentaire' => $validated['commentaire'] ?? null,
                     'stock' => $stockValue
@@ -213,8 +206,7 @@ class CommandeCuisineController extends Controller
         }
 
         try {
-            DB::table('commandes')
-                ->where('idCommande', $id)
+            Commande::where('idCommande', $id)
                 ->update(['etat' => 4]);
 
             return response()->json(['success' => true]);

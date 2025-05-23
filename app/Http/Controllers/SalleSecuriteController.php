@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ReleveSalle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -22,23 +23,23 @@ class SalleSecuriteController extends Controller
      */
     public function index()
     {
-        $temperatureReleves = DB::table('salleEtSecurite')
-                            ->where('type', 0)
-                            ->orderBy('date', 'desc')
-                            ->get();
+        $temperatureReleves = ReleveSalle::with('utilisateur')
+            ->where('type', 0)
+            ->orderBy('date', 'desc')
+            ->get();
 
-        $cleaningReleves = DB::table('salleEtSecurite')
-                             ->where('type', 1)
-                             ->orderBy('date', 'desc')
-                             ->get();
+        $cleaningReleves = ReleveSalle::with('utilisateur')
+            ->where('type', 1)
+            ->orderBy('date', 'desc')
+            ->get();
 
         // Préparer les données du graphique
-        $lastTemperatureReleves = DB::table('salleEtSecurite')
-                                    ->where('type', 0)
-                                    ->orderBy('date', 'desc')
-                                    ->take(15)
-                                    ->get()
-                                    ->reverse(); // Pour avoir les données dans l'ordre chronologique
+        $lastTemperatureReleves = ReleveSalle::with('utilisateur')
+            ->where('type', 0)
+            ->orderBy('date', 'desc')
+            ->take(15)
+            ->get()
+            ->reverse(); // Pour avoir les données dans l'ordre chronologique
 
         $chartData = [
             'dates' => $lastTemperatureReleves->map(function ($item) {
@@ -68,12 +69,11 @@ class SalleSecuriteController extends Controller
             'temperature2' => 'required|numeric',
         ]);
 
-        DB::table('salleEtSecurite')->insert([
+        ReleveSalle::insert([
             'type' => 0,
             'temperature1' => $validated['temperature1'],
             'temperature2' => $validated['temperature2'],
-            'nom' => Auth::user()->nom . ' ' . Auth::user()->prenom,
-            'numeroCompte' => Auth::user()->numeroCompte,
+            'idUtilisateur' => Auth::id(),
             'date' => now()->timezone('Europe/Stockholm'), // S'assurer que la date est bien renseignée
         ]);
 
@@ -92,13 +92,12 @@ class SalleSecuriteController extends Controller
             'commentaire' => 'required|string|max:255'
         ]);
 
-        DB::table('salleEtSecurite')->insert([
+        ReleveSalle::insert([
             'type' => 1,
             'temperature1' => 0,
             'temperature2' => 0,
             'commentaire' => $validated['commentaire'],
-            'nom' => Auth::user()->nom . ' ' . Auth::user()->prenom,
-            'numeroCompte' => Auth::user()->numeroCompte,
+            'idUtilisateur' => Auth::id(),
             'date' => now(), // idem
         ]);
 

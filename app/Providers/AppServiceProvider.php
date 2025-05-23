@@ -28,27 +28,21 @@ class AppServiceProvider extends ServiceProvider
          * Vérifier si l'utilisateur à les accès serveur (1, 2 et 3)
          */
         Gate::define('verifier-acces-serveur', function () {
-            $acces = DB::table('utilisateurs')->where('idUtilisateur', Auth::id())->value('acces');
-
-            return in_array($acces, [1, 2, 3]);
+            return in_array(Auth::user()->acces, [1, 2, 3]);
         });
 
         /**
          * Vérifier si l'utilisateur à les accès administrateur (2 et 3)
          */
         Gate::define('verifier-acces-administrateur', function () {
-            $acces = DB::table('utilisateurs')->where('idUtilisateur', Auth::id())->value('acces');
-
-            return in_array($acces, [2, 3]);
+            return in_array(Auth::user()->acces, [2, 3]);
         });
 
         /**
          * Vérifier si l'utilisateur à les accès super-administrateur (3)
          */
         Gate::define('verifier-acces-super-administrateur', function () {
-            $acces = DB::table('utilisateurs')->where('idUtilisateur', Auth::id())->value('acces');
-
-            return in_array($acces, [3]);
+            return in_array(Auth::user()->acces, [3]);
         });
 
         /**

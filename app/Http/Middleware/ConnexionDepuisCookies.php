@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\Utilisateur;
 
 /**
  * ConnexionDepuisCookies
@@ -44,7 +45,7 @@ class ConnexionDepuisCookies
                 $emailUtilisateur = Crypt::decryptString($cookieEmailUtilisateur);
 
                 // on vérifie que l'utilisateur existe dans la base de données
-                $utilisateur = DB::table('utilisateurs')->where('idUtilisateur', $idUtilisateur)->where('email', $emailUtilisateur)->first();
+                $utilisateur = Utilisateur::where('idUtilisateur', $idUtilisateur)->where('email', $emailUtilisateur)->first();
 
                 // si l'utilisateur existe, on le connecte
                 if ($utilisateur) {

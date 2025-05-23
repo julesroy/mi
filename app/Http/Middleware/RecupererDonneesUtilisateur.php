@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
+use App\Models\Utilisateur;
 
 /**
  * RecupererDonneesUtilisateur
@@ -30,7 +31,7 @@ class RecupererDonneesUtilisateur
         // si l'utilisateur est connecté, on récupère ses données
         if (Auth::check()) {
             // on récupère les données de l'utilisateur
-            $donneesUtilisateur = DB::table('utilisateurs')->where('idUtilisateur', Auth::id())->first();
+            $donneesUtilisateur = Auth::user();
         }
 
         // on partage la donnée récupérée avec toutes les vues

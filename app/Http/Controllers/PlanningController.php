@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ReservationPlanning;
+use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,8 +28,7 @@ class PlanningController extends Controller
         $servers = [];
         // Récupère les serveurs et leurs noms si l'utilisateur actuel est un superadmin
         if (Auth::user()->acces == 3) {
-            $servers = DB::table('utilisateurs')
-                ->select(['idUtilisateur', 'nom', 'prenom'])
+            $servers = Utilisateur::select(['idUtilisateur', 'nom', 'prenom'])
                 ->where('acces', '>', '0')
                 ->get();
         }
@@ -73,13 +74,12 @@ class PlanningController extends Controller
         }
 
         // Query de la réservation + nom prénom de la personne inscrite
-        $data = DB::table('planning')
-            ->leftJoin('utilisateurs', 'utilisateurs.idUtilisateur', '=', 'planning.numeroCompte')
-            ->select(['date', 'poste', 'idInscription', 'utilisateurs.prenom', 'utilisateurs.nom', 'planning.numeroCompte'])
+        $data = ReservationPlanning::with(['utilisateur' => fn($query) => $query->select('nom', 'prenom', 'idUtilisateur')])
+            ->select(['date', 'poste', 'idInscription', 'planning.idUtilisateur'])
             ->where([['date', '>=', $startDay->format('Ymd')], ['date', '<=', $endDay->format('Ymd')]])->get();
 
         foreach ($data as $day) {
-            array_push($planning[$day->date][$day->poste], ['id' => $day->idInscription, 'numeroCompte' => $day->numeroCompte, 'nom' => $day->prenom . ' ' . ucwords(strtolower($day->nom), ' -')]);
+            array_push($planning[$day->date][$day->poste], ['id' => $day->idInscription, 'idUtilisateur' => $day->idUtilisateur, 'nom' => $day->utilisateur->prenom . ' ' . ucwords(strtolower($day->utilisateur->nom), ' -')]);
         }
 
         return response()->json($planning);
@@ -94,12 +94,12 @@ class PlanningController extends Controller
      */
     public function supprimer(Request $req, $idInscription, $date)
     {
-        $query = DB::table('planning')->where('idInscription', '=', $idInscription);
+        $query = ReservationPlanning::where('idInscription', '=', $idInscription);
 
         // Vérifie si l'utilisateur est super-admin ou non
         if (Auth::user()->acces < 3) {
             // Si l'utilisateur tente de supprimer un créneau qui n'est pas sien, on le ratio
-            $inscriptionUserId = $query->first()->numeroCompte;
+            $inscriptionUserId = $query->first()->idUtilisateur;
             if ($inscriptionUserId != Auth::id()) {
                 return response('Accès admin requis', 403);
             } // Accès manquant, donc erreur 403
@@ -131,7 +131,7 @@ class PlanningController extends Controller
         }
 
         // Vérifie que le numéro de compte existe bien
-        if (empty(DB::table('utilisateurs')->where('idUtilisateur', $serverId)->first())) return response("Serveur inexistant " . $serverId . $date . ' ' . $req->input('date') . ' ' . $job . ' !', 400);
+        if (empty(Utilisateur::where('idUtilisateur', $serverId)->first())) return response("Serveur inexistant " . $serverId . $date . ' ' . $req->input('date') . ' ' . $job . ' !', 400);
 
         // Validité du numéro de job
         if ($job > 4 || $job < 0) {
@@ -139,10 +139,10 @@ class PlanningController extends Controller
         }
 
         // Si on a l'accès, ajoute l'entrée dans la DB
-        DB::table('planning')->insert([
+        ReservationPlanning::insert([
             'poste' => $job,
             'date' => $date,
-            'numeroCompte' => $serverId,
+            'idUtilisateur' => $serverId,
         ]);
 
         // Si l'on a réussi à insérer la ligne, on renvoie les nouvelles données

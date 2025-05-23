@@ -50,7 +50,7 @@
                     <table class="min-w-full table-fixed bg-white text-black border-collapse text-center text-xs sm:text-sm md:text-base">
                         <thead class="bg-primaire text-white sticky z-10">
                             <tr>
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="numeroCompte">Numéro de compte</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="idUtilisateur">ID de compte</th>
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="nom">Nom</th>
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prenom">Prénom</th>
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Email</th>
@@ -64,13 +64,13 @@
                         </thead>
                         <tbody>
                             @foreach ($utilisateurs as $donneesUtilisateur)
-                                <tr id="row-{{ $donneesUtilisateur->numeroCompte }}" class="hover:bg-gray-100">
-                                    <td class="w-1/6 py-2 px-4 border-b" id="id-{{ $donneesUtilisateur->numeroCompte }}" data-value="{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->numeroCompte }}</td>
-                                    <td class="w-1/6 py-2 px-4 border-b" id="nom-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->nom }}</td>
-                                    <td class="w-1/6 py-2 px-4 border-b" id="prenom-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->prenom }}</td>
-                                    <td class="w-1/6 py-2 px-4 border-b" id="email-{{ $donneesUtilisateur->numeroCompte }}">{{ $donneesUtilisateur->email }}</td>
-                                    <td class="w-1/6 py-2 px-4 border-b" id="solde-{{ $donneesUtilisateur->numeroCompte }}" data-value="{{ $donneesUtilisateur->solde }}">{{ $donneesUtilisateur->solde }}</td>
-                                    <td class="w-1/6 py-2 px-4 border-b" id="acces-{{ $donneesUtilisateur->numeroCompte }}" data-value="{{ $donneesUtilisateur->acces }}">
+                                <tr id="row-{{ $donneesUtilisateur->idUtilisateur }}" class="hover:bg-gray-100">
+                                    <td class="w-1/6 py-2 px-4 border-b" id="id-{{ $donneesUtilisateur->idUtilisateur }}" data-value="{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->idUtilisateur }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="nom-{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->nom }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="prenom-{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->prenom }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="email-{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->email }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="solde-{{ $donneesUtilisateur->idUtilisateur }}" data-value="{{ $donneesUtilisateur->solde }}">{{ $donneesUtilisateur->solde }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="acces-{{ $donneesUtilisateur->idUtilisateur }}" data-value="{{ $donneesUtilisateur->acces }}">
                                         @php
                                             $accesLabels = [
                                                 0 => "Client",
@@ -85,28 +85,28 @@
 
                                     <td class="w-1/6 py-2 px-4 border-b text-center">
                                         <div class="flex justify-center">
-                                            <img src="{{ asset("images/icons/edit.svg") }}" alt="Modifier" class="action-icon edit-btn" data-id="{{ $donneesUtilisateur->numeroCompte }}" />
+                                            <img src="{{ asset("images/icons/edit.svg") }}" alt="Modifier" class="action-icon edit-btn" data-id="{{ $donneesUtilisateur->idUtilisateur }}" />
                                         </div>
                                     </td>
                                 </tr>
-                                <tr id="edit-row-{{ $donneesUtilisateur->numeroCompte }}" class="hidden bg-gray-200">
+                                <tr id="edit-row-{{ $donneesUtilisateur->idUtilisateur }}" class="hidden bg-gray-200">
                                     <td class="w-1/6 py-2 px-4 border-b">
-                                        <p class="w-full p-1 border">{{ $donneesUtilisateur->numeroCompte }}</p>
+                                        <p class="w-full p-1 border">{{ $donneesUtilisateur->idUtilisateur }}</p>
                                     </td>
                                     <td class="w-1/6 py-2 px-4 border-b">
-                                        <input type="text" class="w-full p-1 border" id="edit-nom-{{ $donneesUtilisateur->numeroCompte }}" value="{{ $donneesUtilisateur->nom }}" />
+                                        <input type="text" class="w-full p-1 border" id="edit-nom-{{ $donneesUtilisateur->idUtilisateur }}" value="{{ $donneesUtilisateur->nom }}" />
                                     </td>
                                     <td class="w-1/6 py-2 px-4 border-b">
-                                        <input type="text" class="w-full p-1 border" id="edit-prenom-{{ $donneesUtilisateur->numeroCompte }}" value="{{ $donneesUtilisateur->prenom }}" />
+                                        <input type="text" class="w-full p-1 border" id="edit-prenom-{{ $donneesUtilisateur->idUtilisateur }}" value="{{ $donneesUtilisateur->prenom }}" />
                                     </td>
                                     <td class="w-1/6 py-2 px-4 border-b">
-                                        <input type="text" class="w-full p-1 border" id="edit-email-{{ $donneesUtilisateur->numeroCompte }}" value="{{ $donneesUtilisateur->email }}" />
+                                        <input type="text" class="w-full p-1 border" id="edit-email-{{ $donneesUtilisateur->idUtilisateur }}" value="{{ $donneesUtilisateur->email }}" />
                                     </td>
                                     <td class="w-1/6 py-2 px-4 border-b">
-                                        <input type="text" class="w-full p-1 border" id="edit-solde-{{ $donneesUtilisateur->numeroCompte }}" value="{{ $donneesUtilisateur->solde }}" />
+                                        <input type="text" class="w-full p-1 border" id="edit-solde-{{ $donneesUtilisateur->idUtilisateur }}" value="{{ $donneesUtilisateur->solde }}" />
                                     </td>
                                     <td class="w-1/6 py-2 px-4 border-b">
-                                        <select id="edit-acces-{{ $donneesUtilisateur->numeroCompte }}" class="w-full p-1 border">
+                                        <select id="edit-acces-{{ $donneesUtilisateur->idUtilisateur }}" class="w-full p-1 border">
                                             <option value="0" {{ $donneesUtilisateur->acces == 0 ? "selected" : "" }}>Client</option>
                                             <option value="1" {{ $donneesUtilisateur->acces == 1 ? "selected" : "" }}>Serveur</option>
                                             <option value="2" {{ $donneesUtilisateur->acces == 2 ? "selected" : "" }}>Admin</option>
@@ -115,8 +115,8 @@
                                     </td>
 
                                     <td class="text-center w-1/6 py-2 px-4 border-b">
-                                        <button class="px-4 py-2 bg-green-600 text-white rounded save-btn w-28" data-id="{{ $donneesUtilisateur->numeroCompte }}">Enregistrer</button>
-                                        <button class="px-4 py-2 bg-gray-400 text-white rounded cancel-btn w-28 mt-1" data-id="{{ $donneesUtilisateur->numeroCompte }}">Annuler</button>
+                                        <button class="px-4 py-2 bg-green-600 text-white rounded save-btn w-28" data-id="{{ $donneesUtilisateur->idUtilisateur }}">Enregistrer</button>
+                                        <button class="px-4 py-2 bg-gray-400 text-white rounded cancel-btn w-28 mt-1" data-id="{{ $donneesUtilisateur->idUtilisateur }}">Annuler</button>
                                     </td>
                                 </tr>
                             @endforeach
