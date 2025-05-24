@@ -29,10 +29,10 @@
                 </div>
 
                 <!-- Formulaire caché pour envoyer modeService -->
-                <form x-ref="formService" method="POST" action="{{ route('admin.parametres.modes-site') }}">
+                <form x-ref="formService" method="POST" action="{{ route("admin.parametres.modes-site") }}">
                     @csrf
-                    <input type="hidden" name="modeService" x-model="modeService">
-                    <input type="hidden" name="modeEvent" x-model="modeEvent">
+                    <input type="hidden" name="modeService" x-model="modeService" />
+                    <input type="hidden" name="modeEvent" x-model="modeEvent" />
                     <button type="button" @click="confirmer()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-green-700">Confirmer les modifications</button>
                 </form>
             </section>
@@ -40,7 +40,7 @@
             <!-- Section Changer le logo -->
             <section class="w-full bg-white rounded-xl border-2 border-black p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Changer le logo</h2>
-                <form class="flex flex-col gap-4" method="POST" action="{{ route('admin.parametres.majLogo') }}" enctype="multipart/form-data">
+                <form class="flex flex-col gap-4" method="POST" action="{{ route("admin.parametres.majLogo") }}" enctype="multipart/form-data">
                     @csrf
                     <label class="block">
                         <span class="text-gray-700 text-lg">Choisir un fichier</span>
@@ -53,11 +53,11 @@
             <!-- Section Modifier le titre -->
             <section class="w-full bg-white rounded-xl border-2 border-black p-6">
                 <h2 class="text-2xl font-semibold text-gray-900 mb-4">Modifier le titre du site</h2>
-                <form class="flex flex-col gap-4" name="modifierTitre" method="POST" action="{{ route('admin.parametres.majTitre') }}">
+                <form class="flex flex-col gap-4" name="modifierTitre" method="POST" action="{{ route("admin.parametres.majTitre") }}">
                     @csrf
                     <label class="block">
                         <span class="text-gray-700 text-lg">Nouveau titre</span>
-                        <input type="text" name="titre" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-red-800 mt-2" placeholder="Entrez le nouveau titre" value="{{ $parametres->titreHeader }}"/>
+                        <input type="text" name="titre" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-red-800 mt-2" placeholder="Entrez le nouveau titre" value="{{ $parametres->titreHeader }}" />
                     </label>
                     <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg transition hover:bg-green-700">Confirmer le titre</button>
                 </form>
@@ -68,8 +68,8 @@
         <script>
             function options() {
                 return {
-                    modeService: {{ $parametres->service ? 'false' : 'true' }},
-                    modeEvent: {{ $parametres->modeEvent ? 'false' : 'true' }},
+                    modeService: {{ $parametres->service ? "false" : "true" }},
+                    modeEvent: {{ $parametres->modeEvent ? "false" : "true" }},
                     modificationsConfirmees: {
                         modeService: false,
                         modeEvent: false,

@@ -5,8 +5,10 @@
         <title>Carte</title>
     </head>
 
-    <body class="bg-white text-black pt-28 md:pt-60">
-        @include('header')
+    <body class="bg-white pt-28 md:pt-57 min-h-screen flex flex-col">
+        @include("header")
+
+        <main class="flex-1">
 
         <div class="max-w-6xl mx-auto px-6 sm:px-8 md:px-10 py-6 border-2 border-black rounded-lg bg-white shadow-lg mb-20">
             <!-- En-tête centré avec titre, nouveautés à gauche, engrenage à droite -->
@@ -111,6 +113,7 @@
             @endif
         </div>
 
+        </main>
      @include('footer')
     </body>
 </html>

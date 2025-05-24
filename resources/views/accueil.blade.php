@@ -6,8 +6,10 @@
         <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     </head>
 
-    <body class="bg-white pt-28 md:pt-57">
+    <body class="bg-white pt-28 md:pt-57 min-h-screen flex flex-col">
         @include("header")
+
+        <main class="flex-1">
         @auth
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 sm:px-6 md:px-20 pb-4">
         @else
@@ -256,6 +258,8 @@
                 </div>
             </div>
         </div>
+        </main>
+
         @include("footer")
         <div class="bg-[var(--color-primaire)] h-4">
         </div>

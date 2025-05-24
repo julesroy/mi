@@ -458,9 +458,6 @@
   .ml-6 {
     margin-left: calc(var(--spacing) * 6);
   }
-  .box-border {
-    box-sizing: border-box;
-  }
   .block {
     display: block;
   }
@@ -1040,9 +1037,6 @@
   .bg-\[\#232326\] {
     background-color: #232326;
   }
-  .bg-\[\#FFFFFF\] {
-    background-color: #FFFFFF;
-  }
   .bg-\[rgb\(10\,10\,10\)\] {
     background-color: rgb(10,10,10);
   }
@@ -1274,9 +1268,6 @@
   .pt-10 {
     padding-top: calc(var(--spacing) * 10);
   }
-  .pt-18 {
-    padding-top: calc(var(--spacing) * 18);
-  }
   .pt-28 {
     padding-top: calc(var(--spacing) * 28);
   }
@@ -1306,9 +1297,6 @@
   }
   .pb-22 {
     padding-bottom: calc(var(--spacing) * 22);
-  }
-  .pb-39 {
-    padding-bottom: calc(var(--spacing) * 39);
   }
   .pl-4 {
     padding-left: calc(var(--spacing) * 4);
@@ -2388,29 +2376,14 @@
       padding-top: calc(var(--spacing) * 36);
     }
   }
-  .md\:pt-40 {
-    @media (width >= 48rem) {
-      padding-top: calc(var(--spacing) * 40);
-    }
-  }
   .md\:pt-45 {
     @media (width >= 48rem) {
       padding-top: calc(var(--spacing) * 45);
     }
   }
-  .md\:pt-50 {
-    @media (width >= 48rem) {
-      padding-top: calc(var(--spacing) * 50);
-    }
-  }
   .md\:pt-54 {
     @media (width >= 48rem) {
       padding-top: calc(var(--spacing) * 54);
-    }
-  }
-  .md\:pt-55 {
-    @media (width >= 48rem) {
-      padding-top: calc(var(--spacing) * 55);
     }
   }
   .md\:pt-57 {
@@ -2597,11 +2570,6 @@
       &:active {
         color: var(--color-gray-300);
       }
-    }
-  }
-  .\[\&_\*\]\:box-border {
-    & * {
-      box-sizing: border-box;
     }
   }
   .\[\&_\*\]\:p-1 {

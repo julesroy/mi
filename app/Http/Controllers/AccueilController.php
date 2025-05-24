@@ -67,11 +67,11 @@ class AccueilController extends Controller
         return $festiVendredi;
     }
 
-    private function recupCommandeEnCours($numeroCompte)
+    private function recupCommandeEnCours($idUtilisateur)
     {
         // Récupérer la commande en cours pour l'utilisateur
         $commande = DB::table('commandes')
-            ->where('numeroCompte', $numeroCompte)
+            ->where('idUtilisateur', $idUtilisateur)
             ->where('etat', 1) // 1 : Commande en cours
             ->orderBy('date', 'asc')
             ->first();
@@ -118,10 +118,10 @@ class AccueilController extends Controller
         $info = $this->recupInfo();
 
         // Récupérer le numéro de compte de l'utilisateur connecté
-        $numeroCompte = Auth::user()->numeroCompte ?? null;
+        $idUtilisateur = Auth::user()->idUtilisateur ?? null;
 
         // Récupérer les informations sur la commande en cours
-        $commandeEnCours = $numeroCompte ? $this->recupCommandeEnCours($numeroCompte) : null;
+        $commandeEnCours = $idUtilisateur ? $this->recupCommandeEnCours($idUtilisateur) : null;
 
         // Récupérer les informations sur Festi'vendredi
         $festiVendredi = $this->recupFestiVendredi();
