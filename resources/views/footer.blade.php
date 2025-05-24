@@ -1,4 +1,4 @@
-<footer class="bg-primaire py-6">
+<footer class="bg-primaire py-6 mt-auto">
     <div class="px-6">
         <div class="flex flex-wrap justify-center items-center gap-x-10 gap-y-3 text-2xl text-white text-center">
             <a href="/politiques-donnees" class="underline hover:text-black">Politiques données personnelles</a>
