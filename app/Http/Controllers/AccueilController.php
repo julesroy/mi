@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Actu;
-use App\Models\Commande;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -18,17 +16,18 @@ use Illuminate\Support\Facades\Auth;
 class AccueilController extends Controller
 {
     /**
-     * Récupère les actualités.
-     *
-     * @return \Illuminate\Support\Collection
-     */
+    * Récupère les actualités.
+    *
+    * @return \Illuminate\Support\Collection
+    */
     private function recupActus()
     {
         // On récupère la dernière actualité
-        $actus = Actu::orderBy('date', 'desc')
+        $actus = DB::table('actus')
+            ->orderBy('date', 'desc')
             ->limit(1)
             ->get();
-
+    
         return $actus;
     }
 
@@ -53,16 +52,26 @@ class AccueilController extends Controller
         ];
     }
 
-    /**
-     * Récupère la commande en cours pour l'utilisateur.
-     *
-     * @param string $idUtilisateur
-     * @return array|null
-     */
-    private function recupCommandeEnCours($idUtilisateur)
+    private function recupFestiVendredi()
+    {
+        // Récupérer la date actuelle
+        $dateActuelle = Carbon::now()->format('d-m-Y');
+
+        // Récupérer le prochain événement Festi'vendredi
+        $festiVendredi = DB::table('events')
+            ->where('typeEvent', 1) // 1: Festi'vendredi
+            ->where('date', '>=', $dateActuelle)
+            ->orderBy('date', 'asc')
+            ->first();
+
+        return $festiVendredi;
+    }
+
+    private function recupCommandeEnCours($numeroCompte)
     {
         // Récupérer la commande en cours pour l'utilisateur
-        $commande = Commande::where('idUtilisateur', $idUtilisateur)
+        $commande = DB::table('commandes')
+            ->where('numeroCompte', $numeroCompte)
             ->where('etat', 1) // 1 : Commande en cours
             ->orderBy('date', 'asc')
             ->first();
@@ -77,14 +86,15 @@ class AccueilController extends Controller
 
         // Vérifier la catégorie de la commande et calculer la position uniquement pour cette catégorie
         if ($commande->categorieCommande == 2 || $commande->categorieCommande == 1) { //Chaud ou hotdog
-            $positionChaud = Commande::where('etat', 1) // Commandes en cours
+            $positionChaud = DB::table('commandes')
+                ->where('etat', 1) // Commandes en cours
                 ->where('categorieCommande', 2) // 2 : Chaud
                 ->where('categorieCommande', 1) // 1: Hotdog
                 ->where('date', '<', $commande->date)
                 ->count() + 1;
-                
         } elseif ($commande->categorieCommande == 0) { // 0 : Froid
-            $positionFroid = Commande::where('etat', 1) // Commandes en cours
+            $positionFroid = DB::table('commandes')
+                ->where('etat', 1) // Commandes en cours
                 ->where('categorieCommande', 0) // 0 : Froid
                 ->where('date', '<', $commande->date)
                 ->count() + 1;
@@ -107,11 +117,14 @@ class AccueilController extends Controller
         $actus = $this->recupActus();
         $info = $this->recupInfo();
 
-        // Récupérer l'ID de l'utilisateur connecté
-        $idUtilisateur = Auth::id() ?? null;
+        // Récupérer le numéro de compte de l'utilisateur connecté
+        $numeroCompte = Auth::user()->numeroCompte ?? null;
 
         // Récupérer les informations sur la commande en cours
-        $commandeEnCours = $idUtilisateur ? $this->recupCommandeEnCours($idUtilisateur) : null;
+        $commandeEnCours = $numeroCompte ? $this->recupCommandeEnCours($numeroCompte) : null;
+
+        // Récupérer les informations sur Festi'vendredi
+        $festiVendredi = $this->recupFestiVendredi();
 
         return view('accueil', [
             'actus' => $actus,
@@ -119,6 +132,7 @@ class AccueilController extends Controller
             'horairesDebutCommandes' => $info['horairesDebutCommandes'],
             'horairesFinCommandes' => $info['horairesFinCommandes'],
             'commandeEnCours' => $commandeEnCours,
+            'festiVendredi' => $festiVendredi,
         ]);
     }
 }
