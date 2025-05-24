@@ -1,5 +1,4 @@
 <?php
-// Gestion Actu
 
 namespace App\Models;
 
