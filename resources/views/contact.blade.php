@@ -14,9 +14,9 @@
                     <h1 class="text-4xl font-bold text-center">Contact</h1>
                     </span>
                     @can("verifier-acces-administrateur")
-                    <a href="/admin/gestion-contact" class="absolute right-0 top-1/2 transform -translate-y-1/2 hover:opacity-75"> <!-- gestion-contact n'existe pas encore mais à créer si on veut modif facilement les infos (membres etc) -->
+                    <!-- <a href="/admin/gestion-contact" class="absolute right-0 top-1/2 transform -translate-y-1/2 hover:opacity-75">
                         <img src="{{ asset('images/icons/admin_parameter.png') }}" alt="Gestion carte" class="w-12 h-12 inline-block" />
-                    </a>
+                    </a> -->
                     @endcan
                 </div>
 
@@ -114,45 +114,38 @@
                     <div class="flex justify-center flex-wrap gap-10">
                         <div class="text-center">
                             <p class="font-bold">Chef de projet</p>
-                            <img src="/images/jules.jpg" class="w-32 h-32 rounded-full object-cover mx-auto my-2" />
                             <p class="font-bold">Jules Roy</p>
                             <p>Front-end</p>
                             <p>Back-end</p>
                         </div>
                         <div class="text-center">
                             <p class="font-bold">Développeuse</p>
-                            <img src="/images/adele.jpg" class="w-32 h-32 rounded-full object-cover mx-auto my-2" />
                             <p class="font-bold">Adèle Lebrun</p>
                             <P>Direction artistique</p>
                             <p>Front-end</p>
                         </div>
                         <div class="text-center">
                             <p class="font-bold">Développeur</p>
-                            <img src="/images/simon.jpg" class="w-32 h-32 rounded-full object-cover mx-auto my-2" />
                             <p class="font-bold">Simon Leroy</p>
                             <p>Front-end</p>
                         </div>
                         <div class="text-center">
                             <p class="font-bold">Développeur</p>
-                            <img src="/images/theo.jpg" class="w-32 h-32 rounded-full object-cover mx-auto my-2" />
                             <p class="font-bold">Théo Lesage</p>
                             <p>Front-end</p>
                         </div>
                         <div class="text-center">
                             <p class="font-bold">Développeur</p>
-                            <img src="/images/sasha.jpg" class="w-32 h-32 rounded-full object-cover mx-auto my-2" />
                             <p class="font-bold">Cem Durand</p>
                             <p>Front-end</p>
                         </div>
                         <div class="text-center">
                             <p class="font-bold">Développeur</p>
-                            <img src="/images/leo.jpg" class="w-32 h-32 rounded-full object-cover mx-auto my-2" />
                             <p class="font-bold">Léo Lewandoski</p>
                             <p>Back-end</p>
                         </div>
                         <div class="text-center">
                             <p class="font-bold">Développeur</p>
-                            <img src="/images/sasha.jpg" class="w-32 h-32 rounded-full object-cover mx-auto my-2" />
                             <p class="font-bold">Sasha Le Roux--Zielinski</p>
                             <p>Back-end</p>
                         </div>
