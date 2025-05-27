@@ -5,18 +5,18 @@
 
             <a href="/reglement" class="underline hover:text-black">Règlement</a>
 
-            <span>© Par'MI'Giano IT - 2025/2026</span>
+            <span>© Par'MI'Giano IT Team - 2025/2026</span>
 
             <a href="/mentions-legales" class="underline hover:text-black">Mentions légales</a>
 
             <a href="/contact" class="underline hover:text-black">Contact</a>
 
             <a href="https://www.instagram.com/maisonisen/" target="_blank" class="hover:opacity-75">
-                <img src="{{ asset("images/icons/insta_logo.png") }}" alt="Instagram" class="w-6 h-6 inline-block" />
+                <img src="{{ asset("images/icons/logo_insta_w.svg") }}" alt="Instagram" class="w-6 h-6 inline-block" />
             </a>
 
             <a href="https://www.linkedin.com/company/maison-isen/" target="_blank" class="hover:opacity-75">
-                <img src="{{ asset("images/icons/linkedin_logo.png") }}" alt="LinkedIn" class="w-6 h-6 inline-block" />
+                <img src="{{ asset("images/icons/logo_linkedin_w.svg") }}" alt="LinkedIn" class="w-6 h-6 inline-block" />
             </a>
         </div>
     </div>

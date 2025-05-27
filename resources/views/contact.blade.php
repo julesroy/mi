@@ -56,10 +56,10 @@
                             41 boulevard Vauban, 59800 Lille, FRANCE </br></br>
                             lamaisonisen@gmail.com </br>
                             <a href="https://www.instagram.com/maisonisen/" target="_blank" class="hover:opacity-75">
-                                <img src="{{ asset("images/icons/insta_logo.png") }}" alt="Instagram" class="w-8 h-8 inline-block" />
+                                <img src="{{ asset("images/icons/logo_insta_b.svg") }}" alt="Instagram" class="w-8 h-8 inline-block" />
                              </a>
                             <a href="https://www.linkedin.com/company/maison-isen/" target="_blank" class="hover:opacity-75">
-                                <img src="{{ asset("images/icons/linkedin_logo.png") }}" alt="LinkedIn" class="w-8 h-8 inline-block" />
+                                <img src="{{ asset("images/icons/logo_linkedin_b.svg") }}" alt="LinkedIn" class="w-8 h-8 inline-block" />
                             </a>
                             </br>
                             </p>
