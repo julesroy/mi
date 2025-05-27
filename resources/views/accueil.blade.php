@@ -269,7 +269,6 @@
         </main>
 
         @include("footer")
-        <div class="bg-[var(--color-primaire)] h-4">
         </div>
     </body>
 </html>
