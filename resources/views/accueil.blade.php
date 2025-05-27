@@ -18,7 +18,7 @@
             <!-- Coté gauche-->
             <div class="space-y-2">
                 <!-- Maison/Service status -->
-                <div id="status-box" class="bg-white border rounded-lg shadow sm:p-6 md:p-4 text-lg sm:text-xl md:text-2xl">
+                <div id="status-box" class="bg-white border rounded-lg shadow p-4 text-lg sm:text-xl md:text-2xl">
                     <div class="font-bold">
                         Par'MI'Giano :
                         <span class="{{ $ouvert ? 'text-[var(--color-secondaire)]' : 'text-red-600' }}">
@@ -50,20 +50,20 @@
                     <div class="relative overflow-hidden h-20 sm:h-24 text-sm sm:text-lg md:text-xl">
                         <template x-if="activeSlide === 0">
                             <div class="text-center transition-opacity duration-300" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-100" x-transition:leave-end="opacity-0">
-                                <div class="text-lg sm:text-xl md:text-2xl font-bold">{{ $stats["today"] ?? 0 }}</div>
-                                <div class="text-gray-500">Commandes aujourd'hui</div>
+                                <img src="{{ asset('images/graphiques/canva/plat.svg') }}" alt="Commandes" class="w-auto h-12 md:h-16 mx-auto mb-2">
+                                <div class="text-gray-500">{{ $stats["today"] ?? 0 }} Commandes aujourd'hui</div>
                             </div>
                         </template>
                         <template x-if="activeSlide === 1">
                             <div class="text-center transition-opacity duration-300" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-100" x-transition:leave-end="opacity-0">
-                                <div class="text-lg sm:text-xl md:text-2xl font-bold">{{ $stats["thisMonth"] ?? 0 }}</div>
-                                <div class="text-gray-500">Commandes ce mois-ci</div>
+                                <img src="{{ asset('images/graphiques/canva/plat.svg') }}" alt="Commandes" class="w-auto h-12 md:h-16 mx-auto mb-2">
+                                <div class="text-gray-500">{{ $stats["thisMonth"] ?? 0 }} Commandes ce mois-ci</div>
                             </div>
                         </template>
                         <template x-if="activeSlide === 2">
                             <div class="text-center transition-opacity duration-300" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-100" x-transition:leave-end="opacity-0">
-                                <div class="text-lg sm:text-xl md:text-2xl font-bold">{{ $stats["thisYear"] ?? 0 }}</div>
-                                <div class="text-gray-500">Commandes cette année</div>
+                                <img src="{{ asset('images/graphiques/canva/plat.svg') }}" alt="Commandes" class="w-auto h-12 md:h-16 mx-auto mb-2">
+                                <div class="text-gray-500">{{ $stats["thisYear"] ?? 0 }} Commandes cette année</div>
                             </div>
                         </template>
                     </div>
@@ -105,26 +105,26 @@
                         <div class="relative overflow-hidden h-20 sm:h-24 text-sm sm:text-lg md:text-xl">
                             <template x-if="activeSlide === 0">
                                 <div class="text-center transition-opacity duration-300" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-100" x-transition:leave-end="opacity-0">
-                                    <div class="text-lg sm:text-xl md:text-2xl font-bold">{{ $userStats["paninis"] ?? 0 }}</div>
-                                    <div class="text-gray-500">Paninis commandés</div>
+                                    <img src="{{ asset("images/graphiques/canva/panini.svg") }}" alt="Panini" class="w-auto h-12 mx-auto mb-2">
+                                    <div class="text-gray-500">{{ $userStats["paninis"] ?? 0 }} Paninis commandés</div>
                                 </div>
                             </template>
                             <template x-if="activeSlide === 1">
                                 <div class="text-center transition-opacity duration-300" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-100" x-transition:leave-end="opacity-0">
-                                    <div class="text-lg sm:text-xl md:text-2xl font-bold">{{ $userStats["sandwiches"] ?? 0 }}</div>
-                                    <div class="text-gray-500">Sandwiches commandés</div>
+                                    <img src="{{ asset("images/graphiques/canva/sandwich.svg") }}" alt="Sandwich" class="w-auto h-12 mx-auto mb-2">
+                                    <div class="text-gray-500">{{ $userStats["sandwiches"] ?? 0 }} Sandwiches commandés</div>
                                 </div>
                             </template>
                             <template x-if="activeSlide === 2">
                                 <div class="text-center transition-opacity duration-300" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-100" x-transition:leave-end="opacity-0">
-                                    <div class="text-lg sm:text-xl md:text-2xl font-bold">{{ $userStats["croques"] ?? 0 }}</div>
-                                    <div class="text-gray-500">Croques commandés</div>
+                                    <img src="{{ asset("images/graphiques/canva/croque.svg") }}" alt="Croque" class="w-auto h-12 mx-auto mb-2">
+                                    <div class="text-gray-500">{{ $userStats["croques"] ?? 0 }} Croques commandés</div>
                                 </div>
                             </template>
                             <template x-if="activeSlide === 3">
                                 <div class="text-center transition-opacity duration-300" x-transition:enter="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="opacity-100" x-transition:leave-end="opacity-0">
-                                    <div class="text-lg sm:text-xl md:text-2xl font-bold">{{ $userStats["hotdogs"] ?? 0 }}</div>
-                                    <div class="text-gray-500">Hotdogs commandés</div>
+                                    <img src="{{ asset("images/graphiques/canva/hotdog.svg") }}" alt="Hotdog" class="w-auto h-12 mx-auto mb-2">
+                                    <div class="text-gray-500">{{ $userStats["hotdogs"] ?? 0 }} Hotdogs commandés</div>
                                 </div>
                             </template>
                         </div>
@@ -164,7 +164,11 @@
             <div class="space-y-4">
                 <!-- Actu du moment -->
                 <div id="actus" class="bg-yellow-50 border rounded-lg shadow p-6 flex flex-col items-center text-center sm:p-8">
-                    <div class="text-lg font-bold mb-4 underline">Actu du moment</div>
+                    <div class="flex justify-evenly items-center gap-2 mb-6">
+                        <img src="{{ asset('images/graphiques/canva/feuilles_gauche.svg') }}" alt="Feuille gauche" class="w-auto h-10 md:h-12">
+                        <div class="text-2xl font-bold mb-4 underline">Actu du moment</div>
+                        <img src="{{ asset('images/graphiques/canva/feuilles_droite.svg') }}" alt="Feuille droite" class="w-auto h-10 md:h-12">
+                    </div>
                     @if (isset($actus) && $actus->isNotEmpty())
                         @foreach ($actus as $actu)
                             <div class="mb-2 font-semibold text-lg">{{ $actu->titre }}</div>
@@ -177,8 +181,12 @@
                 </div>
 
                 <!-- Festi'vendredi -->
-                <div class="bg-blue-50 border rounded-lg shadow p-6 flex flex-col items-center text-center sm:p-8 ">
-                    <div class="text-lg font-bold mb-4 underline">Festi'vendredi</div>
+                <div class="bg-blue-50 border rounded-lg shadow flex flex-col items-center text-center pb-6">
+                    <div class="flex justify-between items-center w-full">
+                        <img src="{{ asset('images/graphiques/canva/drapeaux_gauche.svg') }}" alt="Drapeaux gauche" class="w-auto h-16 md:h-22">
+                        <div class="text-2xl font-bold mb-4 underline pt-4 md:pt-6 flex-1 text-center">Festi'vendredi</div>
+                        <img src="{{ asset('images/graphiques/canva/drapeaux_droite.svg') }}" alt="Drapeaux droite" class="w-auto h-16 md:h-22">
+                    </div>
                     @if ($festiVendredi)
                         <div class="mb-2 text-sm">{{ \Carbon\Carbon::parse($festiVendredi->date)->format('d/m/Y') }}</div>
                         <div class="bg-white border rounded px-4 py-2 shadow mb-4 text-base">{{ $festiVendredi->composition }}</div>

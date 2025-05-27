@@ -16,7 +16,7 @@
         <div class="w-full flex justify-center mb-10 px-2 md:px-0">
             <div class="flex flex-col md:flex-row gap-8 w-full max-w-5xl">
                 <!-- Bloc Actualités principal -->
-                <div class="flex-1 bg-white border-2 border-gray-800 rounded-2xl p-0 min-w-[0] max-w-full sm:min-w-[350px] sm:max-w-[600px] flex flex-col h-[400px]">
+                <div class="flex-1 bg-white border-2 border-gray-800 rounded-2xl p-0 min-w-[0] max-w-full sm:min-w-[350px] sm:max-w-[600px] flex flex-col h-auto">
                     <!-- Titre centré + engrenage -->
                     <div class="relative mb-4 p-4 pb-0">
                         <div class="flex items-center justify-between">
@@ -96,7 +96,7 @@
                 </div>
 
                 <!-- Bloc "À venir" à droite -->
-                <div class="w-full md:w-[320px] bg-white border-2 border-gray-800 rounded-2xl p-0 flex flex-col min-w-[0] max-w-full sm:min-w-[250px] sm:max-w-[350px] h-[400px]">
+                <div class="w-full md:w-[320px] bg-white border-2 border-gray-800 rounded-2xl p-0 flex flex-col min-w-[0] max-w-full sm:min-w-[250px] sm:max-w-[350px] h-auto">
                     <!-- Titre et ligne décorative -->
                     <div class="p-4 pb-0 relative mb-4">
                         <div class="flex items-center">

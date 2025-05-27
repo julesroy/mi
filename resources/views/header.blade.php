@@ -1,34 +1,34 @@
-<header class="fixed top-0 left-0 w-full bg-primaire text-white text-3xl py-0 z-50 h-24 md:h-32">
-    <div class="flex items-center justify-between md:justify-around h-full">
+<header class="fixed top-0 left-0 w-full bg-primaire text-white text-3xl py-0 z-50 h-24 xl:h-32">
+    <div class="flex items-center justify-between xl:justify-around h-full">
         <!-- Pour les grands écrans -->
-        <span class="hidden md:flex justify-between w-5/12 items-center h-full">
-            <span class="text-5xl pl-4 md:pl-0 py-6 md:py-0 font-bold">
+        <span class="hidden xl:flex justify-between w-5/12 items-center h-full">
+            <span class="text-5xl pl-4 xl:pl-0 py-6 xl:py-0 font-bold">
                 <a href="/">{{ $donneesParametres->titreHeader }}</a>
             </span>
 
-            <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
+            <div class="h-full items-center hover:bg-secondaire transition hidden xl:flex">
                 <a href="/contact" class="w-full text-center px-8 h-full flex items-center">Contact</a>
             </div>
-            <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
+            <div class="h-full items-center hover:bg-secondaire transition hidden xl:flex">
                 <a href="/actus" class="w-full text-center px-8 h-full flex items-center">Actus</a>
             </div>
         </span>
-        <img src="{{ asset("images/logo.png") }}" alt="Logo {{ $donneesParametres->titreHeader }}" class="hidden md:block w-48 h-auto relative -mb-20" />
-        <span class="hidden md:flex justify-between w-5/12 items-center h-full">
-            <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
+        <img src="{{ asset("images/logo.png") }}" alt="Logo {{ $donneesParametres->titreHeader }}" class="hidden xl:block w-48 h-auto relative -mb-20" />
+        <span class="hidden xl:flex justify-between w-5/12 items-center h-full">
+            <div class="h-full items-center hover:bg-secondaire transition hidden xl:flex">
                 <a href="/commander" class="w-full text-center px-8 h-full flex items-center">Commander</a>
             </div>
-            <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
+            <div class="h-full items-center hover:bg-secondaire transition hidden xl:flex">
                 <a href="/carte" class="w-full text-center px-8 h-full flex items-center">Carte</a>
             </div>
             @auth
-                <div class="h-full items-center hover:bg-secondaire transition hidden md:flex">
+                <div class="h-full items-center hover:bg-secondaire transition hidden xl:flex">
                     <span class="w-full text-center px-8 h-full flex items-center">Solde : {{ $donneesUtilisateur->solde }}€</span>
                 </div>
             @endauth
 
             <!-- dropdown (sous-menu) pour le compte -->
-            <div class="relative h-full items-center hidden md:flex">
+            <div class="relative h-full items-center hidden xl:flex">
                 <button id="compte-btn" class="w-full text-center px-8 h-full flex items-center justify-center hover:bg-secondaire transition">
                     @auth
                         {{ $donneesUtilisateur->prenom }}
@@ -42,7 +42,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-                <div id="compte-dropdown" class="overflow-hidden max-h-0 text-2xl text-center md:text-left transition-all duration-500 bg-secondaire w-full absolute left-0 top-full z-10">
+                <div id="compte-dropdown" class="overflow-hidden max-h-0 text-2xl text-center xl:text-left transition-all duration-500 bg-secondaire w-full absolute left-0 top-full z-10">
                     @auth
                         @can("verifier-acces-serveur")
                             <a href="/admin/panneau-admin" class="block px-4 py-2 hover:bg-secondaire">Admin</a>
@@ -61,9 +61,9 @@
         </span>
 
         <!-- Pour les petits écrans -->
-        <span id="cote-gauche" class="flex items-center justify-between md:hidden w-full pl-4">
+        <span id="cote-gauche" class="flex items-center justify-between xl:hidden w-full pl-4">
             <!-- menu déroulant pour petits écrans -->
-            <nav id="menu" class="overflow-hidden h-0 transition-all text-2xl duration-500 ease-in-out flex flex-col items-center bg-primaire absolute w-full left-0 top-full md:static md:flex-row md:items-stretch md:justify-start md:h-auto md:overflow-visible">
+            <nav id="menu" class="overflow-hidden h-0 transition-all text-2xl duration-500 ease-in-out flex flex-col items-center bg-primaire absolute w-full left-0 top-full xl:static xl:flex-row xl:items-stretch xl:justify-start xl:h-auto xl:overflow-visible">
                 <a href="/actus" class="w-full px-8 py-6 hover:bg-secondaire">Actus</a>
                 <a href="/contact" class="w-full px-8 py-6 hover:bg-secondaire">Contact</a>
                 <a href="/carte" class="w-full px-8 py-6 hover:bg-secondaire">Carte</a>
@@ -101,7 +101,7 @@
                 </div>
             </nav>
             <!-- bouton du menu déroulant -->
-            <button id="burger" class="md:hidden flex flex-col justify-center w-9 h-9 relative group">
+            <button id="burger" class="xl:hidden flex flex-col justify-center w-9 h-9 relative group">
                 <span class="block absolute h-0.5 w-7 bg-white transition-all duration-300 ease-in-out top-2 left-1 group-[.open]:rotate-45 group-[.open]:top-4"></span>
                 <span class="block absolute h-0.5 w-7 bg-white transition-all duration-300 ease-in-out top-4 left-1 group-[.open]:opacity-0"></span>
                 <span class="block absolute h-0.5 w-7 bg-white transition-all duration-300 ease-in-out top-6 left-1 group-[.open]:-rotate-45 group-[.open]:top-4"></span>
@@ -111,7 +111,7 @@
                 <span class="text-base pr-2">Solde : {{ $donneesUtilisateur->solde }}€</span>
             @endauth
 
-            <span class="md:hidden text-3xl md:text-5xl pr-4 py-6 md:py-0 font-bold">
+            <span class="xl:hidden text-3xl xl:text-5xl pr-4 py-6 xl:py-0 font-bold">
                 <a href="/">{{ $donneesParametres->titreHeader }}</a>
             </span>
         </span>
