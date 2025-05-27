@@ -85,8 +85,8 @@
                             {{ $user->email }}
                         </div>
                         <div class="mb-5">
-                            <span class="font-semibold">ID de compte :</span>
-                            {{ $user->idUtilisateur }}
+                            <span class="font-semibold">Numéro de compte :</span>
+                            {{ $user->numeroCompte }}
                         </div>
                     </div>
                     <hr class="my-2 border-gray-400" />

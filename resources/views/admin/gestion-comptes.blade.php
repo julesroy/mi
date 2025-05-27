@@ -50,7 +50,7 @@
                     <table class="min-w-full table-fixed bg-white text-black border-collapse text-center text-xs sm:text-sm md:text-base">
                         <thead class="bg-primaire text-white sticky z-10">
                             <tr>
-                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="idUtilisateur">ID de compte</th>
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="idUtilisateur">Numero de compte</th>
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="nom">Nom</th>
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="prenom">Prénom</th>
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Email</th>
@@ -67,7 +67,7 @@
                         <tbody>
                             @foreach ($utilisateurs as $donneesUtilisateur)
                                 <tr id="row-{{ $donneesUtilisateur->idUtilisateur }}" class="hover:bg-gray-100">
-                                    <td class="w-1/6 py-2 px-4 border-b" id="id-{{ $donneesUtilisateur->idUtilisateur }}" data-value="{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->idUtilisateur }}</td>
+                                    <td class="w-1/6 py-2 px-4 border-b" id="id-{{ $donneesUtilisateur->idUtilisateur }}" data-value="{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->numeroCompte }}</td>
                                     <td class="w-1/6 py-2 px-4 border-b" id="nom-{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->nom }}</td>
                                     <td class="w-1/6 py-2 px-4 border-b" id="prenom-{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->prenom }}</td>
                                     <td class="w-1/6 py-2 px-4 border-b" id="email-{{ $donneesUtilisateur->idUtilisateur }}">{{ $donneesUtilisateur->email }}</td>
