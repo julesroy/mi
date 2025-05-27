@@ -72,7 +72,7 @@ class CommandeCuisineController extends Controller
         // Récupère tous les ingrédients de la BDD avant (réduit l'impact sur la performance)
         $ingredients = Ingredient::select('idIngredient', 'nom')->get();
 
-        $commandes = Commande::whereIn('categorieCommande', [0, 1, 2])->get()->map(function ($commande) use ($ingredients) {
+        $commandes = Commande::whereIn('categorieCommande', [0, 1, 2])->where('etat', 1)->get()->map(function ($commande) use ($ingredients) {
             // Va chercher tous les ingrédients de la commande
             $commande->items = array_map(function ($item) use ($ingredients) {
                 [$itemId, $quantity, $optional] = explode(',', $item);

@@ -210,11 +210,11 @@
                                 <div>Classement attente :</div>
                                 <div>
                                     Chaud :
-                                    <span class="font-semibold">{{ $commandeEnCours['positionChaud'] ? $commandeEnCours['positionChaud'] . 'ème' : 'aucun' }}</span>
+                                    <span class="font-semibold">{{ $commandeEnCours['positionChaud'] ? ($commandeEnCours['positionChaud'] == 1 ? '1er' : $commandeEnCours['positionChaud'] . 'ème') : 'aucun' }}</span>
                                 </div>
                                 <div>
                                     Froid :
-                                    <span class="font-semibold">{{ $commandeEnCours['positionFroid'] ? $commandeEnCours['positionFroid'] . 'ème' : 'aucun' }}</span>
+                                    <span class="font-semibold">{{ $commandeEnCours['positionFroid'] ? ($commandeEnCours['positionFroid'] == 1 ? '1er' : $commandeEnCours['positionFroid'] . 'ème') : 'aucun' }}</span>
                                 </div>
                             </div>
                         @else

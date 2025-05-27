@@ -74,7 +74,7 @@
 
                             for (let item of commande.items) {
                                 html += `<li>
-                            ${item.quantite} &times; ${item.nom} ${item.optionnel ? '(Optionnel)' : ''}
+                            ${item.quantite} &times; ${item.nom} ${item.optionnel ? '' : ''}
                         </li>`;
                             }
 
@@ -93,10 +93,11 @@
                     });
             }
 
-            // Met à jour l'affichage des commandes toutes les minutes
-            setInterval(updateCommandes, 60_000);
+            // Met à jour l'affichage des commandes toutes les 2 secondes
+            setInterval(updateCommandes, 2000);
             updateCommandes();
 
+            // Met à jour l'heure toutes les secondes
             setInterval(mettreAJourHeure, 1000);
             mettreAJourHeure();
         </script>
