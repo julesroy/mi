@@ -59,6 +59,8 @@
                                     <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b sortable" data-key="acces">Accès</th>
                                 @endif
 
+                                <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b" data-key="roue">Roue</th>
+
                                 <th class="sticky bg-primaire top-0 w-1/6 py-2 px-4 border-b">Actions</th>
                             </tr>
                         </thead>
@@ -81,6 +83,17 @@
                                         @endphp
 
                                         {{ $accesLabels[$donneesUtilisateur->acces] ?? $donneesUtilisateur->acces }}
+                                    </td>
+
+                                    <td class="w-1/6 py-2 px-4 border-b" id="roue-{{ $donneesUtilisateur->idUtilisateur }}" data-value="{{ $donneesUtilisateur->roue }}">
+                                        @php
+                                            $roueLabels = [
+                                                0 => "Non",
+                                                1 => "Oui"
+                                            ];
+                                        @endphp
+
+                                        {{ $roueLabels[$donneesUtilisateur->roue] ?? $donneesUtilisateur->roue }}
                                     </td>
 
                                     <td class="w-1/6 py-2 px-4 border-b text-center">
@@ -111,6 +124,13 @@
                                             <option value="1" {{ $donneesUtilisateur->acces == 1 ? "selected" : "" }}>Serveur</option>
                                             <option value="2" {{ $donneesUtilisateur->acces == 2 ? "selected" : "" }}>Admin</option>
                                             <option value="3" {{ $donneesUtilisateur->acces == 3 ? "selected" : "" }}>Super-Admin</option>
+                                        </select>
+                                    </td>
+
+                                    <td class="w-1/6 py-2 px-4 border-b">
+                                        <select id="edit-roue-{{ $donneesUtilisateur->idUtilisateur }}" class="w-full p-1 border">
+                                            <option value="0" {{ $donneesUtilisateur->roue == 0 ? "selected" : "" }}>Non</option>
+                                            <option value="1" {{ $donneesUtilisateur->roue == 1 ? "selected" : "" }}>Oui</option>
                                         </select>
                                     </td>
 
@@ -210,6 +230,7 @@
                     const email = document.getElementById('edit-email-' + id).value;
                     const solde = document.getElementById('edit-solde-' + id).value;
                     const acces = document.getElementById('edit-acces-' + id).value;
+                    const roue = document.getElementById('edit-roue-' + id).value;
 
                     const formData = new FormData();
                     formData.append('id', id);
@@ -218,6 +239,7 @@
                     formData.append('email', email);
                     formData.append('solde', solde);
                     formData.append('acces', acces);
+                    formData.append('roue', roue);
 
                     fetch('/admin/gestion-comptes/update', {
                         method: 'POST',
@@ -236,6 +258,7 @@
                                 document.getElementById('email-' + id).textContent = email;
                                 document.getElementById('solde-' + id).textContent = solde;
                                 document.getElementById('acces-' + id).textContent = accesNum[parseInt(acces)] || acces;
+                                document.getElementById('roue-' + id).textContent = roue == 1 ? 'Oui' : 'Non';
 
                                 // Masque la ligne d'édition et affiche la ligne normale
                                 document.getElementById('row-' + id).classList.remove('hidden');

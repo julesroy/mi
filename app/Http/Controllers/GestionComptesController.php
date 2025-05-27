@@ -42,6 +42,8 @@ class GestionComptesController extends Controller
         $email = $request->input('email');
         $solde = $request->input('solde');
         $acces = $request->input('acces');
+        
+        $roue = $request->input('roue'); // juste pour le cirday
 
         // Mise à jour des données dans la base de données
         Utilisateur::where('idUtilisateur', $idUtilisateur)
@@ -51,6 +53,7 @@ class GestionComptesController extends Controller
                 'email' => $email,
                 'solde' => $solde,
                 'acces' => $acces,
+                'roue' => $roue // juste pour le cirday
             ]);
 
         return response()->json(['success' => true]);
