@@ -183,9 +183,9 @@
                 <!-- Festi'vendredi -->
                 <div class="bg-blue-50 border rounded-lg shadow flex flex-col items-center text-center pb-6">
                     <div class="flex justify-between items-center w-full">
-                        <img src="{{ asset('images/graphiques/canva/drapeaux_gauche.svg') }}" alt="Drapeaux gauche" class="w-auto h-16 md:h-22">
+                        <img src="{{ asset('images/graphiques/canva/drapeaux_gauche.svg') }}" alt="Drapeaux gauche" class="w-auto h-12 md:h-22">
                         <div class="text-2xl font-bold mb-4 underline pt-4 md:pt-6 flex-1 text-center">Festi'vendredi</div>
-                        <img src="{{ asset('images/graphiques/canva/drapeaux_droite.svg') }}" alt="Drapeaux droite" class="w-auto h-16 md:h-22">
+                        <img src="{{ asset('images/graphiques/canva/drapeaux_droite.svg') }}" alt="Drapeaux droite" class="w-auto h-12 md:h-22">
                     </div>
                     @if ($festiVendredi)
                         <div class="mb-2 text-sm">{{ \Carbon\Carbon::parse($festiVendredi->date)->format('d/m/Y') }}</div>
