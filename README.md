@@ -51,6 +51,54 @@ Lancement projet (active le hot reloading, compile TailwindCSS) :
 npm run dev
 ```
 
+### ⚡ Exécution du projet :
+
+Avant tout, il faut créer un fichier `.env` à la racine du projet, en se basant sur l'exemple suivant : 
+
+```text	
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=base64:ILJ4eDbQ+dKbTb289J6Lki0Lorpfv1MXjLyMTaBLndA=
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000/
+
+APP_LOCALE=fr
+APP_FALLBACK_LOCALE=fr
+APP_FAKER_LOCALE=fr_FR
+
+APP_MAINTENANCE_DRIVER=file
+
+PHP_CLI_SERVER_WORKERS=4
+
+BCRYPT_ROUNDS=12
+
+LOG_CHANNEL=errorlog
+LOG_LEVEL=error
+
+DB_CONNECTION=mysql
+DB_PORT=3306
+DB_DATABASE=maisonisen-beta_db
+DB_HOST=127.0.0.1
+DB_USERNAME=root
+DB_PASSWORD=
+
+SESSION_DRIVER=file
+
+FILESYSTEM_DISK=local
+
+CACHE_STORE=file
+
+QUEUE_CONNECTION=sync
+
+BROADCAST_CONNECTION=log
+```
+
+Les variables `DB_DATABASE`, `DB_USERNAME` et `DB_PASSWORD` doivent être modifiées en fonction de votre configuration MySQL en local.
+
+Il est possible d'importer la base de données depuis le fichier `maisonisen-beta_db.sql` situé à la racine du projet. Pour cela, vous pouvez utiliser un outil comme phpMyAdmin.
+
+En cas de problème avec la base de données ou l'exécution en local du projet, il est possible de consulter le projet à l'adresse suivante : [https://maisonisen-beta.fr](https://maisonisen-beta.fr).
+
 ### 📄 Générer la documentation :
 
 Pour PHP, on utilise PHPDocumentor :
